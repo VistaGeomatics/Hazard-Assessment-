@@ -1084,22 +1084,29 @@
 
         const pdfWidth  = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
+        const margin = 8; // same margin each page
 
         async function addHtmlPageToPdf(div, addNewPage) {
           if (addNewPage) pdf.addPage();
 
-          const canvas = await html2canvas(div, { scale: 2, useCORS: true });
+          const canvas = await html2canvas(div, {
+            scale: 2,
+            useCORS: true
+          });
           const imgData = canvas.toDataURL('image/jpeg', 0.95);
 
-          let imgW = canvas.width;
-          let imgH = canvas.height;
-          const scale = Math.min(pdfWidth / imgW, pdfHeight / imgH);
+          // Fit to width first
+          let imgW = pdfWidth - margin * 2;
+          let imgH = canvas.height * (imgW / canvas.width);
 
-          imgW *= scale;
-          imgH *= scale;
+          const maxHeight = pdfHeight - margin * 2;
+          if (imgH > maxHeight) {
+            imgH = maxHeight;
+            imgW = canvas.width * (imgH / canvas.height);
+          }
 
           const x = (pdfWidth  - imgW) / 2;
-          const y = (pdfHeight - imgH) / 2;
+          const y = margin;
 
           pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
         }
