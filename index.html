@@ -245,6 +245,7 @@
     th, td {
       border: 1px solid var(--border-soft);
       padding: 3px 4px;
+      vertical-align: top;
     }
 
     th {
@@ -364,6 +365,14 @@
     button:hover {
       transform: translateY(-1px);
       box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18);
+    }
+
+    /* Bigger, multiline job-specific control text */
+    .control-text {
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      padding: 5px 7px;
     }
 
     @media (max-width: 700px) {
@@ -494,7 +503,6 @@
             <div class="section-title">Working Alone &amp; Check-in</div>
           </div>
 
-          <!-- Line 1: Working alone, interval, communication -->
           <div class="row">
             <div style="flex:1 1 35%;">
               <label>Working Alone</label>
@@ -513,7 +521,6 @@
             </div>
           </div>
 
-          <!-- Line 2: Contact procedures -->
           <div class="row">
             <div style="flex:1 1 40%;">
               <label for="working_supervisor_name">Contact Procedures – Call Supervisor: Name</label>
@@ -529,7 +536,6 @@
             </div>
           </div>
 
-          <!-- Note line -->
           <div class="small-text" style="margin-top:4px;">
             <strong>Note:</strong> Check-in intervals are based on risk level –
             High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
@@ -657,7 +663,7 @@
             <div class="section-note">Check all hazards that apply to today’s worksite.</div>
           </div>
 
-          <table>
+          <table id="commonHazardsTable">
             <thead>
             <tr>
               <th class="center">Applies</th>
@@ -672,7 +678,7 @@
               <td>
                 Use caution when working around buried or overhead facilities, especially when digging.
                 Always maintain a safe limit of approach and report any damaged facilities immediately.
-                Review company Safe work Practice.
+                Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
@@ -687,16 +693,16 @@
               <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
               <td>Site Housekeeping</td>
               <td>
-                Ensure all workplaces are kept clean and free from any obstructions, that have the potential
-                to cause an incident. Review company Safe work Practice.
+                Ensure all workplaces are kept clean and free from any obstructions that have the potential
+                to cause an incident. Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_h2s"></td>
               <td>H2S Concerns</td>
               <td>
-                Ensure you’ve received adequate training, before working on a site that poses a potential
-                H2S Risk. Review company Safe work Practice. P.P.E. H2S gas detection monitors and
+                Ensure you’ve received adequate training before working on a site that poses a potential
+                H2S risk. Review company Safe Work Practice. P.P.E. H2S gas detection monitors and
                 possible SCBA or SABE.
               </td>
             </tr>
@@ -705,15 +711,14 @@
               <td>Open Excavation</td>
               <td>
                 Always be aware of your surroundings and ensure everyone on site is aware of any open excavation.
-                Keep a safe distance from any open excavation as much as possible, and always cross at the appropriate
+                Keep a safe distance from any open excavation as much as possible and always cross at the appropriate
                 locations. Never jump over open trenches. P.P.E. Hard Hats, CSA Safety Boots with ankle support.
               </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_fences"></td>
               <td>
-                Construction Fences –
-                Installed
+                Construction Fences – Installed
                 <label><input type="checkbox" name="fence_installed_yes"> Yes</label>
                 <label><input type="checkbox" name="fence_installed_no"> No</label>
               </td>
@@ -728,16 +733,16 @@
               <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
               <td>Wild Animals</td>
               <td>
-                Beware of your surrounding at all times. Never approach or interact with wild animals in any way.
+                Beware of your surroundings at all times. Never approach or interact with wild animals in any way.
                 Carry bear spray and properly store and discard food. Use of deterrents, such as bear spray, should
-                be used as a last resort. Review company Safe work Practice.
+                be used as a last resort. Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_river"></td>
               <td>River: High/Low Spring Flood</td>
               <td>
-                Always use caution and keep your distance if possible, when working around river banks or any body
+                Always use caution and keep your distance if possible when working around river banks or any body
                 of water. If you need to cross a river, find an appropriate spot to mitigate/eliminate the potential
                 for an incident or any form of environmental impact.
               </td>
@@ -746,7 +751,7 @@
               <td class="center"><input type="checkbox" name="haz_traffic"></td>
               <td>On and Off Traffic or Construction</td>
               <td>
-                Stay Alert and be aware of your surroundings at all times. Establish eye contact with the operator
+                Stay alert and be aware of your surroundings at all times. Establish eye contact with the operator
                 before approaching any vehicle, use extra caution when working along roadways or active construction sites.
                 P.P.E. Reflective Clothing.
               </td>
@@ -755,31 +760,30 @@
               <td class="center"><input type="checkbox" name="haz_icy"></td>
               <td>Icy Conditions</td>
               <td>
-                Use extreme caution when working on icy and slippery surfaces. Walk slowly, on designated walkways as much
-                as possible. Never walk with your hands in your pockets. Workers should ensure the propose footwear is used.
-                While driving, make sure you reduce your speed and ensure adequate tread on tires. Review company Safe work Practice.
+                Use extreme caution when working on icy and slippery surfaces. Walk slowly on designated walkways as much
+                as possible. Never walk with your hands in your pockets. Workers should ensure the proper footwear is used.
+                While driving, make sure you reduce your speed and ensure adequate tread on tires. Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_noise"></td>
               <td>Excessive Noise Levels</td>
               <td>
-                Limit your exposer as much as possible. Stay alert and ensure you are fully aware of your surroundings.
-                Establish an effective method of communication. P.P.E. Hearing protection. Review company Safe work Practice.
+                Limit your exposure as much as possible. Stay alert and ensure you are fully aware of your surroundings.
+                Establish an effective method of communication. P.P.E. Hearing protection. Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_wildfire"></td>
               <td>
-                Wild Fire Hazard –
-                Fire Ban in Effect
+                Wild Fire Hazard – Fire Ban in Effect
                 <label><input type="checkbox" name="fireban_yes"> Yes</label>
                 <label><input type="checkbox" name="fireban_no"> No</label>
               </td>
               <td>
                 Use extreme caution when working in dry conditions. Refrain from driving in long grass and always properly
-                discard and extinguish any form of accelerant (Cigarettes). Ensure fire extinguishers are in good working order.
-                Review company Safe work Practice.
+                discard and extinguish any form of accelerant (cigarettes). Ensure fire extinguishers are in good working order.
+                Review company Safe Work Practice.
               </td>
             </tr>
             <tr>
@@ -793,8 +797,7 @@
             <tr>
               <td class="center"><input type="checkbox" name="haz_landowner"></td>
               <td>
-                Land Owner / Home Owner –
-                Made Contact
+                Land Owner / Home Owner – Made Contact
                 <label><input type="checkbox" name="landowner_yes"> Yes</label>
                 <label><input type="checkbox" name="landowner_no"> No</label>
               </td>
@@ -827,15 +830,14 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 6 rows -->
             <tr>
               <td><input type="text" name="task_1" /></td>
-              <td><input type="text" name="hazard_1" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. Working near traffic" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_1" /></td>
+              <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest based on hazard entered."></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_2" /></td>
@@ -844,7 +846,7 @@
               <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_2" /></td>
+              <td><textarea name="control_2" class="control-text"></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_3" /></td>
@@ -853,7 +855,7 @@
               <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_3" /></td>
+              <td><textarea name="control_3" class="control-text"></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_4" /></td>
@@ -862,7 +864,7 @@
               <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_4" /></td>
+              <td><textarea name="control_4" class="control-text"></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_5" /></td>
@@ -871,7 +873,7 @@
               <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_5" /></td>
+              <td><textarea name="control_5" class="control-text"></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_6" /></td>
@@ -880,7 +882,7 @@
               <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
-              <td><input type="text" name="control_6" /></td>
+              <td><textarea name="control_6" class="control-text"></textarea></td>
             </tr>
             </tbody>
           </table>
@@ -926,7 +928,7 @@
               <td>Very unlikely</td>
               <td>Unlikely</td>
               <td>Possible</td>
-              <td>Significantly</td>
+              <td>Significant</td>
               <td>Certainty</td>
             </tr>
             </tbody>
@@ -1057,6 +1059,7 @@
           <div class="btn-row" id="buttonRow">
             <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
+            <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
         </div>
       </div>
@@ -1070,51 +1073,114 @@
 
 <script>
   const downloadBtn = document.getElementById('downloadBtn');
+  const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
   const page1       = document.getElementById('page1');
   const page2       = document.getElementById('page2');
 
-  if (downloadBtn && page1 && page2) {
-    downloadBtn.addEventListener('click', async () => {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'mm', 'letter');
+  /**
+   * Temporarily hide unchecked Common Hazards rows in the LIVE DOM,
+   * render page 1 + 2 to a LEGAL-sized PDF, then restore visibility.
+   */
+  async function generatePdf() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'legal'); // 8.5 x 14
 
+    const commonBody = document.querySelector('#commonHazardsTable tbody');
+    const hiddenRows = [];
+
+    if (commonBody) {
+      Array.from(commonBody.rows).forEach(row => {
+        const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
+        if (appliesCheckbox && !appliesCheckbox.checked) {
+          hiddenRows.push(row);
+          row.dataset._originalDisplay = row.style.display || '';
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    async function addPage(div, addNew) {
+      if (!div) return;
+      if (addNew) pdf.addPage();
+
+      const canvas = await html2canvas(div, {
+        scale: 2,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: -window.scrollY
+      });
+
+      const imgData   = canvas.toDataURL('image/jpeg', 0.95);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 8;
+
+      let imgW = pageWidth - margin * 2;
+      let imgH = canvas.height * (imgW / canvas.width);
+
+      if (imgH > pageHeight - margin * 2) {
+        imgH = pageHeight - margin * 2;
+        imgW = canvas.width * (imgH / canvas.height);
+      }
+
+      const x = (pageWidth - imgW) / 2;
+      const y = margin;
+
+      pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+    }
+
+    try {
+      await addPage(page1, false);
+      await addPage(page2, true);
+    } finally {
+      hiddenRows.forEach(row => {
+        row.style.display = row.dataset._originalDisplay || '';
+        delete row.dataset._originalDisplay;
+      });
+    }
+
+    return pdf;
+  }
+
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', async () => {
       try {
         if (buttonRow) buttonRow.style.display = 'none';
-
-        const pdfWidth  = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const margin = 8; // same margin each page
-
-        async function addHtmlPageToPdf(div, addNewPage) {
-          if (addNewPage) pdf.addPage();
-
-          const canvas = await html2canvas(div, {
-            scale: 2,
-            useCORS: true
-          });
-          const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
-          // Fit to width first
-          let imgW = pdfWidth - margin * 2;
-          let imgH = canvas.height * (imgW / canvas.width);
-
-          const maxHeight = pdfHeight - margin * 2;
-          if (imgH > maxHeight) {
-            imgH = maxHeight;
-            imgW = canvas.width * (imgH / canvas.height);
-          }
-
-          const x = (pdfWidth  - imgW) / 2;
-          const y = margin;
-
-          pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
-        }
-
-        await addHtmlPageToPdf(page1, false);
-        await addHtmlPageToPdf(page2, true);
-
+        const pdf = await generatePdf();
         pdf.save('WorksiteHazardAssessment.pdf');
+      } finally {
+        if (buttonRow) buttonRow.style.display = 'flex';
+      }
+    });
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      try {
+        if (buttonRow) buttonRow.style.display = 'none';
+        const pdf = await generatePdf();
+        const blob = pdf.output('blob');
+        const file = new File([blob], 'WorksiteHazardAssessment.pdf', { type: 'application/pdf' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Worksite Hazard Assessment',
+            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
+          });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'WorksiteHazardAssessment.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }
+      } catch (e) {
+        console.error('Share failed:', e);
       } finally {
         if (buttonRow) buttonRow.style.display = 'flex';
       }
@@ -1165,6 +1231,7 @@
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#111827';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -1244,6 +1311,44 @@
       document.querySelectorAll('.risk-output').forEach(o => o.value = "");
     });
   }
+
+  // Local "AI" style auto-fill of control plan based on hazard text
+  const aiSuggestions = {
+    traffic: "Wear reflective clothing, establish eye contact with operators, set up safe work zones and stay alert near moving vehicles.",
+    vehicle: "Park in safe areas, use cones or signs where required, and complete a walk-around before moving the vehicle.",
+    icy: "Walk slowly, use designated walkways, wear proper winter footwear with good traction, and keep hands free for balance.",
+    snow: "Clear snow where possible, watch for hidden ice, use winter PPE and adjust travel and driving speed.",
+    excavation: "Stay clear of edges, never jump trenches, only cross at suitable crossing points and use shoring or sloping where required.",
+    overhead: "Identify overhead lines before starting, maintain required limits of approach, and use spotters as required.",
+    buried: "Use locates before digging, hand-dig within tolerance zones, and stop work and report if contact is suspected.",
+    h2s: "Ensure H2S training and gas monitor use, confirm alarm set points, and establish muster and evacuation procedures.",
+    wildlife: "Work in pairs where possible, maintain awareness, carry bear spray, and never approach or feed wildlife.",
+    chainsaw: "Use chainsaw chaps, eye, hearing and head protection, maintain the saw properly and follow manufacturer instructions.",
+    ladder: "Inspect ladder before use, maintain three points of contact, and secure or tie off ladders where needed.",
+    noise: "Use hearing protection, limit exposure time, and maintain distance from loud equipment when possible.",
+    river: "Stay back from unstable banks, use PFDs where required, and plan safe crossing points.",
+    farming: "Make contact with landowner, keep distance from livestock, and avoid flagging/tape that animals can ingest."
+  };
+
+  document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+    input.addEventListener('input', e => {
+      const text = e.target.value.toLowerCase();
+      const row = e.target.name.split('_')[1];
+      const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+      if (!controlField) return;
+
+      // Only auto-fill if user hasn't already typed a custom, longer control
+      if (controlField.value && controlField.value.length > 10) return;
+
+      for (const key in aiSuggestions) {
+        if (text.includes(key)) {
+          controlField.value = aiSuggestions[key];
+          return;
+        }
+      }
+      // If no keyword match, leave the field alone
+    });
+  });
 </script>
 </body>
 </html>
