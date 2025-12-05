@@ -262,7 +262,6 @@
       text-align: center;
     }
 
-    /* Signatures */
     .signature-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -353,6 +352,7 @@
     .btn-primary {
       background: linear-gradient(120deg, var(--vista-blue-light), var(--vista-blue), var(--vista-blue-dark));
       color: #fff;
+
       box-shadow: 0 8px 20px rgba(5, 41, 66, 0.35);
     }
 
@@ -367,10 +367,9 @@
       box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18);
     }
 
-    /* Bigger, multiline job-specific control text */
     .control-text {
       width: 100%;
-      min-height: 70px;
+      min-height: 80px;
       resize: vertical;
       padding: 5px 7px;
     }
@@ -399,6 +398,7 @@
           <h1>VISTAGEOMATICS</h1>
           <p>Worksite Hazard Assessment &amp; Tailgate Report</p>
         </div>
+        <!-- Replace src with your logo path if needed -->
         <img src="vista-geomatics.png" alt="VistaGeomatics Logo" class="header-logo">
       </div>
 
@@ -464,7 +464,7 @@
           </div>
 
           <div class="row">
-            <div>
+            <div style="flex:1;">
               <label>Site Sidewalk and Fencing Condition Report</label>
               <div class="inline-checkbox-group">
                 <span>Did you drive on the sidewalk?</span>
@@ -651,16 +651,25 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task.</div>
+        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task. Controls are auto-suggested from an embedded ruleset.</div>
         <div class="page-title-accent"></div>
       </div>
 
       <div class="page-body">
+        <!-- Notice + Google Drive link -->
+        <div class="small-text" style="margin-bottom:4px;">
+          Master Hazard Library (Google Drive):
+          <!-- Replace this URL with your real Google Drive link -->
+          <a href="https://drive.google.com/REPLACE_WITH_YOUR_MASTER_HAZARD_LIST_URL" target="_blank" rel="noopener">
+            Open master hazard list
+          </a>
+        </div>
+
         <!-- Common Occurring Hazards -->
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Common Occurring Hazards</div>
-            <div class="section-note">Check all hazards that apply to today’s worksite.</div>
+            <div class="section-note">Check all hazards that apply to today’s worksite. Unchecked rows will be removed from the PDF.</div>
           </div>
 
           <table id="commonHazardsTable">
@@ -815,6 +824,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
+            <div class="section-note">Hazard controls will auto-suggest from a simplified offline ruleset.</div>
           </div>
 
           <table>
@@ -832,12 +842,12 @@
             <tbody>
             <tr>
               <td><input type="text" name="task_1" /></td>
-              <td><input type="text" name="hazard_1" placeholder="e.g. Working near traffic" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. wildlife, cold weather, rain, traffic" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
-              <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest based on hazard entered."></textarea></td>
+              <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_2" /></td>
@@ -1075,30 +1085,47 @@
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
-  const page1       = document.getElementById('page1');
-  const page2       = document.getElementById('page2');
 
-  /**
-   * Temporarily hide unchecked Common Hazards rows in the LIVE DOM,
-   * render page 1 + 2 to a LEGAL-sized PDF, then restore visibility.
-   */
-  async function generatePdf() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'legal'); // 8.5 x 14
+  // ======== PDF GENERATION (LEGAL SIZE, REMOVE UNCHECKED COMMON HAZARDS) ========
 
-    const commonBody = document.querySelector('#commonHazardsTable tbody');
-    const hiddenRows = [];
+  function createFilteredFormClone() {
+    const form = document.getElementById('hazardForm');
+    const clone = form.cloneNode(true);
 
-    if (commonBody) {
-      Array.from(commonBody.rows).forEach(row => {
+    // Remove unchecked rows in Common Occurring Hazards
+    const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
+    if (commonTableBody) {
+      Array.from(commonTableBody.rows).forEach(row => {
         const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
         if (appliesCheckbox && !appliesCheckbox.checked) {
-          hiddenRows.push(row);
-          row.dataset._originalDisplay = row.style.display || '';
-          row.style.display = 'none';
+          commonTableBody.removeChild(row);
         }
       });
     }
+
+    // Hide action buttons in clone
+    const clonedButtonRow = clone.querySelector('#buttonRow');
+    if (clonedButtonRow) clonedButtonRow.style.display = 'none';
+
+    return clone;
+  }
+
+  async function generatePdf() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'legal'); // LEGAL size 8.5x14
+
+    const clone = createFilteredFormClone();
+
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'fixed';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.top = '0';
+    tempContainer.style.width = '1050px';
+    tempContainer.appendChild(clone);
+    document.body.appendChild(tempContainer);
+
+    const clonePage1 = clone.querySelector('#page1');
+    const clonePage2 = clone.querySelector('#page2');
 
     async function addPage(div, addNew) {
       if (!div) return;
@@ -1106,12 +1133,10 @@
 
       const canvas = await html2canvas(div, {
         scale: 2,
-        useCORS: true,
-        scrollX: 0,
-        scrollY: -window.scrollY
+        useCORS: true
       });
 
-      const imgData   = canvas.toDataURL('image/jpeg', 0.95);
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 8;
@@ -1130,15 +1155,10 @@
       pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
     }
 
-    try {
-      await addPage(page1, false);
-      await addPage(page2, true);
-    } finally {
-      hiddenRows.forEach(row => {
-        row.style.display = row.dataset._originalDisplay || '';
-        delete row.dataset._originalDisplay;
-      });
-    }
+    await addPage(clonePage1, false);
+    await addPage(clonePage2, true);
+
+    document.body.removeChild(tempContainer);
 
     return pdf;
   }
@@ -1187,7 +1207,8 @@
     });
   }
 
-  // Auto-calc Risk (R = F × S × P)
+  // ======== RISK CALC (R = F × S × P) ========
+
   function updateRiskForRow(row) {
     const fInput = document.querySelector('input[name="f_' + row + '"]');
     const sInput = document.querySelector('input[name="s_' + row + '"]');
@@ -1206,15 +1227,15 @@
     }
   }
 
-  const riskInputs = document.querySelectorAll('.risk-input');
-  riskInputs.forEach(input => {
+  document.querySelectorAll('.risk-input').forEach(input => {
     input.addEventListener('input', () => {
       const row = input.getAttribute('data-row');
       if (row) updateRiskForRow(row);
     });
   });
 
-  // Signature pads
+  // ======== SIGNATURE PADS ========
+
   function initSignaturePad(canvasId, clearButtonId) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
@@ -1297,7 +1318,6 @@
   initSignaturePad('saSignature', 'clearSaSig');
   initSignaturePad('clientSignature', 'clearClientSig');
 
-  // Reset clears signatures and risk outputs
   const resetBtn = document.getElementById('resetBtn');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
@@ -1312,43 +1332,300 @@
     });
   }
 
-  // Local "AI" style auto-fill of control plan based on hazard text
-  const aiSuggestions = {
-    traffic: "Wear reflective clothing, establish eye contact with operators, set up safe work zones and stay alert near moving vehicles.",
-    vehicle: "Park in safe areas, use cones or signs where required, and complete a walk-around before moving the vehicle.",
-    icy: "Walk slowly, use designated walkways, wear proper winter footwear with good traction, and keep hands free for balance.",
-    snow: "Clear snow where possible, watch for hidden ice, use winter PPE and adjust travel and driving speed.",
-    excavation: "Stay clear of edges, never jump trenches, only cross at suitable crossing points and use shoring or sloping where required.",
-    overhead: "Identify overhead lines before starting, maintain required limits of approach, and use spotters as required.",
-    buried: "Use locates before digging, hand-dig within tolerance zones, and stop work and report if contact is suspected.",
-    h2s: "Ensure H2S training and gas monitor use, confirm alarm set points, and establish muster and evacuation procedures.",
-    wildlife: "Work in pairs where possible, maintain awareness, carry bear spray, and never approach or feed wildlife.",
-    chainsaw: "Use chainsaw chaps, eye, hearing and head protection, maintain the saw properly and follow manufacturer instructions.",
-    ladder: "Inspect ladder before use, maintain three points of contact, and secure or tie off ladders where needed.",
-    noise: "Use hearing protection, limit exposure time, and maintain distance from loud equipment when possible.",
-    river: "Stay back from unstable banks, use PFDs where required, and plan safe crossing points.",
-    farming: "Make contact with landowner, keep distance from livestock, and avoid flagging/tape that animals can ingest."
-  };
+  // ======== OFFLINE HAZARD RULE ENGINE – EXTENDED, WITH SPLIT WEATHER CONTROLS ========
 
-  document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
-    input.addEventListener('input', e => {
-      const text = e.target.value.toLowerCase();
-      const row = e.target.name.split('_')[1];
-      const controlField = document.querySelector(`textarea[name="control_${row}"]`);
-      if (!controlField) return;
+  const DEFAULT_RULES = [
+    // 1) Traffic & vehicles – roads, sites, parking, construction traffic
+    {
+      name: 'Traffic & vehicles (roads, sites, parking)',
+      keywords: 'traffic, vehicle, vehicles, car, cars, truck, trucks, bus, buses, van, vans, road, roads, highway, lane, lanes, shoulder, parking lot, alley, intersection, crosswalk, speeding, passing, tailgating, construction traffic, haul truck, dump truck, delivery truck, backing vehicle, reversing, blind corner',
+      control: 'Set crews and equipment well clear of live lanes and blind spots. Use cones or signs as needed, wear hi-vis, use a spotter for backing, and make eye contact with drivers before entering vehicle paths.'
+    },
 
-      // Only auto-fill if user hasn't already typed a custom, longer control
-      if (controlField.value && controlField.value.length > 10) return;
+    // 2) Winter driving & poor road conditions
+    {
+      name: 'Winter driving & poor road conditions',
+      keywords: 'icy road, icy roads, snow covered roads, slush, black ice, poor road conditions, gravel road, washboard, ruts, deep ruts, soft shoulder, fog on road, low visibility driving, winter storm, whiteout',
+      control: 'Reduce speed, increase following distance, and avoid sudden braking or lane changes. Delay travel or reroute if visibility or traction is too poor to drive safely.'
+    },
 
-      for (const key in aiSuggestions) {
-        if (text.includes(key)) {
-          controlField.value = aiSuggestions[key];
+    // 3) Terrain, footing & slips/trips/falls
+    {
+      name: 'Terrain, footing & slips / trips / falls',
+      keywords: 'uneven ground, uneven, slope, slopes, steep slope, ditch, ditches, embankment, bank, banks, hole, holes, rut, ruts, mud, muddy, soft ground, loose gravel, loose rock, wet grass, snow, ice, icy, slippery, trip hazard, slip hazard, falling, sidewalk, curb, stairs, step, steps, tall grass, hidden hole',
+      control: 'Walk the area first and avoid unstable, icy, or uneven ground. Set tripods and ladders on firm, level footing and keep walk paths free of holes, debris, cords, and loose material.'
+    },
+
+    // 4) Water, ice & drowning hazards
+    {
+      name: 'Water, ice & drowning hazards',
+      keywords: 'river, creek, stream, canal, ditch with water, pond, lake, reservoir, culvert, storm pond, open water, deep water, fast moving water, current, flooding, flood, rising water, ice, thin ice, river ice, lake ice, snow covered ice, falling into water, drowning',
+      control: 'Keep a safe distance from edges, undercut banks, and thin or unknown ice. Choose safe crossing points or alternate routes and stop work if there is a real risk of falling into deep or fast-moving water.'
+    },
+
+    // 5) Cold weather / winter exposure
+    {
+      name: 'Cold weather & winter exposure',
+      keywords: 'cold, cold weather, freezing, frost, frostbite, hypothermia, winter, windchill, minus, below zero, snowstorm, blizzard',
+      control: 'Dress in layers, cover exposed skin, and take warm-up breaks in a heated vehicle or shelter. Shorten tasks in extreme cold and watch each other for early signs of cold stress.'
+    },
+
+    // 6) Heat & sun exposure
+    {
+      name: 'Heat & sun exposure',
+      keywords: 'heat, hot, heat stress, heat exhaustion, heat stroke, sun, sunny, uv, sunburn, high temperature, hot day',
+      control: 'Schedule heavy work for cooler parts of the day, take frequent shade and water breaks, and wear breathable clothing, hat, and sunscreen. Watch for signs of heat stress and slow down or stop if workers feel unwell.'
+    },
+
+    // 7) Rain, wet weather & wet surfaces
+    {
+      name: 'Rain, wet weather & wet surfaces',
+      keywords: 'rain, raining, wet, wet conditions, drizzle, showers, downpour, puddles, slick, slippery when wet, wet stairs, wet ladder, wet concrete, wet metal',
+      control: 'Wear waterproof layers and slip-resistant footwear and slow down on wet surfaces, stairs, and ladders. Avoid climbing on wet metal or steep surfaces where footing is poor.'
+    },
+
+    // 8) Wind, visibility & smoke
+    {
+      name: 'Wind, visibility & smoke',
+      keywords: 'wind, winds, windy, gust, gusts, chinook, high winds, blowing snow, dust, dust storm, fog, foggy, smoke, wildfire smoke, low visibility, poor visibility',
+      control: 'Secure tripods, fencing, and loose materials in high winds and avoid working near overhead hazards in strong gusts. Use extra lighting or delay work if visibility or air quality becomes too poor to work safely.'
+    },
+
+    // 9) Domestic dogs
+    {
+      name: 'Domestic dogs',
+      keywords: 'dog, dogs, barking dog, aggressive dog, guard dog, loose dog',
+      control: 'Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and avoid entering the area until it is clearly under control.'
+    },
+
+    // 10) Livestock (cattle, horses, etc.)
+    {
+      name: 'Livestock – cattle, horses, farm animals',
+      keywords: 'cattle, cow, cows, bull, livestock, herd, horse, horses, pony, sheep, goats, farm animals',
+      control: 'Give livestock plenty of space and avoid walking between animals and fences. Change your route or setup if animals appear protective, stressed, or aggressive.'
+    },
+
+    // 11) Wildlife (bears, moose, coyotes, etc.)
+    {
+      name: 'Wildlife – bears, moose, coyotes, etc.',
+      keywords: 'wildlife, bear, bears, cougar, cougars, moose, deer, elk, coyote, coyotes, wolf, wolves, skunk, porcupine, beaver, goose, geese, aggressive wildlife',
+      control: 'Stay alert for wildlife sign and avoid working close to animals. Back away calmly, keep food and garbage secured, and relocate or leave if wildlife is near or acting unpredictably.'
+    },
+
+    // 12) Insects & ticks
+    {
+      name: 'Insects & ticks',
+      keywords: 'mosquito, mosquitoes, wasp, wasps, bee, bees, hornet, hornets, biting insects, bugs, tick, ticks, nest',
+      control: 'Use insect repellent and wear long sleeves and pants in buggy or brushy areas. Check for ticks after fieldwork and mark or avoid nests and heavy insect activity zones.'
+    },
+
+    // 13) Construction fencing & site perimeter
+    {
+      name: 'Construction fencing & site perimeter',
+      keywords: 'construction fence, construction fencing, temporary fence, temp fence, fence base, fence bases, fence gate, swinging gate, crowd control fence, site perimeter, snow drift on fence',
+      control: 'Do not lean on or climb temporary fencing and watch for bases or sandbags that create trip hazards. Use designated gates and keep clear when panels or gates are being moved or when winds are high.'
+    },
+
+    // 14) Public, landowners & security
+    {
+      name: 'Public, landowners & security',
+      keywords: 'public, pedestrian, pedestrians, people, crowd, crowds, landowner, land owner, homeowner, neighbour, neighbor, trespass, trespassing, dispute, boundary dispute, harassment, aggressive, threats, angry person, theft, stolen, vandalism, encampment, alley, drug activity',
+      control: 'Set up away from main public walk paths and be calm and respectful with the public or landowners. Leave immediately if someone becomes aggressive or threatening and secure vehicles and equipment in higher-risk areas.'
+    },
+
+    // 15) Working alone & communication gaps
+    {
+      name: 'Working alone & communication gaps',
+      keywords: 'alone, working alone, solo, no signal, no service, poor reception, dead radio, dead phone, lost contact, delayed response, remote location, remote site',
+      control: 'Use a defined check-in plan with clear times and backups if a check-in is missed. Confirm that radios or phones are charged and work in the area before committing to lone-worker tasks.'
+    },
+
+    // 16) Fatigue, time pressure & human factors
+    {
+      name: 'Fatigue, time pressure & human factors',
+      keywords: 'tired, fatigue, exhausted, long shift, overtime, rushing, rush, hurry, shortcut, stressed, stress, burnout, distracted, poor focus, new worker, inexperienced, miscommunication',
+      control: 'Plan tasks with realistic timelines and avoid rushing or shortcuts. Take short breaks to manage fatigue, check understanding with new workers, and stop to clarify instructions when communication is unclear.'
+    },
+
+    // 17) Utilities – overhead & underground
+    {
+      name: 'Utilities – overhead & underground',
+      keywords: 'power line, power lines, overhead line, hydro, electrical, electric, wire, wires, cable, cables, gas line, gas, pipeline, pipe, water line, sewer, storm sewer, fibre, fiber, telecom, utility, utilities, manhole, vault, pedestal, transformer',
+      control: 'Review and mark locates before working and keep metal rods and tripods outside limits of approach to power lines. Do not dig, stake, or probe where utilities may be present without confirmation from locates or the owner.'
+    },
+
+    // 18) Confined spaces & hazardous atmospheres
+    {
+      name: 'Confined spaces & hazardous atmospheres',
+      keywords: 'confined space, manhole, vault, tank, pit, sewer, wet well, sump, underground room, oxygen deficiency, h2s, hydrogen sulphide, methane, toxic gas, bad air',
+      control: 'Do not enter manholes, vaults, or other confined spaces without a formal confined-space procedure. Treat unknown spaces as hazardous until tested and monitored with proper equipment.'
+    },
+
+    // 19) Equipment, tools & manual handling
+    {
+      name: 'Equipment, tools & manual handling',
+      keywords: 'tripod, tripods, rod, prism, total station, gnss, gps, pole, pole slip, battery, batteries, heavy, lift, lifting, carry, carrying, strain, back pain, shoulder pain, backpack, hammer, sledge, stake, stakes, knife, blade, utility knife, saw, drill, cord, cords, cable, cables, extension cord, strapped load',
+      control: 'Use proper lifting technique and break heavy or awkward loads into smaller carries or use carts. Check clamps, straps, and poles before use and keep sharp tools and cords controlled so they do not create cuts or trip hazards.'
+    },
+
+    // 20) Construction equipment & overhead work
+    {
+      name: 'Construction equipment & overhead work',
+      keywords: 'excavator, excavators, backhoe, loader, skid steer, grader, crane, boom, boom truck, pump truck, forklift, telehandler, dump truck, concrete truck, rebar, demolition, falling debris, falling objects, overhead work, roof work, hoisted load, crane load',
+      control: 'Stay out of swing radii, lifting zones, and beneath any overhead work or suspended loads. Confirm with the site supervisor where equipment will travel and relocate survey setups if construction activity comes too close.'
+    },
+
+    // 21) Ladders, stairs, scaffolds & work at height
+    {
+      name: 'Ladders, stairs, scaffolds & work at height',
+      keywords: 'ladder, ladders, damaged ladder, ladder slip, ladder angle, scaffold, scaffolding, stair, stairs, stairway, handrail, roof edge, rooftop, balcony, fall from height, open edge, open hole, floor opening',
+      control: 'Use ladders on firm, level ground at the correct angle and maintain three-point contact. Stay back from edges or openings and ensure guardrails or fall protection are in place where there is a fall risk.'
+    },
+
+    // 22) Chemicals, fumes, dust & air quality
+    {
+      name: 'Chemicals, fumes, dust & air quality',
+      keywords: 'fuel, diesel, gas, gasoline, propane, mapp, spray paint, paint, solvent, chemical, chemicals, cement, grout, dust, silica dust, asphalt fumes, fumes, vapour, vapours, vapor, vapors, smoke, exhaust, odour, odor, poor air quality',
+      control: 'Use fuels, paints, and chemicals in well-ventilated areas and stand upwind of dust, fumes, or exhaust. Wear the PPE specified on the SDS and clean up spills promptly.'
+    },
+
+    // 23) Fire & explosion hazards
+    {
+      name: 'Fire & explosion hazards',
+      keywords: 'fire, wildfire, grass fire, fire ban, flammable, flame, spark, ignition source, propane leak, gas leak, fuel spill, explosion, explosive atmosphere',
+      control: 'Keep ignition sources away from flammable materials and follow any fire-ban restrictions. Store fuels and cylinders properly and have a suitable extinguisher available and inspected.'
+    },
+
+    // 24) Drones, lasers & survey tech
+    {
+      name: 'Drones, lasers & survey technology',
+      keywords: 'drone, uav, quadcopter, drone crash, drone propeller, laser, laser level, laser hazard, laser eye, instrument glare, screen glare, gps interference, magnetic interference',
+      control: 'Fly drones only in controlled areas clear of people, vehicles, and power lines and follow manufacturer limits. Avoid directing lasers toward eyes or traffic and manage glare so you can still see footing and surroundings clearly.'
+    },
+
+    // 25) Urban alleys, waste & sharps
+    {
+      name: 'Urban alleys, waste & sharps',
+      keywords: 'alley, alleyway, garbage, debris pile, dumpster, waste, broken glass, syringe, needle, sharps, human waste, homeless camp, encampment',
+      control: 'Watch footing around waste and avoid direct contact with sharps, needles, or bodily fluids. Mark off unsafe areas, use gloves as needed, and relocate setups away from heavy garbage or encampments.'
+    },
+
+    // 26) Parking lots, site access & pedestrians
+    {
+      name: 'Parking lots, site access & pedestrians',
+      keywords: 'parking lot, driveway, access road, site entrance, backing car, backing truck, pedestrian, pedestrians, jogger, cyclist, e-scooter, stroller, school zone, drop off, pick up',
+      control: 'Park so you can pull forward to leave and avoid backing where people or vehicles are moving. Keep tripods out of main walk lines and watch for pedestrians, cyclists, and e-scooters when moving gear or vehicles.'
+    },
+
+    // 27) Building interiors – basements, rooftops, parkades
+    {
+      name: 'Building interiors – basements, rooftops, parkades',
+      keywords: 'basement, crawlspace, crawl space, attic, rooftop, roof, skylight, parkade, parking garage, low ceiling, low headroom, boiler room, mechanical room, storage room, poor lighting inside, mould, mold, mouldy, damp, damp basement',
+      control: 'Use extra lighting and watch for low headroom, trip hazards, and hidden edges or skylights. Limit time in damp, mouldy, or poorly ventilated rooms and avoid roof areas without guardrails or safe access.'
+    },
+
+    // 28) General survey hazard control
+    {
+      name: 'General survey hazard control',
+      keywords: 'hazard, hazards, risk, unsafe, danger, dangerous, concern, issue',
+      control: 'Walk the site before starting, identify key hazards, and adjust the plan, PPE, or setup to control them. Stop work and re-evaluate if conditions change or a hazard cannot be controlled to an acceptable level.'
+    }
+  ];
+
+  const hazardRules = DEFAULT_RULES;
+
+  function normalize(text) {
+    return (text || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function getSuggestionFromRules(hazardText) {
+    const text = normalize(hazardText);
+    if (!text) return '';
+
+    let bestIndex = -1;
+    let bestScore = 0;
+
+    hazardRules.forEach((rule, index) => {
+      const keywordsStr = rule.keywords || '';
+      const keywords = keywordsStr.split(',').map(k => k.trim()).filter(Boolean);
+      let score = 0;
+
+      keywords.forEach(kw => {
+        const normKw = normalize(kw);
+        if (!normKw) return;
+
+        // Strong score for full keyword match (e.g., "dog", "cold weather")
+        if (text.includes(normKw)) {
+          score += 4;
+        } else {
+          // Weaker score for partial overlap on longer words
+          const parts = normKw.split(' ');
+          parts.forEach(part => {
+            if (part.length > 3 && text.includes(part)) {
+              score += 1;
+            }
+          });
+        }
+      });
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestIndex = index;
+      }
+    });
+
+    if (bestIndex >= 0 && bestScore > 0) {
+      return hazardRules[bestIndex].control || '';
+    }
+    return '';
+  }
+
+  function initHazardAutoSuggest() {
+    document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+      // Suggest control when leaving the hazard cell
+      input.addEventListener('blur', e => {
+        const hazardText = e.target.value.trim();
+        const parts = e.target.name.split('_');
+        const row = parts[1];
+        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+        if (!controlField) return;
+
+        // If hazard is empty, wipe control
+        if (!hazardText) {
+          controlField.value = '';
           return;
         }
-      }
-      // If no keyword match, leave the field alone
+
+        // Don’t overwrite longer manual text the user has already entered
+        if (controlField.value && controlField.value.length > 40) return;
+
+        const suggestion = getSuggestionFromRules(hazardText);
+        if (suggestion) {
+          controlField.value = suggestion;
+        }
+      });
+
+      // Clear control when hazard text is cleared
+      input.addEventListener('input', e => {
+        const value = e.target.value.trim();
+        const parts = e.target.name.split('_');
+        const row = parts[1];
+        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+        if (!controlField) return;
+
+        if (!value) {
+          controlField.value = '';
+        }
+      });
     });
-  });
+  }
+
+  // Call once on load
+  initHazardAutoSuggest();
 </script>
 </body>
 </html>
