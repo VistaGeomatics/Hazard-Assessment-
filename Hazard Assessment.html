@@ -842,7 +842,7 @@
             <tbody>
             <tr>
               <td><input type="text" name="task_1" /></td>
-              <td><input type="text" name="hazard_1" placeholder="e.g. wildlife, cold weather, rain, traffic" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. dog, cold weather, rain, traffic" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
@@ -1086,13 +1086,13 @@
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  // ======== PDF GENERATION (LEGAL SIZE, REMOVE UNCHECKED COMMON HAZARDS) ========
+  // ======== PDF GENERATION (LEGAL SIZE, REMOVE UNCHECKED COMMON HAZARDS, NO BLANK SPACE, FULL TEXTAREAS) ========
 
   function createFilteredFormClone() {
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
 
-    // Remove unchecked rows in Common Occurring Hazards
+    // Remove unchecked Common Hazards rows
     const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
     if (commonTableBody) {
       Array.from(commonTableBody.rows).forEach(row => {
@@ -1101,9 +1101,27 @@
           commonTableBody.removeChild(row);
         }
       });
+
+      // Collapse height so no blank space remains
+      commonTableBody.style.display = 'table-row-group';
+      const tbl = commonTableBody.parentElement;
+      tbl.style.height = 'auto';
+      tbl.style.maxHeight = 'none';
+      tbl.style.overflow = 'visible';
+      // Trigger reflow
+      void commonTableBody.offsetHeight;
     }
 
-    // Hide action buttons in clone
+    // Expand all textareas so text is not cut off
+    clone.querySelectorAll("textarea").forEach(t => {
+      t.style.height = "auto";
+      t.style.minHeight = "0";
+      t.style.maxHeight = "none";
+      t.style.overflow = "visible";
+      t.style.height = t.scrollHeight + "px";
+    });
+
+    // Hide the action buttons
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
