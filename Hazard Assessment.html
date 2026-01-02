@@ -317,7 +317,7 @@
       text-align: center;
     }
 
-    /* EXPORT: replace textarea with div so html2canvas always captures content */
+    /* EXPORT: replace textarea with div so html2canvas captures content */
     .print-textarea {
       width: 100%;
       min-height: 56px;
@@ -332,6 +332,35 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+
+    /* Hospital autocomplete (works on iPad + PC) */
+    .autocomplete-wrap { position: relative; }
+    .suggestions {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 4px);
+      z-index: 1000;
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+      max-height: 220px;
+      overflow: auto;
+      display: none;
+    }
+    .suggestion-item {
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      border-bottom: 1px solid rgba(214,226,240,0.6);
+    }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover { background: #f2f7ff; }
+    .suggestion-top { font-weight: 600; color: var(--vista-blue-dark); }
+    .suggestion-sub { margin-top: 2px; color: var(--text-muted); font-size: 0.72rem; }
+    .hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
 
     @media (max-width: 700px) {
       .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -777,11 +806,22 @@
 
         <!-- Emergency Response -->
         <div class="section-card">
-          <div class="section-header"><div class="section-title">Emergency Response Plan</div></div>
+          <div class="section-header">
+            <div class="section-title">Emergency Response Plan</div>
+            <div class="section-note">Start typing a facility name or acronym (example: FMC). Select a match to auto-fill 911 and procedures.</div>
+          </div>
 
           <div class="row">
-            <div><label for="nearest_hospital">Nearest first aid facility or hospital</label><input type="text" id="nearest_hospital" name="nearest_hospital"></div>
-            <div><label for="hospital_phone">Phone #</label><input type="text" id="hospital_phone" name="hospital_phone"></div>
+            <div class="autocomplete-wrap">
+              <label for="nearest_hospital">Nearest first aid facility or hospital</label>
+              <input type="text" id="nearest_hospital" name="nearest_hospital" autocomplete="off" placeholder="Type facility name or acronym">
+              <div id="hospitalSuggestions" class="suggestions"></div>
+              <div class="hint">Tip: You can enter the acronym, then tap the suggestion.</div>
+            </div>
+            <div>
+              <label for="hospital_phone">Phone #</label>
+              <input type="text" id="hospital_phone" name="hospital_phone">
+            </div>
           </div>
 
           <div style="margin-top:4px;">
@@ -816,6 +856,7 @@
 
             <div class="signature-box">
               <div class="signature-label">Rodman – Signature</div>
+
               <canvas id="saSignature" class="signature-canvas"></canvas>
               <div class="signature-actions"><button type="button" class="btn-secondary" id="clearSaSig">Clear</button></div>
               <div class="signature-row">
@@ -847,7 +888,7 @@
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
 
-          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.4</div>
+          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.5</div>
         </div>
 
       </div>
@@ -879,10 +920,10 @@
     const loc = (document.querySelector('input[name="location"]')?.value || "").trim();
     const date = (document.querySelector('input[name="date"]')?.value || "").trim();
     const parts = ["WorksiteHazardAssessment"];
-    if (job) parts.push("Job_" + job);
+    if (job) parts.push("Job " + job);
     if (loc) parts.push(loc);
     if (date) parts.push(date);
-    return sanitizeFileName(parts.join(" - "));
+    return sanitizeFileName(parts.join(", "));
   }
 
   function askForFileName() {
@@ -1010,7 +1051,7 @@
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
-    // make textarea content always appear in export
+    // force textarea content to appear in export
     replaceTextareasForPrint(clone);
 
     return clone;
@@ -1221,15 +1262,13 @@
     if (!w) return [];
     const out = new Set([w]);
 
-    // singularize common plurals
-    if (w.endsWith("ies") && w.length > 4) out.add(w.slice(0, -3) + "y");           // batteries -> battery
-    if (w.endsWith("es") && w.length > 3) out.add(w.slice(0, -2));                  // fences -> fence
-    if (w.endsWith("s") && !w.endsWith("ss") && w.length > 2) out.add(w.slice(0, -1)); // dogs -> dog
+    if (w.endsWith("ies") && w.length > 4) out.add(w.slice(0, -3) + "y");
+    if (w.endsWith("es") && w.length > 3) out.add(w.slice(0, -2));
+    if (w.endsWith("s") && !w.endsWith("ss") && w.length > 2) out.add(w.slice(0, -1));
 
-    // pluralize
-    if (w.endsWith("y") && w.length > 2) out.add(w.slice(0, -1) + "ies");           // battery -> batteries
-    out.add(w + "s");                                                               // dog -> dogs
-    out.add(w + "es");                                                              // fence -> fences
+    if (w.endsWith("y") && w.length > 2) out.add(w.slice(0, -1) + "ies");
+    out.add(w + "s");
+    out.add(w + "es");
     return Array.from(out);
   }
 
@@ -1237,31 +1276,27 @@
     const t = normalize(text);
     if (!t) return [];
     const base = t.split(' ').filter(Boolean);
-
     const expanded = new Set();
-    base.forEach(tok => {
-      wordVariants(tok).forEach(v => expanded.add(v));
-    });
-
+    base.forEach(tok => wordVariants(tok).forEach(v => expanded.add(v)));
     return Array.from(expanded);
   }
 
   const hazardRules = [
-    { name:"Construction Traffic", keywords:"construction traffic,site traffic,haul truck,haul trucks,dump truck,dump trucks,delivery truck,delivery trucks,flagger,flagging,traffic control,backing,reversing,blind spot,swing radius,work zone", control:"Stay out of travel paths and swing radii. Wear hi-vis, use cones/signs if needed, use a spotter for backing, and make eye contact with operators.", f:3,s:4,p:3 },
+    { name:"Construction Traffic", keywords:"construction traffic,site traffic,haul truck,haul trucks,dump truck,dump trucks,delivery truck,delivery trucks,flagger,flagging,traffic control,backing,reversing,blind spot,swing radius,work zone", control:"Stay out of travel paths and swing radii. Wear hi-vis, use cones or signs if needed, use a spotter for backing, and make eye contact with operators.", f:3,s:4,p:3 },
     { name:"Construction Fencing", keywords:"construction fencing,construction fence,temp fence,temporary fence,fence panel,fence panels,fence base,fence bases,site perimeter,gate,gates,barricade,barricades", control:"Use gates and crossings, watch bases and trip hazards, and keep clear when panels move. In wind, keep distance and do not lean on fencing.", f:2,s:3,p:3 },
     { name:"Portable Generators", keywords:"generator,generators,portable generator,genset,genny,exhaust,carbon monoxide,extension cord,extension cords,cord,cords,fueling,refuel,gas can", control:"Run outdoors away from openings. Route cords to prevent trips. Refuel only when off and cooled, and store fuel safely.", f:2,s:5,p:2 },
-    { name:"Traffic & Vehicles", keywords:"traffic,road,roads,highway,lane,lanes,shoulder,intersection,crosswalk,parking lot,alley,backing,reversing,vehicle,vehicles,truck,trucks,bus,buses", control:"Work clear of live lanes and vehicle routes. Wear hi-vis, face traffic, use cones/signs if needed, and use a spotter for backing.", f:3,s:4,p:3 },
-    { name:"Slips / Trips / Falls", keywords:"slip,slips,trip,trips,fall,falls,uneven ground,slippery,ice,icy,snow,mud,ditch,ditches,embankment,hole,holes,rut,ruts,loose gravel,wet grass,stairs,curb,sidewalk", control:"Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear.", f:3,s:3,p:3 },
+    { name:"Traffic & Vehicles", keywords:"traffic,road,roads,highway,lane,lanes,shoulder,intersection,crosswalk,parking lot,alley,backing,reversing,vehicle,vehicles,truck,trucks,bus,buses", control:"Work clear of live lanes and vehicle routes. Wear hi-vis, face traffic, use cones or signs if needed, and use a spotter for backing.", f:3,s:4,p:3 },
+    { name:"Slips, Trips, Falls", keywords:"slip,slips,trip,trips,fall,falls,uneven ground,slippery,ice,icy,snow,mud,ditch,ditches,embankment,hole,holes,rut,ruts,loose gravel,wet grass,stairs,curb,sidewalk", control:"Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear.", f:3,s:3,p:3 },
     { name:"Cold Weather", keywords:"cold,cold weather,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero", control:"Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or windchill.", f:3,s:4,p:2 },
-    { name:"Rain / Wet Conditions", keywords:"rain,raining,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs", control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid steep or unstable areas with poor footing.", f:3,s:3,p:3 },
-    { name:"Wind / Low Visibility", keywords:"wind,windy,gust,gusts,blowing snow,dust,dust storm,fog,foggy,smoke,wildfire smoke,low visibility", control:"Secure tripods and loose items and use lower, wider setups. Delay work if wind, smoke, or visibility makes conditions unsafe.", f:3,s:3,p:3 },
+    { name:"Rain, Wet Conditions", keywords:"rain,raining,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs", control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid steep or unstable areas with poor footing.", f:3,s:3,p:3 },
+    { name:"Wind, Low Visibility", keywords:"wind,windy,gust,gusts,blowing snow,dust,dust storm,fog,foggy,smoke,wildfire smoke,low visibility", control:"Secure tripods and loose items and use lower, wider setups. Delay work if wind, smoke, or visibility makes conditions unsafe.", f:3,s:3,p:3 },
     { name:"Utilities", keywords:"utilities,utility,overhead,underground,locate,locates,power line,powerlines,gas line,pipeline,telecom,fibre,fiber,manhole,vault,transformer", control:"Confirm locates and mark-outs before work. Maintain limits of approach and do not dig, stake, or probe without verified clearance.", f:2,s:5,p:2 },
-    { name:"Digging / Pins", keywords:"digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins,pin,pins", control:"Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.", f:2,s:5,p:2 },
+    { name:"Digging, Pins", keywords:"digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins,pin,pins", control:"Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.", f:2,s:5,p:2 },
     { name:"Jackhammer", keywords:"jackhammer,breaker,demolition hammer,concrete,pavement,chipping,vibration,noise", control:"Wear eye and hearing protection and use stable footing. Control flying debris, confirm utilities below, and take breaks to reduce vibration exposure.", f:2,s:4,p:2 },
     { name:"Dogs", keywords:"dog,dogs,aggressive dog,aggressive dogs,loose dog,loose dogs,barking dog,barking dogs,guard dog,guard dogs", control:"Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and do not enter until the area is clearly safe.", f:2,s:3,p:3 },
     { name:"Wildlife", keywords:"wildlife,bear,bears,moose,coyote,coyotes,cougar,cougars,wolf,wolves,elk,deer,goose,geese", control:"Stay alert, keep distance, secure food and garbage, carry bear spray where required, and leave if wildlife is near or unpredictable.", f:2,s:5,p:2 },
-    { name:"H2S / Gas", keywords:"h2s,hydrogen sulfide,hydrogen sulphide,methane,toxic gas,gas monitor,alarm,oxygen deficiency,confined space", control:"Do not work in H2S or hazardous atmospheres without training and a working monitor. Follow emergency procedures and evacuate on alarm.", f:2,s:5,p:2 },
-    { name:"Housekeeping / Storage", keywords:"housekeeping,access,egress,material storage,stored,stacked,blocking,walkway,walkways,aisle,aisles,debris", control:"Keep access and egress clear. Store materials safely and maintain housekeeping. Remove trip hazards and improve lighting if needed.", f:3,s:3,p:3 }
+    { name:"H2S, Gas", keywords:"h2s,hydrogen sulfide,hydrogen sulphide,methane,toxic gas,gas monitor,alarm,oxygen deficiency,confined space", control:"Do not work in H2S or hazardous atmospheres without training and a working monitor. Follow emergency procedures and evacuate on alarm.", f:2,s:5,p:2 },
+    { name:"Housekeeping", keywords:"housekeeping,access,egress,material storage,stored,stacked,blocking,walkway,walkways,aisle,aisles,debris", control:"Keep access and egress clear. Store materials safely and maintain housekeeping. Remove trip hazards and improve lighting if needed.", f:3,s:3,p:3 }
   ].map(r => ({ ...r, control: clamp185(r.control) }));
 
   function scoreRule(rule, text, tokens) {
@@ -1278,7 +1313,6 @@
       if (kw.length <= 2) continue;
       if (kw.length === 3 && !ALLOW_SHORT.has(kw)) continue;
 
-      // Phrase keyword
       if (kw.includes(' ')) {
         if (text.includes(kw)) { score += 12; continue; }
 
@@ -1295,13 +1329,8 @@
         continue;
       }
 
-      // Single word keyword: plural-aware
       const kwVars = wordVariants(kw);
-      if (kwVars.some(v => tokenSet.has(v))) {
-        score += 6;
-        continue;
-      }
-
+      if (kwVars.some(v => tokenSet.has(v))) { score += 6; continue; }
       if (kw.length >= 5 && text.includes(kw)) score += 2;
     }
 
@@ -1344,28 +1373,22 @@
   function initHazardAutoSuggest() {
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
 
-      // Clear controls + ratings when hazard is cleared
       input.addEventListener('input', e => {
         const value = e.target.value.trim();
         const row = e.target.name.split('_')[1];
         if (!value) clearRowControlsAndRatings(row);
       });
 
-      // Suggest control + auto-fill F/S/P (if blank) on blur
       input.addEventListener('blur', e => {
         const hazardText = e.target.value.trim();
         const row = e.target.name.split('_')[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
         if (!controlField) return;
 
-        if (!hazardText) {
-          clearRowControlsAndRatings(row);
-          return;
-        }
+        if (!hazardText) { clearRowControlsAndRatings(row); return; }
 
         const rule = bestRuleMatch(hazardText);
 
-        // only overwrite if user hasn't already entered a long custom control
         if (!(controlField.value && controlField.value.trim().length > 40)) {
           if (rule && rule.control) controlField.value = clamp185(rule.control);
         }
@@ -1375,6 +1398,157 @@
     });
   }
   initHazardAutoSuggest();
+
+  /* ===================== EMERGENCY RESPONSE AUTO-FILL (SELF-CONTAINED) ===================== */
+  const MEDICAL_FACILITIES = [{"name":"Foothills Medical Centre","abbr":"FMC","type":"Hospital","address":"1403 29 St NW","city":"Calgary","postal":"T2N 2T9"},{"name":"Alberta Children's Hospital","abbr":"ACH","type":"Hospital","address":"28 Oki Dr NW","city":"Calgary","postal":"T3B 6A8"},{"name":"Peter Lougheed Centre","abbr":"PLC","type":"Hospital","address":"3500 26 Ave NE","city":"Calgary","postal":"T1Y 6J4"},{"name":"Rockyview General Hospital","abbr":"RGH","type":"Hospital","address":"7007 14 St SW","city":"Calgary","postal":"T2V 1P9"},{"name":"South Health Campus","abbr":"SHC","type":"Hospital","address":"4448 Front St SE","city":"Calgary","postal":"T3M 1M4"},{"name":"Sheldon M. Chumir Health Centre","abbr":"SMCHC","type":"Community Health Centre","address":"1213 4 St SW","city":"Calgary","postal":"T2R 0X7"},{"name":"Sunridge Professional Building, Urgent Care","abbr":"SPB","type":"Urgent Care","address":"2685 36 St NE","city":"Calgary","postal":"T1Y 6T2"},{"name":"Airdrie Urgent Care Centre","abbr":"AUCC","type":"Urgent Care","address":"604 Main St S","city":"Airdrie","postal":"T4B 2L2"},{"name":"Okotoks Health and Wellness Centre","abbr":"OHWC","type":"Urgent Care","address":"100 Campus Dr","city":"Okotoks","postal":"T1S 0C2"},{"name":"Cochrane Urgent Care","abbr":"CUC","type":"Urgent Care","address":"15 Westside Dr","city":"Cochrane","postal":"T4C 1M1"},{"name":"Banff Mineral Springs Hospital","abbr":"BMSH","type":"Hospital","address":"305 Lynx St","city":"Banff","postal":"T1L 1H1"},{"name":"Canmore General Hospital","abbr":"CGH","type":"Hospital","address":"1100 Hospital Pl","city":"Canmore","postal":"T1W 1N2"},{"name":"High River General Hospital","abbr":"HRGH","type":"Hospital","address":"560 9 Ave W","city":"High River","postal":"T1V 1B3"},{"name":"Didsbury District Health Services","abbr":"DDHS","type":"Hospital","address":"20 6 Ave NE","city":"Didsbury","postal":"T0M 0W0"},{"name":"Olds Hospital and Care Centre","abbr":"OHCC","type":"Hospital","address":"3901 57 Ave","city":"Olds","postal":"T4H 1T9"},{"name":"Claresholm General Hospital","abbr":"CLGH","type":"Hospital","address":"501 18 Ave W","city":"Claresholm","postal":"T0L 0T0"},{"name":"Nanton Community Health Centre","abbr":"NCHC","type":"Community Health Centre","address":"5019 48 St","city":"Nanton","postal":"T0L 1R0"},{"name":"Strathmore District Health Services","abbr":"SDHS","type":"Hospital","address":"200 Brent Blvd","city":"Strathmore","postal":"T1P 1J9"},{"name":"Chestermere Health Centre","abbr":"CHC","type":"Community Health Centre","address":"100 West Creek Blvd","city":"Chestermere","postal":"T1X 1S1"},{"name":"Black Diamond Health Centre","abbr":"BDHC","type":"Community Health Centre","address":"214 Centre Ave W","city":"Black Diamond","postal":"T0L 0H0"},{"name":"Turner Valley Medical Clinic","abbr":"TVMC","type":"Community Health Centre","address":"410 Main St NW","city":"Turner Valley","postal":"T0L 2A0"},{"name":"Siksika Health Services","abbr":"SHS","type":"Community Health Centre","address":"Siksika Nation","city":"Siksika Nation","postal":""},{"name":"Brooks Health Centre","abbr":"BHC","type":"Hospital","address":"440 3 St E","city":"Brooks","postal":"T1R 0G7"},{"name":"Medicine Hat Regional Hospital","abbr":"MHRH","type":"Hospital","address":"666 5 St SW","city":"Medicine Hat","postal":"T1A 4H6"},{"name":"Lethbridge Regional Hospital","abbr":"LRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Vulcan Community Health Centre","abbr":"VCHC","type":"Community Health Centre","address":"221 1 Ave S","city":"Vulcan","postal":"T0L 2B0"},{"name":"Drumheller Health Centre","abbr":"DHC","type":"Hospital","address":"351 9 St NW","city":"Drumheller","postal":"T0J 0Y1"},{"name":"Three Hills Health Centre","abbr":"THHC","type":"Hospital","address":"1010 1 St N","city":"Three Hills","postal":"T0M 2A0"},{"name":"Hanna Health Centre","abbr":"HHC","type":"Hospital","address":"517 6 Ave W","city":"Hanna","postal":"T0J 1P0"}];
+
+  const nearestHospitalInput = document.getElementById("nearest_hospital");
+  const hospitalPhoneInput = document.getElementById("hospital_phone");
+  const emergencyProceduresInput = document.getElementById("emergency_procedures");
+  const hospitalSuggestions = document.getElementById("hospitalSuggestions");
+
+  function formatFacilityLine(f) {
+    const parts = [];
+    const head = f.abbr ? `${f.name} (${f.abbr})` : f.name;
+    parts.push(head);
+    const addrBits = [f.address, f.city, f.postal].filter(Boolean).join(", ");
+    if (addrBits) parts.push(addrBits);
+    return parts.join(", ");
+  }
+
+  function buildERPText(f) {
+    const facilityLine = formatFacilityLine(f);
+    return `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${facilityLine} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+  }
+
+  function matchFacilities(query) {
+    const q = normalize(query);
+    if (!q) return [];
+    const qNoSpaces = q.replace(/\s+/g, "");
+
+    const starts = [];
+    const contains = [];
+
+    MEDICAL_FACILITIES.forEach(f => {
+      const name = normalize(f.name);
+      const abbr = normalize(f.abbr).replace(/\s+/g, "");
+      const type = normalize(f.type);
+      const city = normalize(f.city);
+
+      const abbrHit = abbr && (abbr === qNoSpaces || abbr.startsWith(qNoSpaces));
+      const nameStarts = name.startsWith(q);
+      const nameContains = name.includes(q);
+      const typeHit = type.includes(q);
+      const cityHit = city.includes(q);
+
+      if (abbrHit || nameStarts) starts.push(f);
+      else if (nameContains || typeHit || cityHit) contains.push(f);
+    });
+
+    return starts.concat(contains).slice(0, 8);
+  }
+
+  function showSuggestions(list) {
+    hospitalSuggestions.innerHTML = "";
+    if (!list.length) {
+      hospitalSuggestions.style.display = "none";
+      return;
+    }
+
+    list.forEach(f => {
+      const item = document.createElement("div");
+      item.className = "suggestion-item";
+
+      const top = document.createElement("div");
+      top.className = "suggestion-top";
+      top.textContent = f.abbr ? `${f.name} (${f.abbr})` : f.name;
+
+      const sub = document.createElement("div");
+      sub.className = "suggestion-sub";
+      const addrBits = [f.type, f.address, f.city, f.postal].filter(Boolean).join(", ");
+      sub.textContent = addrBits;
+
+      item.appendChild(top);
+      item.appendChild(sub);
+
+      item.addEventListener("mousedown", (e) => { e.preventDefault(); selectFacility(f); });
+      item.addEventListener("touchstart", (e) => { e.preventDefault(); selectFacility(f); }, { passive:false });
+
+      hospitalSuggestions.appendChild(item);
+    });
+
+    hospitalSuggestions.style.display = "block";
+  }
+
+  function selectFacility(f) {
+    nearestHospitalInput.value = f.abbr ? `${f.name} (${f.abbr})` : f.name;
+    nearestHospitalInput.dataset.selectedFacility = formatFacilityLine(f);
+
+    hospitalPhoneInput.value = "911";
+    emergencyProceduresInput.value = buildERPText(f);
+
+    hospitalSuggestions.style.display = "none";
+  }
+
+  function tryAutoSelectExact(query) {
+    const q = normalize(query);
+    if (!q) return null;
+    const qNoSpaces = q.replace(/\s+/g, "");
+
+    // Exact acronym match first
+    const byAbbr = MEDICAL_FACILITIES.find(f => normalize(f.abbr).replace(/\s+/g, "") === qNoSpaces);
+    if (byAbbr) return byAbbr;
+
+    // Exact name match
+    const byName = MEDICAL_FACILITIES.find(f => normalize(f.name) === q);
+    if (byName) return byName;
+
+    return null;
+  }
+
+  function clearERPIfAuto() {
+    // Only clear if it looks like our auto-filled content to avoid erasing custom text.
+    const autoLooks = (emergencyProceduresInput.value || "").includes("Ensure your safety and move to a secure area.");
+    if (autoLooks) emergencyProceduresInput.value = "";
+    if ((hospitalPhoneInput.value || "").trim() === "911") hospitalPhoneInput.value = "";
+    delete nearestHospitalInput.dataset.selectedFacility;
+  }
+
+  if (nearestHospitalInput) {
+    nearestHospitalInput.addEventListener("input", () => {
+      const val = nearestHospitalInput.value || "";
+      if (!val.trim()) {
+        hospitalSuggestions.style.display = "none";
+        clearERPIfAuto();
+        return;
+      }
+      const matches = matchFacilities(val);
+      showSuggestions(matches);
+    });
+
+    nearestHospitalInput.addEventListener("blur", () => {
+      // allow click/tap to register before hiding
+      setTimeout(() => { hospitalSuggestions.style.display = "none"; }, 150);
+
+      const val = (nearestHospitalInput.value || "").trim();
+      if (!val) return;
+
+      const exact = tryAutoSelectExact(val);
+      if (exact) selectFacility(exact);
+      else {
+        // If user typed something and did not select a facility, do not force overwrite.
+        // But if they previously selected then changed it, clear auto ERP if selection no longer matches.
+        const selected = nearestHospitalInput.dataset.selectedFacility || "";
+        if (selected && !normalize(selected).includes(normalize(val))) clearERPIfAuto();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!nearestHospitalInput.contains(e.target) && !hospitalSuggestions.contains(e.target)) {
+        hospitalSuggestions.style.display = "none";
+      }
+    }, true);
+  }
 </script>
 </body>
 </html>
