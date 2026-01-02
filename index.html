@@ -69,7 +69,6 @@
     }
 
     .header-left p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.9; }
-
     .header-logo { height: 60px; filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35)); }
 
     .page-title-bar {
@@ -239,7 +238,6 @@
     }
 
     td { background: #f9fbff; }
-
     .center { text-align: center; }
 
     .signature-grid {
@@ -322,6 +320,22 @@
       line-height: 1.2 !important;
       font-size: 0.74rem !important;
       text-align: center;
+    }
+
+    /* PRINT/EXPORT textarea replacement (guarantees html2canvas captures text) */
+    .print-textarea {
+      width: 100%;
+      min-height: 56px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: #f9fbff;
+      font-family: "Inter", sans-serif;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     @media (max-width: 700px) {
@@ -683,7 +697,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">If the hazard is cleared, the control and ratings clear. Controls stay ≤ 185 characters.</div>
+            <div class="section-note">If hazard is cleared, the control and ratings clear. Controls stay ≤ 185 characters.</div>
           </div>
 
           <table>
@@ -699,7 +713,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- 6 rows -->
               <tr>
                 <td><input type="text" name="task_1" /></td>
                 <td><input type="text" name="hazard_1" placeholder="e.g. construction traffic, construction fencing, generator, digging pins" /></td>
@@ -833,7 +846,7 @@
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
 
-          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.2</div>
+          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.3</div>
         </div>
       </div>
     </div>
@@ -847,6 +860,34 @@
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
+
+  /* ===================== FILE NAME (iPad + PC) ===================== */
+  function sanitizeFileName(name) {
+    const cleaned = String(name || "")
+      .trim()
+      .replace(/[\\/:*?"<>|]+/g, "_")
+      .replace(/\s+/g, " ")
+      .slice(0, 80);
+    return cleaned || "WorksiteHazardAssessment";
+  }
+
+  function defaultFileNameBase() {
+    const job = (document.querySelector('input[name="job_number"]')?.value || "").trim();
+    const loc = (document.querySelector('input[name="location"]')?.value || "").trim();
+    const date = (document.querySelector('input[name="date"]')?.value || "").trim(); // YYYY-MM-DD
+    const parts = ["WorksiteHazardAssessment"];
+    if (job) parts.push("Job_" + job);
+    if (loc) parts.push(loc);
+    if (date) parts.push(date);
+    return sanitizeFileName(parts.join(" - "));
+  }
+
+  function askForFileName() {
+    const suggested = defaultFileNameBase();
+    const input = window.prompt("File name for the PDF:", suggested);
+    // If user cancels prompt, still proceed with suggested (works well on iPad)
+    return sanitizeFileName(input || suggested) + ".pdf";
+  }
 
   /* ===================== RISK CALC ===================== */
   function updateRiskForRow(row) {
@@ -932,6 +973,20 @@
     } catch (e) {}
   }
 
+  // IMPORTANT: html2canvas can miss textarea content. Replace them with divs that show text.
+  function replaceTextareasForPrint(cloneRoot) {
+    const textareas = Array.from(cloneRoot.querySelectorAll("textarea"));
+    textareas.forEach(ta => {
+      const div = document.createElement("div");
+      div.className = "print-textarea";
+      div.textContent = ta.value || ta.textContent || "";
+
+      // Preserve height similar to textarea content
+      // (scrollHeight works once in DOM; we set a generous min height + wrap)
+      ta.replaceWith(div);
+    });
+  }
+
   function createFilteredFormClone() {
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
@@ -953,17 +1008,12 @@
       });
     }
 
-    // expand textareas so bottom line isn't cut off
-    clone.querySelectorAll("textarea").forEach(t => {
-      t.style.height = "auto";
-      t.style.minHeight = "0";
-      t.style.maxHeight = "none";
-      t.style.overflow = "visible";
-      t.style.height = t.scrollHeight + "px";
-    });
-
+    // hide buttons
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
+
+    // Replace all textareas with print-safe divs so control plans always show
+    replaceTextareasForPrint(clone);
 
     return clone;
   }
@@ -1021,29 +1071,35 @@
   }
 
   downloadBtn.addEventListener('click', async () => {
+    const filename = askForFileName();
     try {
       if (buttonRow) buttonRow.style.display = 'none';
       const pdf = await generatePdf();
-      pdf.save('WorksiteHazardAssessment.pdf');
+      pdf.save(filename);
     } finally {
       if (buttonRow) buttonRow.style.display = 'flex';
     }
   });
 
   shareBtn.addEventListener('click', async () => {
+    const filename = askForFileName();
     try {
       if (buttonRow) buttonRow.style.display = 'none';
       const pdf = await generatePdf();
       const blob = pdf.output('blob');
-      const file = new File([blob], 'WorksiteHazardAssessment.pdf', { type: 'application/pdf' });
+      const file = new File([blob], filename, { type: 'application/pdf' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files:[file], title:'Worksite Hazard Assessment', text:'VistaGeomatics – Worksite Hazard Assessment PDF' });
+        await navigator.share({
+          files: [file],
+          title: 'Worksite Hazard Assessment',
+          text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
+        });
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'WorksiteHazardAssessment.pdf';
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -1144,15 +1200,7 @@
     document.querySelectorAll('.risk-output').forEach(o => o.value = "");
   });
 
-  /* ===================== HAZARD RULE ENGINE (FIXED MATCHING) =====================
-     Fixes:
-     - No false match from tiny keywords like "co" in "construction"
-     - Construction traffic / fencing reliably match
-     - Clearing hazard clears control + F/S/P/R
-  */
-
-  // keywords under 3 chars are ignored entirely (prevents "co" matching "construction")
-  // 3-char tokens allowed only if in this set (so H2S works, etc.)
+  /* ===================== HAZARD RULE ENGINE ===================== */
   const ALLOW_SHORT = new Set(["h2s","uv","sds","pfd","gps","gnss","scba","sabe","co2"]);
 
   function normalize(text) {
@@ -1175,12 +1223,10 @@
     return str.slice(0, 182).trimEnd() + "...";
   }
 
-  // All controls are already written short; clamp is a safety net.
   const hazardRules = [
     { name:"Construction Traffic", keywords:"construction traffic,haul truck,haul trucks,dump truck,dump trucks,delivery truck,delivery trucks,site traffic,traffic control,flagger,flagging,backing,reversing,blind spot,swing radius", control:"Stay out of travel paths and swing radii. Wear hi-vis, use cones/signs if needed, use a spotter for backing, and make eye contact with operators.", f:3,s:4,p:3 },
     { name:"Construction Fencing", keywords:"construction fencing,construction fence,temp fence,temporary fence,fence panel,fence panels,fence base,fence bases,site perimeter,gate,gates", control:"Use gates and crossings, watch bases and trip hazards, and keep clear when panels move. In wind, keep distance and do not lean on fencing.", f:2,s:3,p:3 },
     { name:"Portable Generators", keywords:"generator,generators,portable generator,genset,genny,exhaust,carbon monoxide,extension cord,cords,fueling,refuel", control:"Run outdoors away from openings. Route cords to prevent trips. Refuel only when off and cooled, and store fuel safely.", f:2,s:5,p:2 },
-
     { name:"Traffic & Vehicles", keywords:"traffic,road,roads,highway,lane,lanes,shoulder,intersection,crosswalk,parking lot,alley,backing,reversing,vehicle,vehicles,truck,trucks,bus,buses", control:"Work clear of live lanes and vehicle routes. Wear hi-vis, face traffic, use cones/signs if needed, and use a spotter for backing.", f:3,s:4,p:3 },
     { name:"Slips / Trips / Falls", keywords:"slip,slips,trip,trips,fall,falls,uneven ground,slippery,ice,icy,snow,mud,ditch,embankment,hole,holes,rut,ruts,loose gravel,wet grass,stairs,curb,sidewalk", control:"Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear.", f:3,s:3,p:3 },
     { name:"Cold Weather", keywords:"cold,cold weather,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero", control:"Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or windchill.", f:3,s:4,p:2 },
@@ -1206,24 +1252,17 @@
 
     for (const kw of kList) {
       if (!kw) continue;
-
-      // ignore very short tokens like "co" to prevent false matches with "construction"
       if (kw.length <= 2) continue;
       if (kw.length === 3 && !ALLOW_SHORT.has(kw)) continue;
 
-      // phrase match (multi-word)
       if (kw.includes(' ')) {
         if (text.includes(kw)) { score += 10; continue; }
-        // partial phrase support: count if all words are present as full tokens
         const parts = kw.split(' ').filter(Boolean);
         if (parts.length >= 2 && parts.every(p => p.length >= 3 && tokenSet.has(p))) score += 6;
         continue;
       }
 
-      // single word match as full token preferred
       if (tokenSet.has(kw)) { score += 6; continue; }
-
-      // weaker substring match (only for longer words to avoid "gas" issues etc.)
       if (kw.length >= 5 && text.includes(kw)) score += 2;
     }
     return score;
@@ -1263,15 +1302,12 @@
   }
 
   function initHazardAutoSuggest() {
+
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
       input.addEventListener('input', e => {
         const value = e.target.value.trim();
         const row = e.target.name.split('_')[1];
-
-        // If hazard cleared -> clear control + ratings immediately
-        if (!value) {
-          clearRowControlsAndRatings(row);
-        }
+        if (!value) clearRowControlsAndRatings(row);
       });
 
       input.addEventListener('blur', e => {
@@ -1287,7 +1323,6 @@
 
         const rule = bestRuleMatch(hazardText);
 
-        // If user already wrote a long custom control, don't overwrite
         if (!(controlField.value && controlField.value.trim().length > 40)) {
           if (rule && rule.control) controlField.value = clamp185(rule.control);
         }
