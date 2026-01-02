@@ -2,407 +2,237 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>VistaGeomatics – Worksite Hazard Assessment</title>
+  <title>VistaGeomatics , Worksite Hazard Assessment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --vista-blue: #165f7d;
-      --vista-blue-light: #2a7fa3;
-      --vista-blue-dark: #0b3045;
-      --bg-body: #eef3f9;
-      --bg-card: #ffffff;
-      --border-soft: #d6e2f0;
-      --text-main: #101827;
-      --text-muted: #6b7280;
+    :root{
+      --vista-blue:#165f7d;
+      --vista-blue-light:#2a7fa3;
+      --vista-blue-dark:#0b3045;
+      --bg-body:#eef3f9;
+      --bg-card:#ffffff;
+      --border-soft:#d6e2f0;
+      --text-main:#101827;
+      --text-muted:#6b7280;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:16px;
+      font-family:"Inter",sans-serif;
+      background:radial-gradient(circle at top,#f4f8fc 0,#e4edf6 40%,#dde6f3 100%);
+      color:var(--text-main);
+      -webkit-text-size-adjust:100%;
+    }
+    .page-wrap{max-width:1050px;margin:0 auto;}
+    .container{
+      background:var(--bg-card);
+      border-radius:16px;
+      box-shadow:0 14px 30px rgba(5,41,66,.18),0 0 0 1px rgba(5,41,66,.04);
+      overflow:hidden;
+      position:relative;
+      margin-bottom:18px;
+    }
+    .container::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(circle at top right,rgba(22,95,125,.16),transparent 55%);
+      opacity:.9;
+    }
+    .header-bar{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 20px;
+      background:linear-gradient(120deg,var(--vista-blue-light) 0%,var(--vista-blue) 40%,var(--vista-blue-dark) 100%);
+      color:#fff;
+    }
+    .header-left h1{
+      margin:0;
+      font-family:"Montserrat",sans-serif;
+      font-size:1.4rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .header-left p{margin:2px 0 0;font-size:.8rem;opacity:.9;}
+    .header-logo{height:60px;filter:drop-shadow(0 5px 14px rgba(0,0,0,.35));}
+
+    .page-title-bar{
+      position:relative;
+      z-index:1;
+      text-align:center;
+      padding:10px 20px 6px;
+      background:linear-gradient(180deg,rgba(255,255,255,.78),#f7faff);
+    }
+    .page-title-main{
+      font-family:"Montserrat",sans-serif;
+      font-size:1.2rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--vista-blue-dark);
+    }
+    .page-title-sub{margin-top:3px;font-size:.78rem;color:var(--text-muted);}
+    .page-title-accent{
+      width:120px;height:3px;margin:8px auto 0;border-radius:999px;
+      background:linear-gradient(120deg,var(--vista-blue-light),var(--vista-blue),var(--vista-blue-dark));
+      box-shadow:0 0 8px rgba(46,167,224,.65);
+    }
+    .page-body{position:relative;z-index:1;padding:10px 18px 14px;font-size:.8rem;}
+    label{
+      font-size:.78rem;
+      font-weight:600;
+      display:block;
+      margin-bottom:2px;
+      color:var(--text-main);
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      padding: 16px;
-      font-family: "Inter", sans-serif;
-      background: radial-gradient(circle at top, #f4f8fc 0, #e4edf6 40%, #dde6f3 100%);
-      color: var(--text-main);
-      -webkit-text-size-adjust: 100%;
+    /* INPUT/TEXT CLIPPING FIX */
+    input[type="text"],input[type="date"],input[type="time"],textarea,.small-input{
+      width:100%;
+      font-family:"Inter",sans-serif;
+      font-size:.74rem;
+      line-height:1.25;
+      color:var(--text-main);
+      border-radius:8px;
+      border:1px solid var(--border-soft);
+      background:#f9fbff;
+      transition:.15s;
+    }
+    input[type="text"],input[type="date"],input[type="time"],.small-input{
+      height:34px;
+      padding:6px 8px;
+      vertical-align:middle;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    textarea{padding:6px 8px;min-height:56px;resize:vertical;}
+    input:focus,textarea:focus{
+      outline:none;
+      border-color:var(--vista-blue-light);
+      background:#fff;
+      box-shadow:0 0 0 2px rgba(38,132,168,.18);
     }
 
-    .page-wrap {
-      max-width: 1050px;
-      margin: 0 auto;
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px;}
+    .row>div{flex:1;min-width:150px;}
+
+    .section-card{
+      margin-top:8px;
+      padding:8px 10px 10px;
+      border-radius:12px;
+      border:1px solid var(--border-soft);
+      background:linear-gradient(135deg,#fbfdff 0%,#f4f8fd 60%,#eff5fb 100%);
+      box-shadow:0 6px 16px rgba(5,41,66,.05);
+      position:relative;
+    }
+    .section-card::before{
+      content:"";
+      position:absolute;
+      top:0;left:0;right:0;
+      height:3px;
+      border-radius:12px 12px 0 0;
+      background:linear-gradient(90deg,var(--vista-blue-light),var(--vista-blue-dark));
+    }
+    .section-header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:4px;}
+    .section-title{
+      font-weight:600;
+      font-size:.86rem;
+      color:var(--vista-blue-dark);
+      font-family:"Montserrat",sans-serif;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .section-note{font-size:.72rem;color:var(--text-muted);}
+
+    .inline-checkbox-group{display:flex;flex-wrap:wrap;gap:10px;font-size:.76rem;}
+    .inline-checkbox-group label{display:inline-flex;align-items:center;gap:4px;font-weight:500;margin-bottom:0;}
+    input[type="checkbox"]{width:14px;height:14px;accent-color:var(--vista-blue);margin:0;}
+
+    .small-text{font-size:.74rem;color:var(--text-muted);}
+
+    table{width:100%;border-collapse:collapse;font-size:.75rem;margin-top:4px;}
+    th,td{border:1px solid var(--border-soft);padding:3px 4px;vertical-align:top;}
+    th{background:#e8f0fb;font-weight:600;color:var(--vista-blue-dark);}
+    td{background:#f9fbff;}
+    .center{text-align:center;}
+
+    .signature-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:8px;
+      margin-top:4px;
+    }
+    .signature-box{
+      border-radius:10px;
+      border:1px solid var(--border-soft);
+      background:#f9fbff;
+      padding:6px;
+      font-size:.78rem;
+    }
+    .signature-label{font-size:.74rem;font-weight:600;color:var(--text-muted);margin-bottom:2px;}
+    .signature-canvas{
+      width:100%;
+      height:80px;
+      border-radius:8px;
+      border:1px solid var(--border-soft);
+      background:#fff;
+      box-shadow:inset 0 1px 2px rgba(15,23,42,.08);
+      display:block;
+      cursor:crosshair;
+    }
+    .signature-actions{display:flex;justify-content:flex-end;margin-top:4px;}
+    .signature-actions button{padding:3px 10px;font-size:.7rem;letter-spacing:.05em;}
+    .signature-row{display:flex;gap:6px;margin-top:4px;}
+    .signature-row>div{flex:1;}
+
+    .btn-row{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;margin-bottom:4px;}
+    button{
+      border:none;
+      border-radius:999px;
+      padding:7px 16px;
+      font-size:.78rem;
+      font-weight:600;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    .btn-primary{
+      background:linear-gradient(120deg,var(--vista-blue-light),var(--vista-blue),var(--vista-blue-dark));
+      color:#fff;
+      box-shadow:0 8px 20px rgba(5,41,66,.35);
+    }
+    .btn-secondary{background:#f3f4f6;color:var(--text-main);border:1px solid #d6d7dd;}
+    button:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(15,23,42,.18);}
+
+    .control-text{
+      width:100%;
+      min-height:80px;
+      resize:vertical;
+      padding:6px 8px;
+      line-height:1.25;
+      font-size:.74rem;
+    }
+    .risk-input,.risk-output{
+      height:32px !important;
+      padding:5px 6px !important;
+      line-height:1.2 !important;
+      font-size:.74rem !important;
+      text-align:center;
     }
 
-    .container {
-      background: var(--bg-card);
-      border-radius: 16px;
-      box-shadow: 0 14px 30px rgba(5, 41, 66, 0.18), 0 0 0 1px rgba(5, 41, 66, 0.04);
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 18px;
-    }
-
-    .container::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at top right, rgba(22,95,125,0.16), transparent 55%);
-      opacity: 0.9;
-    }
-
-    .header-bar {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      background: linear-gradient(120deg, var(--vista-blue-light) 0%, var(--vista-blue) 40%, var(--vista-blue-dark) 100%);
-      color: #fff;
-    }
-
-    .header-left h1 {
-      margin: 0;
-      font-family: "Montserrat", sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .header-left p {
-      margin: 2px 0 0;
-      font-size: 0.8rem;
-      opacity: 0.9;
-    }
-
-    .header-logo {
-      height: 60px;
-      filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35));
-    }
-
-    .page-title-bar {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 10px 20px 6px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.78), #f7faff);
-    }
-
-    .page-title-main {
-      font-family: "Montserrat", sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--vista-blue-dark);
-    }
-
-    .page-title-sub {
-      margin-top: 3px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .page-title-accent {
-      width: 120px;
-      height: 3px;
-      margin: 8px auto 0;
-      border-radius: 999px;
-      background: linear-gradient(120deg, var(--vista-blue-light), var(--vista-blue), var(--vista-blue-dark));
-      box-shadow: 0 0 8px rgba(46,167,224,0.65);
-    }
-
-    .page-body {
-      position: relative;
-      z-index: 1;
-      padding: 10px 18px 14px;
-      font-size: 0.8rem;
-    }
-
-    label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 2px;
-      color: var(--text-main);
-    }
-
-    /* ===== INPUT/TEXT CLIPPING FIX (Safari/iPad + general) ===== */
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    textarea,
-    .small-input {
-      width: 100%;
-      font-family: "Inter", sans-serif;
-      font-size: 0.74rem;
-      line-height: 1.25;
-      color: var(--text-main);
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: #f9fbff;
-      transition: 0.15s;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    .small-input {
-      height: 34px;
-      padding: 6px 8px;
-      vertical-align: middle;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    input[type="date"],
-    input[type="time"] {
-      background-clip: padding-box;
-    }
-
-    textarea {
-      padding: 6px 8px;
-      min-height: 56px;
-      resize: vertical;
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--vista-blue-light);
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(38,132,168,0.18);
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .row > div {
-      flex: 1;
-      min-width: 150px;
-    }
-
-    .section-card {
-      margin-top: 8px;
-      padding: 8px 10px 10px;
-      border-radius: 12px;
-      border: 1px solid var(--border-soft);
-      background: linear-gradient(135deg, #fbfdff 0%, #f4f8fd 60%, #eff5fb 100%);
-      box-shadow: 0 6px 16px rgba(5, 41, 66, 0.05);
-      position: relative;
-    }
-
-    .section-card::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: 12px 12px 0 0;
-      background: linear-gradient(90deg, var(--vista-blue-light), var(--vista-blue-dark));
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .section-title {
-      font-weight: 600;
-      font-size: 0.86rem;
-      color: var(--vista-blue-dark);
-      font-family: "Montserrat", sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .section-note {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .inline-checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 0.76rem;
-    }
-
-    .inline-checkbox-group label {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-weight: 500;
-      margin-bottom: 0;
-    }
-
-    input[type="checkbox"] {
-      width: 14px;
-      height: 14px;
-      accent-color: var(--vista-blue);
-      margin: 0;
-    }
-
-    .small-text {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-      margin-top: 4px;
-    }
-
-    th, td {
-      border: 1px solid var(--border-soft);
-      padding: 3px 4px;
-      vertical-align: top;
-    }
-
-    th {
-      background: #e8f0fb;
-      font-weight: 600;
-      color: var(--vista-blue-dark);
-    }
-
-    td {
-      background: #f9fbff;
-    }
-
-    .center { text-align: center; }
-
-    .signature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .signature-box {
-      border-radius: 10px;
-      border: 1px solid var(--border-soft);
-      background: #f9fbff;
-      padding: 6px;
-      font-size: 0.78rem;
-    }
-
-    .signature-label {
-      font-size: 0.74rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-    }
-
-    .signature-canvas {
-      width: 100%;
-      height: 80px;
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
-      display: block;
-      cursor: crosshair;
-    }
-
-    .signature-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 4px;
-    }
-
-    .signature-actions button {
-      padding: 3px 10px;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-    }
-
-    .signature-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .signature-row > div { flex: 1; }
-
-    .btn-row {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 10px;
-      margin-bottom: 4px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 7px 16px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
-    }
-
-    .btn-primary {
-      background: linear-gradient(120deg, var(--vista-blue-light), var(--vista-blue), var(--vista-blue-dark));
-      color: #fff;
-      box-shadow: 0 8px 20px rgba(5, 41, 66, 0.35);
-    }
-
-    .btn-secondary {
-      background: #f3f4f6;
-      color: var(--text-main);
-      border: 1px solid #d6d7dd;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18);
-    }
-
-    .control-text {
-      width: 100%;
-      min-height: 80px;
-      resize: vertical;
-      padding: 6px 8px;
-      line-height: 1.25;
-      font-size: 0.74rem;
-    }
-
-    .risk-input,
-    .risk-output {
-      height: 32px !important;
-      padding: 5px 6px !important;
-      line-height: 1.2 !important;
-      font-size: 0.74rem !important;
-      text-align: center;
-    }
-
-    @media (max-width: 700px) {
-      .header-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .page-title-main {
-        font-size: 1.05rem;
-        letter-spacing: 0.12em;
-      }
+    @media (max-width:700px){
+      .header-bar{flex-direction:column;align-items:flex-start;gap:8px;}
+      .page-title-main{font-size:1.05rem;letter-spacing:.12em;}
     }
   </style>
 </head>
@@ -429,42 +259,19 @@
       <div class="page-body">
         <!-- General information -->
         <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">General Information</div>
+          <div class="section-header"><div class="section-title">General Information</div></div>
+          <div class="row">
+            <div><label for="developed_by">Developed By</label><input type="text" id="developed_by" name="developed_by"></div>
+            <div><label for="location">Location</label><input type="text" id="location" name="location"></div>
           </div>
           <div class="row">
-            <div>
-              <label for="developed_by">Developed By</label>
-              <input type="text" id="developed_by" name="developed_by">
-            </div>
-            <div>
-              <label for="location">Location</label>
-              <input type="text" id="location" name="location">
-            </div>
+            <div><label for="date">Date</label><input type="date" id="date" name="date"></div>
+            <div><label for="start_time">Start Time</label><input type="time" id="start_time" name="start_time"></div>
+            <div><label for="completion_time">Form Completion Time</label><input type="time" id="completion_time" name="completion_time"></div>
           </div>
           <div class="row">
-            <div>
-              <label for="date">Date</label>
-              <input type="date" id="date" name="date">
-            </div>
-            <div>
-              <label for="start_time">Start Time</label>
-              <input type="time" id="start_time" name="start_time">
-            </div>
-            <div>
-              <label for="completion_time">Form Completion Time</label>
-              <input type="time" id="completion_time" name="completion_time">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="job_number">Job Number</label>
-              <input type="text" id="job_number" name="job_number">
-            </div>
-            <div>
-              <label for="description">Description of Work</label>
-              <input type="text" id="description" name="description">
-            </div>
+            <div><label for="job_number">Job Number</label><input type="text" id="job_number" name="job_number"></div>
+            <div><label for="description">Description of Work</label><input type="text" id="description" name="description"></div>
           </div>
         </div>
 
@@ -472,9 +279,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Tailgate Meeting Report</div>
-            <div class="section-note">
-              Complete daily prior to starting work and when procedures change or new hazards are present.
-            </div>
+            <div class="section-note">Complete daily prior to starting work and when procedures change or new hazards are present.</div>
           </div>
           <div style="margin-bottom:4px;">
             <label for="tailgate_minutes">Tailgate Minutes</label>
@@ -517,9 +322,7 @@
 
         <!-- Working Alone -->
         <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">Working Alone &amp; Check-in</div>
-          </div>
+          <div class="section-header"><div class="section-title">Working Alone &amp; Check-in</div></div>
 
           <div class="row">
             <div style="flex:1 1 35%;">
@@ -541,7 +344,7 @@
 
           <div class="row">
             <div style="flex:1 1 40%;">
-              <label for="working_supervisor_name">Contact Procedures – Call Supervisor: Name</label>
+              <label for="working_supervisor_name">Contact Procedures, Call Supervisor: Name</label>
               <input type="text" id="working_supervisor_name" name="working_supervisor_name">
             </div>
             <div style="flex:1 1 25%;">
@@ -555,7 +358,7 @@
           </div>
 
           <div class="small-text" style="margin-top:4px;">
-            <strong>Note:</strong> Check-in intervals are based on risk level –
+            <strong>Note:</strong> Check-in intervals are based on risk level,
             High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
           </div>
         </div>
@@ -566,74 +369,68 @@
             <div class="section-title">Daily Equipment Inspection</div>
             <div class="section-note">Check your vehicle, ATV, snowmobile, generator, trailer, and/or chainsaw and report any deficiencies.</div>
           </div>
-
           <table>
-            <thead>
-            <tr>
-              <th>Equipment</th>
-              <th>Inspection Items</th>
-            </tr>
-            </thead>
+            <thead><tr><th>Equipment</th><th>Inspection Items</th></tr></thead>
             <tbody>
-            <tr>
-              <td>Vehicle</td>
-              <td>
-                <div class="inline-checkbox-group">
-                  <label><input type="checkbox" name="veh_tires"> Tires</label>
-                  <label><input type="checkbox" name="veh_oil"> Oil</label>
-                  <label><input type="checkbox" name="veh_fuel"> Fuel</label>
-                  <label><input type="checkbox" name="veh_washer"> Washer fluid</label>
-                  <label><input type="checkbox" name="veh_lights"> Lights</label>
-                  <label><input type="checkbox" name="veh_tiedowns"> Tie-Down Straps</label>
-                  <label>Other: <input type="text" name="veh_other" style="width:120px;"></label>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>ATV / Snowmobile</td>
-              <td>
-                <div class="inline-checkbox-group">
-                  <label><input type="checkbox" name="atv_tires"> Tires/Track</label>
-                  <label><input type="checkbox" name="atv_oil_fuel"> Oil/Fuel</label>
-                  <label><input type="checkbox" name="atv_lights"> Lights</label>
-                  <label><input type="checkbox" name="atv_brakes"> Brakes</label>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Generator</td>
-              <td>
-                <div class="inline-checkbox-group">
-                  <label><input type="checkbox" name="gen_oil"> Oil</label>
-                  <label><input type="checkbox" name="gen_fuel"> Fuel</label>
-                  <label><input type="checkbox" name="gen_cord"> Extension Cord</label>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Chainsaw (if used)</td>
-              <td>
-                <div class="inline-checkbox-group">
-                  <label><input type="checkbox" name="saw_oil"> Oil</label>
-                  <label><input type="checkbox" name="saw_fuel"> Fuel</label>
-                  <label><input type="checkbox" name="saw_chain"> Chain</label>
-                  <label><input type="checkbox" name="saw_guard"> Guard</label>
-                  <label>Other: <input type="text" name="saw_other" style="width:120px;"></label>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Trailer</td>
-              <td>
-                <div class="inline-checkbox-group">
-                  <label><input type="checkbox" name="trl_tires"> Tires</label>
-                  <label><input type="checkbox" name="trl_lights"> Lights</label>
-                  <label><input type="checkbox" name="trl_chains"> Safety Chains</label>
-                  <label><input type="checkbox" name="trl_deck"> Deck</label>
-                  <label><input type="checkbox" name="trl_plate"> Licence Plate</label>
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td>Vehicle</td>
+                <td>
+                  <div class="inline-checkbox-group">
+                    <label><input type="checkbox" name="veh_tires"> Tires</label>
+                    <label><input type="checkbox" name="veh_oil"> Oil</label>
+                    <label><input type="checkbox" name="veh_fuel"> Fuel</label>
+                    <label><input type="checkbox" name="veh_washer"> Washer fluid</label>
+                    <label><input type="checkbox" name="veh_lights"> Lights</label>
+                    <label><input type="checkbox" name="veh_tiedowns"> Tie-Down Straps</label>
+                    <label>Other: <input type="text" name="veh_other" style="width:120px;"></label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>ATV / Snowmobile</td>
+                <td>
+                  <div class="inline-checkbox-group">
+                    <label><input type="checkbox" name="atv_tires"> Tires/Track</label>
+                    <label><input type="checkbox" name="atv_oil_fuel"> Oil/Fuel</label>
+                    <label><input type="checkbox" name="atv_lights"> Lights</label>
+                    <label><input type="checkbox" name="atv_brakes"> Brakes</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Generator</td>
+                <td>
+                  <div class="inline-checkbox-group">
+                    <label><input type="checkbox" name="gen_oil"> Oil</label>
+                    <label><input type="checkbox" name="gen_fuel"> Fuel</label>
+                    <label><input type="checkbox" name="gen_cord"> Extension Cord</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Chainsaw (if used)</td>
+                <td>
+                  <div class="inline-checkbox-group">
+                    <label><input type="checkbox" name="saw_oil"> Oil</label>
+                    <label><input type="checkbox" name="saw_fuel"> Fuel</label>
+                    <label><input type="checkbox" name="saw_chain"> Chain</label>
+                    <label><input type="checkbox" name="saw_guard"> Guard</label>
+                    <label>Other: <input type="text" name="saw_other" style="width:120px;"></label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Trailer</td>
+                <td>
+                  <div class="inline-checkbox-group">
+                    <label><input type="checkbox" name="trl_tires"> Tires</label>
+                    <label><input type="checkbox" name="trl_lights"> Lights</label>
+                    <label><input type="checkbox" name="trl_chains"> Safety Chains</label>
+                    <label><input type="checkbox" name="trl_deck"> Deck</label>
+                    <label><input type="checkbox" name="trl_plate"> Licence Plate</label>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -642,9 +439,8 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Personal Protective Equipment</div>
-            <div class="section-note">Check off required PPE; report missing or worn items as needed.</div>
+            <div class="section-note">Check off required PPE, report missing or worn items as needed.</div>
           </div>
-
           <div class="inline-checkbox-group">
             <label><input type="checkbox" name="ppe_hardhat"> Hardhat</label>
             <label><input type="checkbox" name="ppe_atv_helmet"> ATV Helmets</label>
@@ -669,36 +465,121 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task. Controls are auto-suggested from an embedded ruleset.</div>
+        <div class="page-title-sub">Controls and risk ratings auto-suggest from the embedded ruleset, risk R auto-calculates from F × S × P.</div>
         <div class="page-title-accent"></div>
       </div>
 
       <div class="page-body">
-        <div class="small-text" style="margin-bottom:4px;">
-          Master Hazard Library (Google Drive):
-          <a href="https://drive.google.com/REPLACE_WITH_YOUR_MASTER_HAZARD_LIST_URL" target="_blank" rel="noopener">
-            Open master hazard list
-          </a>
-        </div>
-
         <!-- Common Occurring Hazards -->
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Common Occurring Hazards</div>
-            <div class="section-note">Check all hazards that apply to today’s worksite. Unchecked rows will be removed from the PDF.</div>
+            <div class="section-note">Unchecked rows are removed from the PDF to eliminate blank space.</div>
           </div>
 
           <table id="commonHazardsTable">
             <thead>
-            <tr>
-              <th class="center">Applies</th>
-              <th>Hazard</th>
-              <th>Controls (from Worksite Hazard Assessment)</th>
-            </tr>
+              <tr>
+                <th class="center">Applies</th>
+                <th>Hazard</th>
+                <th>Controls (from Worksite Hazard Assessment)</th>
+              </tr>
             </thead>
             <tbody>
-              <!-- (your rows unchanged) -->
-              <!-- ... -->
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_buried_overhead"></td>
+                <td>Buried or Overhead Facilities</td>
+                <td>Use caution around utilities, maintain limits of approach, confirm locates before digging or probing, and report damage immediately.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_hunting"></td>
+                <td>Hunting Season</td>
+                <td>Know season dates, stay together, make noise, wear hi-vis, and contact hunters if seen. Do not enter active hunting areas.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
+                <td>Site Housekeeping</td>
+                <td>Keep work areas clear of debris and obstructions. Maintain safe access/egress and remove trip hazards as you go.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_h2s"></td>
+                <td>H2S Concerns</td>
+                <td>Do not work in H2S areas without training and a working monitor. Follow emergency procedures and evacuate on alarm.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_open_excavation"></td>
+                <td>Open Excavation</td>
+                <td>Stay back from edges, use designated crossings, never jump trenches, and keep gear away from edges. PPE: hardhat, CSA boots.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_fences"></td>
+                <td>
+                  Construction Fences, Installed
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="fence_installed_yes"> Yes
+                  </label>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="fence_installed_no"> No
+                  </label>
+                </td>
+                <td>Use gates and crossing points, watch for bases and trip hazards, and keep clear when panels are moved. Use caution in high winds.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
+                <td>Wild Animals</td>
+                <td>Stay alert, keep distance, store food and garbage, carry bear spray where required, and leave the area if wildlife is near.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_river"></td>
+                <td>River, High/Low Spring Flood</td>
+                <td>Keep back from banks and moving water, avoid undercut edges, use safe crossings, and stop work if conditions are unsafe.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_traffic"></td>
+                <td>On and Off Traffic or Construction</td>
+                <td>Wear hi-vis, keep setups out of travel paths, make eye contact with operators, and use cones or signs as needed.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_icy"></td>
+                <td>Icy Conditions</td>
+                <td>Use slip-resistant footwear, slow down, keep hands free, and drive to conditions. Avoid icy slopes and unstable edges.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_noise"></td>
+                <td>Excessive Noise Levels</td>
+                <td>Limit exposure, use hearing protection, establish clear communication, and stay alert to surroundings and equipment movement.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_wildfire"></td>
+                <td>
+                  Wild Fire Hazard, Fire Ban in Effect
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="fireban_yes"> Yes
+                  </label>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="fireban_no"> No
+                  </label>
+                </td>
+                <td>Follow fire-ban rules, avoid ignition sources, keep extinguishers available, and report smoke or fire immediately.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_farming"></td>
+                <td>Farming Operations (cattle or other animals)</td>
+                <td>Make your presence known, give livestock space, and avoid working between animals and fences. Reroute if animals are agitated.</td>
+              </tr>
+              <tr>
+                <td class="center"><input type="checkbox" name="haz_landowner"></td>
+                <td>
+                  Land Owner / Home Owner, Made Contact
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="landowner_yes"> Yes
+                  </label>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                    <input type="checkbox" name="landowner_no"> No
+                  </label>
+                </td>
+                <td>Stay calm and respectful. Do not argue. If conflict escalates, leave the area and report to supervisor and client contact.</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -707,103 +588,132 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">Hazard controls will auto-suggest from a simplified offline ruleset.</div>
+            <div class="section-note">Controls are auto-suggested (≤185 chars). F, S, P can auto-fill from the embedded ruleset, R auto-calculates.</div>
           </div>
 
           <table>
             <thead>
-            <tr>
-              <th>Job Tasks</th>
-              <th>Hazards</th>
-              <th class="center">F</th>
-              <th class="center">S</th>
-              <th class="center">P</th>
-              <th class="center">R</th>
-              <th>Control Plan / Barriers / Procedures</th>
-            </tr>
+              <tr>
+                <th>Job Tasks</th>
+                <th>Hazards</th>
+                <th class="center">F</th>
+                <th class="center">S</th>
+                <th class="center">P</th>
+                <th class="center">R</th>
+                <th>Control Plan / Barriers / Procedures</th>
+              </tr>
             </thead>
             <tbody>
-              <!-- (your 6 rows unchanged) -->
-              <!-- ... -->
+              <tr>
+                <td><input type="text" name="task_1" /></td>
+                <td><input type="text" name="hazard_1" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
+                <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="task_2" /></td>
+                <td><input type="text" name="hazard_2" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_2" class="risk-input" data-row="2" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
+                <td><textarea name="control_2" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="task_3" /></td>
+                <td><input type="text" name="hazard_3" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_3" class="risk-input" data-row="3" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
+                <td><textarea name="control_3" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="task_4" /></td>
+                <td><input type="text" name="hazard_4" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_4" class="risk-input" data-row="4" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
+                <td><textarea name="control_4" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="task_5" /></td>
+                <td><input type="text" name="hazard_5" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_5" class="risk-input" data-row="5" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
+                <td><textarea name="control_5" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="task_6" /></td>
+                <td><input type="text" name="hazard_6" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td class="center"><input type="text" name="f_6" class="risk-input" data-row="6" style="width:32px;"></td>
+                <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
+                <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
+                <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
+                <td><textarea name="control_6" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- Risk Assessment Guide -->
-        <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">Risk Assessment Guide</div>
-            <div class="section-note">Use these ratings when completing the Job Specific Hazards table.</div>
-          </div>
-          <!-- (unchanged) -->
-        </div>
-
         <!-- Emergency Response -->
         <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">Emergency Response Plan</div>
+          <div class="section-header"><div class="section-title">Emergency Response Plan</div></div>
+          <div class="row">
+            <div><label for="nearest_hospital">Nearest first aid facility or hospital</label><input type="text" id="nearest_hospital" name="nearest_hospital"></div>
+            <div><label for="hospital_phone">Phone #</label><input type="text" id="hospital_phone" name="hospital_phone"></div>
           </div>
-          <!-- (unchanged) -->
+          <div style="margin-top:4px;">
+            <label for="emergency_procedures">Emergency Response Procedures</label>
+            <textarea id="emergency_procedures" name="emergency_procedures"></textarea>
+          </div>
+          <div style="margin-top:4px;">
+            <div class="inline-checkbox-group">
+              <label><input type="checkbox" name="first_aid_available"> First Aid Kit Available</label>
+              <label><input type="checkbox" name="fire_ext_available"> Fire Extinguisher Available</label>
+              <label><input type="checkbox" name="effective_comm"> Effective Method of Communication Available</label>
+            </div>
+          </div>
         </div>
 
         <!-- Signatures -->
         <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">Acknowledgement &amp; Sign-off</div>
-          </div>
+          <div class="section-header"><div class="section-title">Acknowledgement &amp; Sign-off</div></div>
 
           <div class="signature-grid">
             <div class="signature-box">
-              <div class="signature-label">Party Chief – Signature</div>
+              <div class="signature-label">Party Chief, Signature</div>
               <canvas id="pcSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions">
-                <button type="button" class="btn-secondary" id="clearPcSig">Clear</button>
-              </div>
+              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearPcSig">Clear</button></div>
               <div class="signature-row">
-                <div>
-                  <div class="signature-label">Name</div>
-                  <input type="text" class="small-input" name="pc_name">
-                </div>
-                <div>
-                  <div class="signature-label">Date</div>
-                  <input type="text" class="small-input" name="pc_date" placeholder="YYYY-MM-DD">
-                </div>
+                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="pc_name"></div>
+                <div><div class="signature-label">Date</div><input type="text" class="small-input" name="pc_date" placeholder="YYYY-MM-DD"></div>
               </div>
             </div>
 
             <div class="signature-box">
-              <div class="signature-label">Rodman – Signature</div>
+              <div class="signature-label">Rodman, Signature</div>
               <canvas id="saSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions">
-                <button type="button" class="btn-secondary" id="clearSaSig">Clear</button>
-              </div>
+              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearSaSig">Clear</button></div>
               <div class="signature-row">
-                <div>
-                  <div class="signature-label">Name</div>
-                  <input type="text" class="small-input" name="sa_name">
-                </div>
-                <div>
-                  <div class="signature-label">Date</div>
-                  <input type="text" class="small-input" name="sa_date" placeholder="YYYY-MM-DD">
-                </div>
+                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="sa_name"></div>
+                <div><div class="signature-label">Date</div><input type="text" class="small-input" name="sa_date" placeholder="YYYY-MM-DD"></div>
               </div>
             </div>
 
             <div class="signature-box">
-              <div class="signature-label">Client Representative / Safety Coordinator / Additional Rodman – Signature</div>
+              <div class="signature-label">Client Representative / Safety Coordinator / Additional Rodman, Signature</div>
               <canvas id="clientSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions">
-                <button type="button" class="btn-secondary" id="clearClientSig">Clear</button>
-              </div>
+              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearClientSig">Clear</button></div>
               <div class="signature-row">
-                <div>
-                  <div class="signature-label">Name</div>
-                  <input type="text" class="small-input" name="client_name">
-                </div>
-                <div>
-                  <div class="signature-label">Date</div>
-                  <input type="text" class="small-input" name="client_date" placeholder="YYYY-MM-DD">
-                </div>
+                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="client_name"></div>
+                <div><div class="signature-label">Date</div><input type="text" class="small-input" name="client_date" placeholder="YYYY-MM-DD"></div>
               </div>
             </div>
           </div>
@@ -818,6 +728,8 @@
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
+
+          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.1</div>
         </div>
       </div>
     </div>
@@ -832,200 +744,108 @@
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  // ============================================================================
-  // FIX: Ensure Job Tasks / Hazards / F-S-P-R / Controls ALWAYS show in exported PDF
-  // Works on iPads + PCs.
-  //
-  // Root cause: html2canvas often does NOT render live values for inputs/textareas
-  // in a cloned DOM. Solution:
-  //   1) Clone the form
-  //   2) Copy ALL live values/checked states from the real form into the clone
-  //   3) Copy signature canvas drawings into clone canvases
-  //   4) Convert inputs/textareas in the clone into DIVs with the values (print-only)
-  //   5) Then html2canvas captures the DIV text reliably.
-  // ============================================================================
+  /* ===== RISK CALC: R = F × S × P ===== */
+  function updateRiskForRow(row) {
+    const fInput = document.querySelector('input[name="f_' + row + '"]');
+    const sInput = document.querySelector('input[name="s_' + row + '"]');
+    const pInput = document.querySelector('input[name="p_' + row + '"]');
+    const rInput = document.querySelector('input[name="r_' + row + '"]');
+    if (!fInput || !sInput || !pInput || !rInput) return;
 
-  function escapeText(str) {
-    return (str || "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
+    const f = parseInt(fInput.value, 10);
+    const s = parseInt(sInput.value, 10);
+    const p = parseInt(pInput.value, 10);
+
+    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) rInput.value = f * s * p;
+    else rInput.value = "";
   }
 
-  function syncFormValues(srcRoot, dstRoot) {
-    const srcFields = srcRoot.querySelectorAll('input, textarea, select');
-    srcFields.forEach(src => {
-      // Prefer name match, fall back to id
-      let dst = null;
-      const name = src.getAttribute('name');
-      const id = src.getAttribute('id');
+  document.querySelectorAll('.risk-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const row = input.getAttribute('data-row');
+      if (row) updateRiskForRow(row);
+    });
+  });
 
-      if (name) dst = dstRoot.querySelector(`[name="${CSS.escape(name)}"]`);
-      if (!dst && id) dst = dstRoot.querySelector(`#${CSS.escape(id)}`);
-      if (!dst) return;
+  /* ===== EXPORT: copy live values + signatures + remove unchecked hazards ===== */
+  function syncLiveValuesToClone(originalForm, cloneForm) {
+    const getKey = (el) => el.name || el.id;
 
-      const tag = src.tagName.toLowerCase();
-      if (tag === 'textarea') {
-        dst.value = src.value;
-        // Also set innerHTML for some clone cases
-        dst.textContent = src.value;
-      } else if (tag === 'select') {
-        dst.value = src.value;
-      } else if (tag === 'input') {
-        const type = (src.getAttribute('type') || 'text').toLowerCase();
-        if (type === 'checkbox' || type === 'radio') {
-          dst.checked = src.checked;
-          if (src.checked) dst.setAttribute('checked', 'checked');
-          else dst.removeAttribute('checked');
-        } else {
-          dst.value = src.value;
-          dst.setAttribute('value', src.value);
-        }
+    const origEls = Array.from(originalForm.querySelectorAll("input, textarea, select"));
+    const cloneMap = new Map();
+    Array.from(cloneForm.querySelectorAll("input, textarea, select")).forEach(el => {
+      const key = getKey(el);
+      if (key) cloneMap.set(key, el);
+    });
+
+    origEls.forEach(orig => {
+      const key = getKey(orig);
+      if (!key) return;
+      const cloneEl = cloneMap.get(key);
+      if (!cloneEl) return;
+
+      if (orig.type === "checkbox" || orig.type === "radio") {
+        cloneEl.checked = orig.checked;
+        if (orig.checked) cloneEl.setAttribute("checked", "checked");
+        else cloneEl.removeAttribute("checked");
+      } else {
+        cloneEl.value = orig.value;
+        cloneEl.setAttribute("value", orig.value);
+        if (cloneEl.tagName.toLowerCase() === "textarea") cloneEl.textContent = orig.value;
       }
     });
   }
 
-  function syncCanvasDrawings(srcRoot, dstRoot) {
-    const srcCanvases = srcRoot.querySelectorAll('canvas');
-    srcCanvases.forEach(srcCanvas => {
-      const id = srcCanvas.id;
-      if (!id) return;
-      const dstCanvas = dstRoot.querySelector(`#${CSS.escape(id)}`);
-      if (!dstCanvas) return;
+  function copyCanvasToCloneImage(originalCanvasId, cloneRoot) {
+    const origCanvas = document.getElementById(originalCanvasId);
+    const clonedCanvas = cloneRoot.querySelector('#' + originalCanvasId);
+    if (!origCanvas || !clonedCanvas) return;
 
-      // Match size then draw
-      const w = srcCanvas.width;
-      const h = srcCanvas.height;
-      if (w && h) {
-        dstCanvas.width = w;
-        dstCanvas.height = h;
-      }
-      const dstCtx = dstCanvas.getContext('2d');
-      dstCtx.clearRect(0, 0, dstCanvas.width, dstCanvas.height);
-      dstCtx.drawImage(srcCanvas, 0, 0);
-    });
+    try {
+      const img = document.createElement('img');
+      img.src = origCanvas.toDataURL('image/png');
+      img.alt = "signature";
+      img.style.width = "100%";
+      img.style.height = "80px";
+      img.style.borderRadius = "8px";
+      img.style.border = "1px solid var(--border-soft)";
+      img.style.background = "#fff";
+      img.style.display = "block";
+      clonedCanvas.replaceWith(img);
+    } catch (e) {}
   }
-
-  function convertInteractiveElementsToPrint(rootEl) {
-    // Convert text-like inputs + textareas to DIVs so html2canvas captures values
-    const convertTextField = (el) => {
-      const cs = window.getComputedStyle(el);
-      const div = document.createElement('div');
-
-      div.style.cssText = `
-        width: ${cs.width};
-        min-height: ${cs.height};
-        padding: ${cs.padding};
-        border: ${cs.border};
-        border-radius: ${cs.borderRadius};
-        background: ${cs.backgroundColor};
-        font-family: ${cs.fontFamily};
-        font-size: ${cs.fontSize};
-        line-height: ${cs.lineHeight};
-        color: ${cs.color};
-        box-shadow: ${cs.boxShadow};
-        white-space: pre-wrap;
-        overflow-wrap: break-word;
-      `;
-
-      const val = (el.value ?? "").toString();
-      div.innerHTML = escapeText(val);
-
-      // Keep table cells tidy
-      div.style.display = 'block';
-
-      el.replaceWith(div);
-    };
-
-    const convertCheckbox = (el) => {
-      const cs = window.getComputedStyle(el);
-      const span = document.createElement('span');
-      span.style.cssText = `
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: ${cs.width};
-        height: ${cs.height};
-        border: 1px solid rgba(15,23,42,0.35);
-        border-radius: 3px;
-        background: #fff;
-        font-size: 12px;
-        line-height: 1;
-        color: #111827;
-      `;
-      span.textContent = el.checked ? '✓' : '';
-      el.replaceWith(span);
-    };
-
-    // IMPORTANT: do conversions AFTER the clone is attached to DOM (so getComputedStyle works)
-    const fields = rootEl.querySelectorAll('textarea, input, select');
-    fields.forEach(el => {
-      const tag = el.tagName.toLowerCase();
-      if (tag === 'textarea') return convertTextField(el);
-
-      if (tag === 'select') {
-        // Convert select into text div using selected option
-        const cs = window.getComputedStyle(el);
-        const div = document.createElement('div');
-        div.style.cssText = `
-          width: ${cs.width};
-          min-height: ${cs.height};
-          padding: ${cs.padding};
-          border: ${cs.border};
-          border-radius: ${cs.borderRadius};
-          background: ${cs.backgroundColor};
-          font-family: ${cs.fontFamily};
-          font-size: ${cs.fontSize};
-          line-height: ${cs.lineHeight};
-          color: ${cs.color};
-          white-space: pre-wrap;
-          overflow-wrap: break-word;
-          display: block;
-        `;
-        const txt = el.options?.[el.selectedIndex]?.text || '';
-        div.innerHTML = escapeText(txt);
-        el.replaceWith(div);
-        return;
-      }
-
-      if (tag === 'input') {
-        const type = (el.getAttribute('type') || 'text').toLowerCase();
-        if (type === 'checkbox' || type === 'radio') return convertCheckbox(el);
-        return convertTextField(el);
-      }
-    });
-  }
-
-  // ======== PDF GENERATION (LEGAL SIZE, REMOVE UNCHECKED COMMON HAZARDS, NO BLANK SPACE, SHOW ALL INPUT VALUES) ========
 
   function createFilteredFormClone() {
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
 
-    // 1) Copy live values/checked states from real form into clone
-    syncFormValues(form, clone);
+    // copy all typed values into the clone (critical for html2canvas export)
+    syncLiveValuesToClone(form, clone);
 
-    // 2) Copy signature drawings into clone canvases
-    syncCanvasDrawings(form, clone);
+    // copy signatures (canvas drawings do not clone)
+    copyCanvasToCloneImage('pcSignature', clone);
+    copyCanvasToCloneImage('saSignature', clone);
+    copyCanvasToCloneImage('clientSignature', clone);
 
-    // 3) Remove unchecked "Common Occurring Hazards" rows (based on synced checks)
+    // remove unchecked common hazard rows
     const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
     if (commonTableBody) {
       Array.from(commonTableBody.rows).forEach(row => {
         const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
-        if (appliesCheckbox && !appliesCheckbox.checked) {
-          commonTableBody.removeChild(row);
-        }
+        if (appliesCheckbox && !appliesCheckbox.checked) commonTableBody.removeChild(row);
       });
-
-      commonTableBody.style.display = 'table-row-group';
-      const tbl = commonTableBody.parentElement;
-      tbl.style.height = 'auto';
-      tbl.style.maxHeight = 'none';
-      tbl.style.overflow = 'visible';
-      void commonTableBody.offsetHeight;
     }
 
-    // Remove buttons from clone
+    // expand textareas to avoid bottom line clipping
+    clone.querySelectorAll("textarea").forEach(t => {
+      t.style.height = "auto";
+      t.style.minHeight = "0";
+      t.style.maxHeight = "none";
+      t.style.overflow = "visible";
+      t.style.height = t.scrollHeight + "px";
+    });
+
+    // hide buttons in export
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
@@ -1046,9 +866,6 @@
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
-    // 4) Convert inputs/textareas to DIVs in the clone so html2canvas always captures values
-    convertInteractiveElementsToPrint(tempContainer);
-
     const clonePage1 = clone.querySelector('#page1');
     const clonePage2 = clone.querySelector('#page2');
 
@@ -1059,7 +876,7 @@
       const canvas = await html2canvas(div, {
         scale: 2,
         useCORS: true,
-        scrollY: 0
+        backgroundColor: "#ffffff"
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1088,110 +905,70 @@
     return pdf;
   }
 
-  if (downloadBtn) {
-    downloadBtn.addEventListener('click', async () => {
-      try {
-        if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        pdf.save('WorksiteHazardAssessment.pdf');
-      } finally {
-        if (buttonRow) buttonRow.style.display = 'flex';
-      }
-    });
-  }
-
-  if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
-      try {
-        if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        const blob = pdf.output('blob');
-        const file = new File([blob], 'WorksiteHazardAssessment.pdf', { type: 'application/pdf' });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Worksite Hazard Assessment',
-            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
-          });
-        } else {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'WorksiteHazardAssessment.pdf';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        }
-      } catch (e) {
-        console.error('Share failed:', e);
-      } finally {
-        if (buttonRow) buttonRow.style.display = 'flex';
-      }
-    });
-  }
-
-  // ======== RISK CALC (R = F × S × P) ========
-
-  function updateRiskForRow(row) {
-    const fInput = document.querySelector('input[name="f_' + row + '"]');
-    const sInput = document.querySelector('input[name="s_' + row + '"]');
-    const pInput = document.querySelector('input[name="p_' + row + '"]');
-    const rInput = document.querySelector('input[name="r_' + row + '"]');
-    if (!fInput || !sInput || !pInput || !rInput) return;
-
-    const f = parseInt(fInput.value, 10);
-    const s = parseInt(sInput.value, 10);
-    const p = parseInt(pInput.value, 10);
-
-    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) {
-      rInput.value = f * s * p;
-    } else {
-      rInput.value = "";
+  downloadBtn.addEventListener('click', async () => {
+    try {
+      if (buttonRow) buttonRow.style.display = 'none';
+      const pdf = await generatePdf();
+      pdf.save('WorksiteHazardAssessment.pdf');
+    } finally {
+      if (buttonRow) buttonRow.style.display = 'flex';
     }
-  }
-
-  document.querySelectorAll('.risk-input').forEach(input => {
-    input.addEventListener('input', () => {
-      const row = input.getAttribute('data-row');
-      if (row) updateRiskForRow(row);
-    });
   });
 
-  // ======== SIGNATURE PADS ========
+  shareBtn.addEventListener('click', async () => {
+    try {
+      if (buttonRow) buttonRow.style.display = 'none';
+      const pdf = await generatePdf();
+      const blob = pdf.output('blob');
+      const file = new File([blob], 'WorksiteHazardAssessment.pdf', { type: 'application/pdf' });
 
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files:[file], title:'Worksite Hazard Assessment', text:'VistaGeomatics, Worksite Hazard Assessment PDF' });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'WorksiteHazardAssessment.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.error('Share failed:', e);
+    } finally {
+      if (buttonRow) buttonRow.style.display = 'flex';
+    }
+  });
+
+  /* ===== SIGNATURE PADS ===== */
   function initSignaturePad(canvasId, clearButtonId) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let lastX = 0, lastY = 0;
+    let drawing = false, lastX = 0, lastY = 0;
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
-      const tmp = document.createElement('canvas');
-      tmp.width = canvas.width;
-      tmp.height = canvas.height;
-      tmp.getContext('2d').drawImage(canvas, 0, 0);
-
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#111827';
-
-      // restore
-      ctx.drawImage(tmp, 0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, rect.width, rect.height);
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    function startDraw(x, y) { drawing = true; lastX = x; lastY = y; }
-    function drawLine(x, y) {
+    function startDraw(x, y){ drawing = true; lastX = x; lastY = y; }
+    function drawLine(x, y){
       if (!drawing) return;
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
@@ -1199,7 +976,7 @@
       ctx.stroke();
       lastX = x; lastY = y;
     }
-    function endDraw() { drawing = false; }
+    function endDraw(){ drawing = false; }
 
     canvas.addEventListener('mousedown', e => {
       const rect = canvas.getBoundingClientRect();
@@ -1215,25 +992,23 @@
     canvas.addEventListener('touchstart', e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      startDraw(touch.clientX - rect.left, touch.clientY - rect.top);
-    }, { passive: false });
+      const t = e.touches[0];
+      startDraw(t.clientX - rect.left, t.clientY - rect.top);
+    }, { passive:false });
 
     canvas.addEventListener('touchmove', e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      drawLine(touch.clientX - rect.left, touch.clientY - rect.top);
-    }, { passive: false });
+      const t = e.touches[0];
+      drawLine(t.clientX - rect.left, t.clientY - rect.top);
+    }, { passive:false });
 
-    canvas.addEventListener('touchend', e => {
-      e.preventDefault();
-      endDraw();
-    }, { passive: false });
+    canvas.addEventListener('touchend', e => { e.preventDefault(); endDraw(); }, { passive:false });
 
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
       });
     }
   }
@@ -1242,27 +1017,74 @@
   initSignaturePad('saSignature', 'clearSaSig');
   initSignaturePad('clientSignature', 'clearClientSig');
 
-  const resetBtn = document.getElementById('resetBtn');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      ['pcSignature','saSignature','clientSignature'].forEach(id => {
-        const canvas = document.getElementById(id);
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-      });
-      document.querySelectorAll('.risk-output').forEach(o => o.value = "");
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    ['pcSignature','saSignature','clientSignature'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+      }
     });
-  }
+    document.querySelectorAll('.risk-output').forEach(o => o.value = "");
+  });
 
-  // ======== OFFLINE HAZARD RULE ENGINE – EXTENDED ========
-  // (UNCHANGED from your code below)
-  const DEFAULT_RULES = [
-    /* your rules unchanged */
+  /* ===== OFFLINE HAZARD RULE ENGINE (SELF-CONTAINED) =====
+     - No external links, rules are embedded below.
+     - Controls are kept <= 185 characters.
+     - F,S,P auto-fill only if blank, R auto-calculates.
+  */
+  const BASE_RULES = [
+    {name:'Traffic & vehicles', keywords:'traffic,vehicle,vehicles,road,highway,lane,shoulder,intersection,parking lot,alley,backing,reversing,spotter,haul truck,dump truck,construction traffic', control:'Work clear of live traffic and equipment routes. Wear hi-vis, use cones/signs as needed, use a spotter for backing, and make eye contact before crossing paths.', f:3,s:4,p:3},
+    {name:'Slips / trips / uneven ground', keywords:'uneven ground,slippery,ice,icy,snow,mud,ditch,embankment,hole,rut,loose gravel,wet grass,trip hazard,slip hazard,sidewalk,curb,stairs', control:'Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear of cords and debris.', f:3,s:3,p:3},
+    {name:'Cold stress', keywords:'cold,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero', control:'Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or high windchill.', f:3,s:4,p:2},
+    {name:'Heat stress', keywords:'heat,hot,uv,sun,sunburn,dehydration,heat stress,heat exhaustion,heat stroke', control:'Work in cooler periods, take shade and water breaks, and use hat and sunscreen. Watch for heat illness and stop work if symptoms occur.', f:3,s:4,p:2},
+    {name:'Rain / wet surfaces', keywords:'rain,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs', control:'Wear waterproof layers and slip-resistant footwear, slow down on wet surfaces, and avoid steep or unstable areas with poor footing.', f:3,s:3,p:3},
+    {name:'Wind / smoke / low visibility', keywords:'wind,windy,gust,gusts,smoke,wildfire smoke,fog,low visibility,blowing snow,dust', control:'Secure tripods and loose items, use lower wider setups in gusts, and delay work if wind, smoke, or visibility makes conditions unsafe.', f:3,s:3,p:3},
+    {name:'Dogs', keywords:'dog,dogs,aggressive dog,loose dog,barking,guard dog', control:'Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and do not enter until the area is clearly safe.', f:2,s:3,p:3},
+    {name:'Wildlife', keywords:'wildlife,bear,moose,coyote,cougar,wolf,elk,deer,goose,geese', control:'Stay alert, keep distance, secure food and garbage, carry bear spray where required, and leave the area if wildlife is near or unpredictable.', f:2,s:5,p:2},
+    {name:'Utilities', keywords:'utilities,power line,powerlines,overhead,underground,locate,locates,gas line,pipeline,telecom,fibre,fiber,manhole,vault,transformer', control:'Confirm locates and mark-outs before work. Keep poles outside limits of approach and do not dig, stake, or probe without verified clearance.', f:2,s:5,p:2},
+    {name:'Digging / excavation / pins', keywords:'digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins', control:'Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.', f:2,s:5,p:2},
+    {name:'Jackhammer', keywords:'jackhammer,breaker,demolition hammer,concrete,pavement,chipping,vibration,noise', control:'Wear eye and hearing protection and use stable footing. Control flying debris, confirm utilities below, and take breaks to reduce vibration exposure.', f:2,s:4,p:2},
+    {name:'Generator', keywords:'generator,generators,portable generator,genset,exhaust,carbon monoxide,co,fueling,extension cord', control:'Run generators outdoors away from openings. Route cords to prevent trips and refuel only when off and cooled. Store fuel safely.', f:2,s:5,p:2}
   ];
 
-  const hazardRules = DEFAULT_RULES;
+  const SHEET_RULES = [
+    {name:"Access, Egress and Material Storage",keywords:"access,egress,material,storage,stored,stacked,blocking,walkway,walkways,aisle,aisles",control:"Store materials safely and keep access and egress clear. Maintain housekeeping and safe walk paths. Use lighting where visibility is poor.",f:3,s:3,p:3},
+    {name:"Aggressive Public",keywords:"aggressive,public,landowner,homeowner,threat,threats,harassment,conflict,argument,dispute,trespass",control:"Avoid confrontation, keep distance, and leave if unsafe. Report to supervisor and follow the violence/harassment procedure.",f:2,s:4,p:2},
+    {name:"Airborne Hazards (Dust, Smoke, Air Quality)",keywords:"dust,smoke,air quality,airborne,silica,fumes,haze,poor air,respiratory",control:"Monitor air quality and visibility. Limit exposure, use respiratory protection if required, and delay work if conditions are unsafe.",f:3,s:3,p:2},
+    {name:"Allergies (Plants, Bites, Stings)",keywords:"allergy,allergies,plants,stings,bites,tick,ticks,mosquito,mosquitoes,wasp,wasps,bee,bees,hornet",control:"Identify allergy risks, carry required medication, use repellant, and avoid nests or dense vegetation. Seek medical help for reactions.",f:2,s:4,p:2},
+    {name:"Animal and Wildlife Encounters",keywords:"animal,animals,wildlife,bear,moose,coyote,cougar,deer,dog,dogs",control:"Stay alert, keep distance, and do not approach animals. Carry bear spray where required and leave the area if wildlife is present.",f:2,s:5,p:2},
+    {name:"Asbestos",keywords:"asbestos,suspect asbestos,renovation,demo,demolition,insulation,vermiculite",control:"Do not disturb suspect asbestos. Stop work, isolate the area, and notify the supervisor or site contact.",f:1,s:5,p:1},
+    {name:"Back Strain, Lifting and Carrying",keywords:"back,strain,lift,lifting,carry,carrying,manual handling,awkward,heavy,overhead lift",control:"Use proper lifting technique, keep loads close, and team lift heavy or awkward items. Use aids where available and take breaks.",f:3,s:3,p:3},
+    {name:"Batteries and Battery Charging",keywords:"battery,batteries,charging,charger,chargers,terminal,terminals,acid",control:"Charge batteries in a ventilated area away from heat. Inspect cords and chargers and follow manufacturer instructions.",f:2,s:3,p:2},
+    {name:"Bear Spray Use and Storage",keywords:"bear spray,pepper spray,wildlife deterrent,deterrent,storage,expiry",control:"Carry bear spray where required and keep it accessible. Store safely, check expiry, and ensure workers are trained on use and wind.",f:1,s:5,p:1},
+    {name:"Bee / Wasp Nests",keywords:"bee,bees,wasp,wasps,hornet,hornets,nest,nests",control:"Stay clear of nests and do not disturb. Use repellant and relocate work. Seek medical help for severe stings or reactions.",f:2,s:3,p:2},
+    {name:"Bloodborne Pathogens",keywords:"bloodborne,blood,bodily fluids,first aid,needle,needles,sharps",control:"Use gloves and barriers for first aid. Avoid contact with fluids and dispose of sharps safely. Wash hands and report exposures.",f:1,s:4,p:1},
+    {name:"Boats and Watercraft Use",keywords:"boat,boats,watercraft,river crossing,lake,shoreline",control:"Use a PFD on or near watercraft. Follow weather limits, maintain communication, and carry required rescue equipment.",f:1,s:5,p:1},
+    {name:"Bridge Work",keywords:"bridge,bridges,over water,edge,traffic on bridge,fall hazard",control:"Control traffic and maintain safe access. Use fall protection where required and keep clear of edges. Follow site rules.",f:2,s:5,p:2},
+    {name:"Buried Facilities",keywords:"buried,underground,utilities,gas line,pipe,pipeline,telecom,fibre,locates",control:"Confirm locates before staking, digging, or probing. Hand dig near marks and stop work if facility locations are uncertain.",f:2,s:5,p:2},
+    {name:"Chainsaw Use",keywords:"chainsaw,saw,cutting,tree,trees,brush,limbing,felling",control:"Use trained operators only. Wear required PPE and keep others at a safe distance. Refuel only when off, cooled, and away from ignition.",f:2,s:5,p:2},
+    {name:"Chemical Exposure",keywords:"chemical,chemicals,solvent,solvents,fuel,diesel,gasoline,propane,cleaner",control:"Review SDS, use required PPE, and ensure ventilation. Store and label chemicals properly and clean spills immediately.",f:2,s:4,p:2},
+    {name:"Confined Spaces",keywords:"confined space,manhole,vault,tank,pit,sewer,oxygen,methane,h2s",control:"Do not enter confined spaces without permit, training, and a rescue plan. Use gas monitoring and ventilation as required.",f:1,s:5,p:1},
+    {name:"Construction Traffic",keywords:"construction traffic,haul truck,excavator,loader,backhoe,skid steer,backing,spotter,blind spot",control:"Stay visible in hi-vis and keep out of blind spots. Use a spotter for backing and follow the site traffic plan.",f:3,s:4,p:3},
+    {name:"Electrical Hazards",keywords:"electrical,electricity,cord,cords,extension cord,power tool,shock,overhead line",control:"Inspect cords and tools before use. Keep clear of overhead powerlines and do not use damaged electrical equipment.",f:2,s:5,p:2},
+    {name:"Excavations and Trenches",keywords:"excavation,trench,trenches,collapse,edge,open trench,shoring",control:"Stay back from edges and do not enter excavations unless authorized and protected. Use safe crossings and follow site rules.",f:2,s:5,p:2},
+    {name:"Extreme Heat",keywords:"extreme heat,hot,heat wave,uv,heat illness,dehydration",control:"Increase water and shade breaks, adjust pace, and work in cooler periods. Watch for heat illness and stop work if symptoms occur.",f:3,s:4,p:2},
+    {name:"Fall Hazards",keywords:"fall,falls,height,ladder,roof,stairs,scaffold,open edge,opening",control:"Use ladders correctly and maintain three-point contact. Use fall protection where required and keep clear of edges and openings.",f:2,s:5,p:2},
+    {name:"Fire Ban",keywords:"fire ban,wildfire,ignition,sparks,smoking,open flame",control:"Follow fire-ban rules, avoid ignition sources, keep extinguishers available, and report smoke or fire immediately.",f:2,s:5,p:2},
+    {name:"H2S",keywords:"h2s,hydrogen sulfide,toxic gas,gas monitor,alarm,methane,oxygen",control:"Do not work in H2S areas without training and a working monitor. Follow emergency procedures and evacuate immediately on alarm.",f:2,s:5,p:2},
+    {name:"Manual Handling",keywords:"manual handling,lift,lifting,carry,carrying,awkward load,heavy,ergonomics",control:"Use proper technique, avoid twisting, and team lift heavy loads. Use carts or aids where available and take rest breaks.",f:3,s:3,p:3},
+    {name:"Overhead Powerlines",keywords:"overhead powerline,power line,lines,electrical,limit of approach,pole,tripod",control:"Maintain limits of approach and keep poles and tripods away from lines. Use a spotter and stop work if clearance is uncertain.",f:2,s:5,p:2},
+    {name:"Rain",keywords:"rain,rainy,wet,slippery,mud,puddles,reduced visibility",control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid unstable slopes. Drive to conditions.",f:3,s:3,p:3},
+    {name:"Slips Trips and Falls",keywords:"slip,slips,trip,trips,fall,falls,uneven,icy,slippery,mud,cord",control:"Walk the area first and keep paths clear. Use slip-resistant footwear and set equipment on firm ground. Use handrails where available.",f:3,s:3,p:3},
+    {name:"Traffic",keywords:"traffic,road,highway,vehicles,intersection,lane,shoulder,backing,spotter",control:"Wear hi-vis and work away from live lanes. Use cones/signs as needed, face traffic, and use a spotter for backing.",f:3,s:4,p:3},
+    {name:"Uneven Ground",keywords:"uneven ground,rut,ruts,hole,holes,ditch,embankment,loose gravel",control:"Watch footing and avoid unstable edges. Use proper footwear, keep hands free, and set tripods on firm ground. Use safe access routes.",f:3,s:3,p:3},
+    {name:"Wind",keywords:"wind,windy,gust,gusts,blowing snow,blowing dust,smoke,low visibility",control:"Secure tripods and loose items and use lower wider setups in gusts. Delay work if wind or visibility makes it unsafe.",f:3,s:3,p:3},
+    {name:"Winter Driving",keywords:"winter driving,black ice,icy roads,snow,slush,whiteout,poor traction",control:"Drive to conditions and increase following distance. Check tires and lights and carry emergency gear. Avoid travel in severe weather.",f:3,s:4,p:2}
+  ];
+
+  const hazardRules = [...BASE_RULES, ...SHEET_RULES];
 
   function normalize(text) {
     return (text || '')
@@ -1272,74 +1094,78 @@
       .trim();
   }
 
-  function getSuggestionFromRules(hazardText) {
+  function bestRuleMatch(hazardText) {
     const text = normalize(hazardText);
-    if (!text) return '';
+    if (!text) return null;
 
-    let bestIndex = -1;
+    let best = null;
     let bestScore = 0;
 
-    hazardRules.forEach((rule, index) => {
+    hazardRules.forEach(rule => {
       const keywordsStr = rule.keywords || '';
-      const keywords = keywordsStr.split(',').map(k => k.trim()).filter(Boolean);
+      const keywords = keywordsStr.split(',').map(k => normalize(k.trim())).filter(Boolean);
       let score = 0;
 
       keywords.forEach(kw => {
-        const normKw = normalize(kw);
-        if (!normKw) return;
-
-        if (text.includes(normKw)) {
-          score += 4;
-        } else {
-          const parts = normKw.split(' ');
-          parts.forEach(part => {
-            if (part.length > 3 && text.includes(part)) score += 1;
-          });
+        if (!kw) return;
+        if (text.includes(kw)) score += 4;
+        else {
+          const parts = kw.split(' ');
+          parts.forEach(part => { if (part.length > 3 && text.includes(part)) score += 1; });
         }
       });
 
-      if (score > bestScore) {
-        bestScore = score;
-        bestIndex = index;
-      }
+      if (score > bestScore) { bestScore = score; best = rule; }
     });
 
-    if (bestIndex >= 0 && bestScore > 0) return hazardRules[bestIndex].control || '';
-    return '';
+    return bestScore > 0 ? best : null;
+  }
+
+  function autofillRiskIfBlank(row, rule) {
+    if (!rule) return;
+
+    const fEl = document.querySelector(`input[name="f_${row}"]`);
+    const sEl = document.querySelector(`input[name="s_${row}"]`);
+    const pEl = document.querySelector(`input[name="p_${row}"]`);
+    if (!fEl || !sEl || !pEl) return;
+
+    const isBlank = (el) => !String(el.value || "").trim();
+
+    if (isBlank(fEl) && Number.isFinite(rule.f)) fEl.value = rule.f;
+    if (isBlank(sEl) && Number.isFinite(rule.s)) sEl.value = rule.s;
+    if (isBlank(pEl) && Number.isFinite(rule.p)) pEl.value = rule.p;
+
+    updateRiskForRow(row);
   }
 
   function initHazardAutoSuggest() {
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
       input.addEventListener('blur', e => {
         const hazardText = e.target.value.trim();
-        const parts = e.target.name.split('_');
-        const row = parts[1];
+        const row = e.target.name.split('_')[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
         if (!controlField) return;
 
-        if (!hazardText) {
-          controlField.value = '';
-          return;
+        if (!hazardText) { controlField.value = ''; return; }
+
+        const rule = bestRuleMatch(hazardText);
+
+        if (!(controlField.value && controlField.value.length > 40)) {
+          if (rule && rule.control) controlField.value = rule.control;
         }
 
-        if (controlField.value && controlField.value.length > 40) return;
-
-        const suggestion = getSuggestionFromRules(hazardText);
-        if (suggestion) controlField.value = suggestion;
+        autofillRiskIfBlank(row, rule);
       });
 
       input.addEventListener('input', e => {
         const value = e.target.value.trim();
-        const parts = e.target.name.split('_');
-        const row = parts[1];
+        const row = e.target.name.split('_')[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
         if (!controlField) return;
-
         if (!value) controlField.value = '';
       });
     });
   }
-
   initHazardAutoSuggest();
 </script>
 </body>
