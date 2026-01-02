@@ -2,237 +2,331 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>VistaGeomatics , Worksite Hazard Assessment</title>
+  <title>VistaGeomatics – Worksite Hazard Assessment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
-    :root{
-      --vista-blue:#165f7d;
-      --vista-blue-light:#2a7fa3;
-      --vista-blue-dark:#0b3045;
-      --bg-body:#eef3f9;
-      --bg-card:#ffffff;
-      --border-soft:#d6e2f0;
-      --text-main:#101827;
-      --text-muted:#6b7280;
+    :root {
+      --vista-blue: #165f7d;
+      --vista-blue-light: #2a7fa3;
+      --vista-blue-dark: #0b3045;
+      --bg-body: #eef3f9;
+      --bg-card: #ffffff;
+      --border-soft: #d6e2f0;
+      --text-main: #101827;
+      --text-muted: #6b7280;
     }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      padding:16px;
-      font-family:"Inter",sans-serif;
-      background:radial-gradient(circle at top,#f4f8fc 0,#e4edf6 40%,#dde6f3 100%);
-      color:var(--text-main);
-      -webkit-text-size-adjust:100%;
-    }
-    .page-wrap{max-width:1050px;margin:0 auto;}
-    .container{
-      background:var(--bg-card);
-      border-radius:16px;
-      box-shadow:0 14px 30px rgba(5,41,66,.18),0 0 0 1px rgba(5,41,66,.04);
-      overflow:hidden;
-      position:relative;
-      margin-bottom:18px;
-    }
-    .container::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:radial-gradient(circle at top right,rgba(22,95,125,.16),transparent 55%);
-      opacity:.9;
-    }
-    .header-bar{
-      position:relative;
-      z-index:1;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 20px;
-      background:linear-gradient(120deg,var(--vista-blue-light) 0%,var(--vista-blue) 40%,var(--vista-blue-dark) 100%);
-      color:#fff;
-    }
-    .header-left h1{
-      margin:0;
-      font-family:"Montserrat",sans-serif;
-      font-size:1.4rem;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-    .header-left p{margin:2px 0 0;font-size:.8rem;opacity:.9;}
-    .header-logo{height:60px;filter:drop-shadow(0 5px 14px rgba(0,0,0,.35));}
 
-    .page-title-bar{
-      position:relative;
-      z-index:1;
-      text-align:center;
-      padding:10px 20px 6px;
-      background:linear-gradient(180deg,rgba(255,255,255,.78),#f7faff);
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: "Inter", sans-serif;
+      background: radial-gradient(circle at top, #f4f8fc 0, #e4edf6 40%, #dde6f3 100%);
+      color: var(--text-main);
+      -webkit-text-size-adjust: 100%;
     }
-    .page-title-main{
-      font-family:"Montserrat",sans-serif;
-      font-size:1.2rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:var(--vista-blue-dark);
+
+    .page-wrap { max-width: 1050px; margin: 0 auto; }
+
+    .container {
+      background: var(--bg-card);
+      border-radius: 16px;
+      box-shadow: 0 14px 30px rgba(5, 41, 66, 0.18), 0 0 0 1px rgba(5, 41, 66, 0.04);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 18px;
     }
-    .page-title-sub{margin-top:3px;font-size:.78rem;color:var(--text-muted);}
-    .page-title-accent{
-      width:120px;height:3px;margin:8px auto 0;border-radius:999px;
-      background:linear-gradient(120deg,var(--vista-blue-light),var(--vista-blue),var(--vista-blue-dark));
-      box-shadow:0 0 8px rgba(46,167,224,.65);
+
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at top right, rgba(22,95,125,0.16), transparent 55%);
+      opacity: 0.9;
     }
-    .page-body{position:relative;z-index:1;padding:10px 18px 14px;font-size:.8rem;}
-    label{
-      font-size:.78rem;
-      font-weight:600;
-      display:block;
-      margin-bottom:2px;
-      color:var(--text-main);
+
+    .header-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: linear-gradient(120deg, var(--vista-blue-light) 0%, var(--vista-blue) 40%, var(--vista-blue-dark) 100%);
+      color: #fff;
+    }
+
+    .header-left h1 {
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .header-left p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.9; }
+
+    .header-logo { height: 60px; filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35)); }
+
+    .page-title-bar {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 10px 20px 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), #f7faff);
+    }
+
+    .page-title-main {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--vista-blue-dark);
+    }
+
+    .page-title-sub { margin-top: 3px; font-size: 0.78rem; color: var(--text-muted); }
+
+    .page-title-accent {
+      width: 120px;
+      height: 3px;
+      margin: 8px auto 0;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--vista-blue-light), var(--vista-blue), var(--vista-blue-dark));
+      box-shadow: 0 0 8px rgba(46,167,224,0.65);
+    }
+
+    .page-body { position: relative; z-index: 1; padding: 10px 18px 14px; font-size: 0.8rem; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+      color: var(--text-main);
     }
 
     /* INPUT/TEXT CLIPPING FIX */
-    input[type="text"],input[type="date"],input[type="time"],textarea,.small-input{
-      width:100%;
-      font-family:"Inter",sans-serif;
-      font-size:.74rem;
-      line-height:1.25;
-      color:var(--text-main);
-      border-radius:8px;
-      border:1px solid var(--border-soft);
-      background:#f9fbff;
-      transition:.15s;
-    }
-    input[type="text"],input[type="date"],input[type="time"],.small-input{
-      height:34px;
-      padding:6px 8px;
-      vertical-align:middle;
-      -webkit-appearance:none;
-      appearance:none;
-    }
-    textarea{padding:6px 8px;min-height:56px;resize:vertical;}
-    input:focus,textarea:focus{
-      outline:none;
-      border-color:var(--vista-blue-light);
-      background:#fff;
-      box-shadow:0 0 0 2px rgba(38,132,168,.18);
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    .small-input {
+      width: 100%;
+      font-family: "Inter", sans-serif;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      color: var(--text-main);
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: #f9fbff;
+      transition: 0.15s;
     }
 
-    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px;}
-    .row>div{flex:1;min-width:150px;}
-
-    .section-card{
-      margin-top:8px;
-      padding:8px 10px 10px;
-      border-radius:12px;
-      border:1px solid var(--border-soft);
-      background:linear-gradient(135deg,#fbfdff 0%,#f4f8fd 60%,#eff5fb 100%);
-      box-shadow:0 6px 16px rgba(5,41,66,.05);
-      position:relative;
-    }
-    .section-card::before{
-      content:"";
-      position:absolute;
-      top:0;left:0;right:0;
-      height:3px;
-      border-radius:12px 12px 0 0;
-      background:linear-gradient(90deg,var(--vista-blue-light),var(--vista-blue-dark));
-    }
-    .section-header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:4px;}
-    .section-title{
-      font-weight:600;
-      font-size:.86rem;
-      color:var(--vista-blue-dark);
-      font-family:"Montserrat",sans-serif;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-    }
-    .section-note{font-size:.72rem;color:var(--text-muted);}
-
-    .inline-checkbox-group{display:flex;flex-wrap:wrap;gap:10px;font-size:.76rem;}
-    .inline-checkbox-group label{display:inline-flex;align-items:center;gap:4px;font-weight:500;margin-bottom:0;}
-    input[type="checkbox"]{width:14px;height:14px;accent-color:var(--vista-blue);margin:0;}
-
-    .small-text{font-size:.74rem;color:var(--text-muted);}
-
-    table{width:100%;border-collapse:collapse;font-size:.75rem;margin-top:4px;}
-    th,td{border:1px solid var(--border-soft);padding:3px 4px;vertical-align:top;}
-    th{background:#e8f0fb;font-weight:600;color:var(--vista-blue-dark);}
-    td{background:#f9fbff;}
-    .center{text-align:center;}
-
-    .signature-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:8px;
-      margin-top:4px;
-    }
-    .signature-box{
-      border-radius:10px;
-      border:1px solid var(--border-soft);
-      background:#f9fbff;
-      padding:6px;
-      font-size:.78rem;
-    }
-    .signature-label{font-size:.74rem;font-weight:600;color:var(--text-muted);margin-bottom:2px;}
-    .signature-canvas{
-      width:100%;
-      height:80px;
-      border-radius:8px;
-      border:1px solid var(--border-soft);
-      background:#fff;
-      box-shadow:inset 0 1px 2px rgba(15,23,42,.08);
-      display:block;
-      cursor:crosshair;
-    }
-    .signature-actions{display:flex;justify-content:flex-end;margin-top:4px;}
-    .signature-actions button{padding:3px 10px;font-size:.7rem;letter-spacing:.05em;}
-    .signature-row{display:flex;gap:6px;margin-top:4px;}
-    .signature-row>div{flex:1;}
-
-    .btn-row{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;margin-bottom:4px;}
-    button{
-      border:none;
-      border-radius:999px;
-      padding:7px 16px;
-      font-size:.78rem;
-      font-weight:600;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      transition:transform .12s ease,box-shadow .12s ease;
-    }
-    .btn-primary{
-      background:linear-gradient(120deg,var(--vista-blue-light),var(--vista-blue),var(--vista-blue-dark));
-      color:#fff;
-      box-shadow:0 8px 20px rgba(5,41,66,.35);
-    }
-    .btn-secondary{background:#f3f4f6;color:var(--text-main);border:1px solid #d6d7dd;}
-    button:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(15,23,42,.18);}
-
-    .control-text{
-      width:100%;
-      min-height:80px;
-      resize:vertical;
-      padding:6px 8px;
-      line-height:1.25;
-      font-size:.74rem;
-    }
-    .risk-input,.risk-output{
-      height:32px !important;
-      padding:5px 6px !important;
-      line-height:1.2 !important;
-      font-size:.74rem !important;
-      text-align:center;
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    .small-input {
+      height: 34px;
+      padding: 6px 8px;
+      vertical-align: middle;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    @media (max-width:700px){
-      .header-bar{flex-direction:column;align-items:flex-start;gap:8px;}
-      .page-title-main{font-size:1.05rem;letter-spacing:.12em;}
+    textarea { padding: 6px 8px; min-height: 56px; resize: vertical; }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--vista-blue-light);
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(38,132,168,0.18);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .row > div { flex: 1; min-width: 150px; }
+
+    .section-card {
+      margin-top: 8px;
+      padding: 8px 10px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      background: linear-gradient(135deg, #fbfdff 0%, #f4f8fd 60%, #eff5fb 100%);
+      box-shadow: 0 6px 16px rgba(5, 41, 66, 0.05);
+      position: relative;
+    }
+
+    .section-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 12px 12px 0 0;
+      background: linear-gradient(90deg, var(--vista-blue-light), var(--vista-blue-dark));
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 0.86rem;
+      color: var(--vista-blue-dark);
+      font-family: "Montserrat", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .section-note { font-size: 0.72rem; color: var(--text-muted); }
+
+    .inline-checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.76rem;
+    }
+
+    .inline-checkbox-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--vista-blue);
+      margin: 0;
+    }
+
+    .small-text { font-size: 0.74rem; color: var(--text-muted); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      margin-top: 4px;
+    }
+
+    th, td {
+      border: 1px solid var(--border-soft);
+      padding: 3px 4px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e8f0fb;
+      font-weight: 600;
+      color: var(--vista-blue-dark);
+    }
+
+    td { background: #f9fbff; }
+
+    .center { text-align: center; }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .signature-box {
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      background: #f9fbff;
+      padding: 6px;
+      font-size: 0.78rem;
+    }
+
+    .signature-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .signature-canvas {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
+      display: block;
+      cursor: crosshair;
+    }
+
+    .signature-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
+    .signature-actions button { padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.05em; }
+    .signature-row { display: flex; gap: 6px; margin-top: 4px; }
+    .signature-row > div { flex: 1; }
+
+    .btn-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; margin-bottom: 4px; }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--vista-blue-light), var(--vista-blue), var(--vista-blue-dark));
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(5, 41, 66, 0.35);
+    }
+
+    .btn-secondary { background: #f3f4f6; color: var(--text-main); border: 1px solid #d6d7dd; }
+    button:hover { transform: translateY(-1px); box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18); }
+
+    .control-text {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      padding: 6px 8px;
+      line-height: 1.25;
+      font-size: 0.74rem;
+    }
+
+    .risk-input,
+    .risk-output {
+      height: 32px !important;
+      padding: 5px 6px !important;
+      line-height: 1.2 !important;
+      font-size: 0.74rem !important;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .page-title-main { font-size: 1.05rem; letter-spacing: 0.12em; }
     }
   </style>
 </head>
@@ -344,7 +438,7 @@
 
           <div class="row">
             <div style="flex:1 1 40%;">
-              <label for="working_supervisor_name">Contact Procedures, Call Supervisor: Name</label>
+              <label for="working_supervisor_name">Contact Procedures – Call Supervisor: Name</label>
               <input type="text" id="working_supervisor_name" name="working_supervisor_name">
             </div>
             <div style="flex:1 1 25%;">
@@ -358,8 +452,7 @@
           </div>
 
           <div class="small-text" style="margin-top:4px;">
-            <strong>Note:</strong> Check-in intervals are based on risk level,
-            High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
+            <strong>Note:</strong> Check-in intervals are based on risk level – High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
           </div>
         </div>
 
@@ -369,6 +462,7 @@
             <div class="section-title">Daily Equipment Inspection</div>
             <div class="section-note">Check your vehicle, ATV, snowmobile, generator, trailer, and/or chainsaw and report any deficiencies.</div>
           </div>
+
           <table>
             <thead><tr><th>Equipment</th><th>Inspection Items</th></tr></thead>
             <tbody>
@@ -439,8 +533,9 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Personal Protective Equipment</div>
-            <div class="section-note">Check off required PPE, report missing or worn items as needed.</div>
+            <div class="section-note">Check off required PPE; report missing or worn items as needed.</div>
           </div>
+
           <div class="inline-checkbox-group">
             <label><input type="checkbox" name="ppe_hardhat"> Hardhat</label>
             <label><input type="checkbox" name="ppe_atv_helmet"> ATV Helmets</label>
@@ -465,7 +560,7 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Controls and risk ratings auto-suggest from the embedded ruleset, risk R auto-calculates from F × S × P.</div>
+        <div class="page-title-sub">Controls and ratings auto-suggest from the embedded ruleset. R auto-calculates from F × S × P.</div>
         <div class="page-title-accent"></div>
       </div>
 
@@ -494,7 +589,7 @@
               <tr>
                 <td class="center"><input type="checkbox" name="haz_hunting"></td>
                 <td>Hunting Season</td>
-                <td>Know season dates, stay together, make noise, wear hi-vis, and contact hunters if seen. Do not enter active hunting areas.</td>
+                <td>Know season dates, stay together, make noise, wear hi-vis, and avoid active hunting areas.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
@@ -514,7 +609,7 @@
               <tr>
                 <td class="center"><input type="checkbox" name="haz_fences"></td>
                 <td>
-                  Construction Fences, Installed
+                  Construction Fences – Installed
                   <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
                     <input type="checkbox" name="fence_installed_yes"> Yes
                   </label>
@@ -522,37 +617,37 @@
                     <input type="checkbox" name="fence_installed_no"> No
                   </label>
                 </td>
-                <td>Use gates and crossing points, watch for bases and trip hazards, and keep clear when panels are moved. Use caution in high winds.</td>
+                <td>Use gates/crossings, watch bases and trip hazards, and keep clear when panels move. Use caution in high winds.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
                 <td>Wild Animals</td>
-                <td>Stay alert, keep distance, store food and garbage, carry bear spray where required, and leave the area if wildlife is near.</td>
+                <td>Stay alert, keep distance, store food/garbage, carry bear spray where required, and leave if wildlife is near.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_river"></td>
-                <td>River, High/Low Spring Flood</td>
-                <td>Keep back from banks and moving water, avoid undercut edges, use safe crossings, and stop work if conditions are unsafe.</td>
+                <td>River: High/Low Spring Flood</td>
+                <td>Keep back from banks and moving water, avoid undercut edges, use safe crossings, and stop work if unsafe.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_traffic"></td>
                 <td>On and Off Traffic or Construction</td>
-                <td>Wear hi-vis, keep setups out of travel paths, make eye contact with operators, and use cones or signs as needed.</td>
+                <td>Wear hi-vis, keep setups out of travel paths, make eye contact with operators, and use cones/signs as needed.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_icy"></td>
                 <td>Icy Conditions</td>
-                <td>Use slip-resistant footwear, slow down, keep hands free, and drive to conditions. Avoid icy slopes and unstable edges.</td>
+                <td>Use slip-resistant footwear, slow down, keep hands free, and avoid icy slopes and unstable edges.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_noise"></td>
                 <td>Excessive Noise Levels</td>
-                <td>Limit exposure, use hearing protection, establish clear communication, and stay alert to surroundings and equipment movement.</td>
+                <td>Limit exposure, use hearing protection, establish clear communication, and stay alert to surroundings.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_wildfire"></td>
                 <td>
-                  Wild Fire Hazard, Fire Ban in Effect
+                  Wild Fire Hazard – Fire Ban in Effect
                   <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
                     <input type="checkbox" name="fireban_yes"> Yes
                   </label>
@@ -565,12 +660,12 @@
               <tr>
                 <td class="center"><input type="checkbox" name="haz_farming"></td>
                 <td>Farming Operations (cattle or other animals)</td>
-                <td>Make your presence known, give livestock space, and avoid working between animals and fences. Reroute if animals are agitated.</td>
+                <td>Make your presence known, give livestock space, and reroute if animals appear stressed or aggressive.</td>
               </tr>
               <tr>
                 <td class="center"><input type="checkbox" name="haz_landowner"></td>
                 <td>
-                  Land Owner / Home Owner, Made Contact
+                  Land Owner / Home Owner – Made Contact
                   <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
                     <input type="checkbox" name="landowner_yes"> Yes
                   </label>
@@ -588,7 +683,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">Controls are auto-suggested (≤185 chars). F, S, P can auto-fill from the embedded ruleset, R auto-calculates.</div>
+            <div class="section-note">If the hazard is cleared, the control and ratings clear. Controls stay ≤ 185 characters.</div>
           </div>
 
           <table>
@@ -604,59 +699,65 @@
               </tr>
             </thead>
             <tbody>
+              <!-- 6 rows -->
               <tr>
                 <td><input type="text" name="task_1" /></td>
-                <td><input type="text" name="hazard_1" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_1" placeholder="e.g. construction traffic, construction fencing, generator, digging pins" /></td>
                 <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
                 <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
               </tr>
+
               <tr>
                 <td><input type="text" name="task_2" /></td>
-                <td><input type="text" name="hazard_2" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_2" /></td>
                 <td class="center"><input type="text" name="f_2" class="risk-input" data-row="2" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
-                <td><textarea name="control_2" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+                <td><textarea name="control_2" class="control-text"></textarea></td>
               </tr>
+
               <tr>
                 <td><input type="text" name="task_3" /></td>
-                <td><input type="text" name="hazard_3" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_3" /></td>
                 <td class="center"><input type="text" name="f_3" class="risk-input" data-row="3" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
-                <td><textarea name="control_3" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+                <td><textarea name="control_3" class="control-text"></textarea></td>
               </tr>
+
               <tr>
                 <td><input type="text" name="task_4" /></td>
-                <td><input type="text" name="hazard_4" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_4" /></td>
                 <td class="center"><input type="text" name="f_4" class="risk-input" data-row="4" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
-                <td><textarea name="control_4" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+                <td><textarea name="control_4" class="control-text"></textarea></td>
               </tr>
+
               <tr>
                 <td><input type="text" name="task_5" /></td>
-                <td><input type="text" name="hazard_5" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_5" /></td>
                 <td class="center"><input type="text" name="f_5" class="risk-input" data-row="5" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
-                <td><textarea name="control_5" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+                <td><textarea name="control_5" class="control-text"></textarea></td>
               </tr>
+
               <tr>
                 <td><input type="text" name="task_6" /></td>
-                <td><input type="text" name="hazard_6" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+                <td><input type="text" name="hazard_6" /></td>
                 <td class="center"><input type="text" name="f_6" class="risk-input" data-row="6" style="width:32px;"></td>
                 <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
                 <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
                 <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
-                <td><textarea name="control_6" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+                <td><textarea name="control_6" class="control-text"></textarea></td>
               </tr>
             </tbody>
           </table>
@@ -665,14 +766,17 @@
         <!-- Emergency Response -->
         <div class="section-card">
           <div class="section-header"><div class="section-title">Emergency Response Plan</div></div>
+
           <div class="row">
             <div><label for="nearest_hospital">Nearest first aid facility or hospital</label><input type="text" id="nearest_hospital" name="nearest_hospital"></div>
             <div><label for="hospital_phone">Phone #</label><input type="text" id="hospital_phone" name="hospital_phone"></div>
           </div>
+
           <div style="margin-top:4px;">
             <label for="emergency_procedures">Emergency Response Procedures</label>
             <textarea id="emergency_procedures" name="emergency_procedures"></textarea>
           </div>
+
           <div style="margin-top:4px;">
             <div class="inline-checkbox-group">
               <label><input type="checkbox" name="first_aid_available"> First Aid Kit Available</label>
@@ -688,7 +792,7 @@
 
           <div class="signature-grid">
             <div class="signature-box">
-              <div class="signature-label">Party Chief, Signature</div>
+              <div class="signature-label">Party Chief – Signature</div>
               <canvas id="pcSignature" class="signature-canvas"></canvas>
               <div class="signature-actions"><button type="button" class="btn-secondary" id="clearPcSig">Clear</button></div>
               <div class="signature-row">
@@ -698,7 +802,7 @@
             </div>
 
             <div class="signature-box">
-              <div class="signature-label">Rodman, Signature</div>
+              <div class="signature-label">Rodman – Signature</div>
               <canvas id="saSignature" class="signature-canvas"></canvas>
               <div class="signature-actions"><button type="button" class="btn-secondary" id="clearSaSig">Clear</button></div>
               <div class="signature-row">
@@ -708,7 +812,7 @@
             </div>
 
             <div class="signature-box">
-              <div class="signature-label">Client Representative / Safety Coordinator / Additional Rodman, Signature</div>
+              <div class="signature-label">Client Representative / Safety Coordinator / Additional Rodman – Signature</div>
               <canvas id="clientSignature" class="signature-canvas"></canvas>
               <div class="signature-actions"><button type="button" class="btn-secondary" id="clearClientSig">Clear</button></div>
               <div class="signature-row">
@@ -729,7 +833,7 @@
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
 
-          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.1</div>
+          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.2</div>
         </div>
       </div>
     </div>
@@ -744,7 +848,7 @@
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  /* ===== RISK CALC: R = F × S × P ===== */
+  /* ===================== RISK CALC ===================== */
   function updateRiskForRow(row) {
     const fInput = document.querySelector('input[name="f_' + row + '"]');
     const sInput = document.querySelector('input[name="s_' + row + '"]');
@@ -760,6 +864,19 @@
     else rInput.value = "";
   }
 
+  function clearRowControlsAndRatings(row) {
+    const c = document.querySelector(`textarea[name="control_${row}"]`);
+    const f = document.querySelector(`input[name="f_${row}"]`);
+    const s = document.querySelector(`input[name="s_${row}"]`);
+    const p = document.querySelector(`input[name="p_${row}"]`);
+    const r = document.querySelector(`input[name="r_${row}"]`);
+    if (c) c.value = "";
+    if (f) f.value = "";
+    if (s) s.value = "";
+    if (p) p.value = "";
+    if (r) r.value = "";
+  }
+
   document.querySelectorAll('.risk-input').forEach(input => {
     input.addEventListener('input', () => {
       const row = input.getAttribute('data-row');
@@ -767,7 +884,7 @@
     });
   });
 
-  /* ===== EXPORT: copy live values + signatures + remove unchecked hazards ===== */
+  /* ===================== EXPORT HELPERS ===================== */
   function syncLiveValuesToClone(originalForm, cloneForm) {
     const getKey = (el) => el.name || el.id;
 
@@ -819,10 +936,10 @@
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
 
-    // copy all typed values into the clone (critical for html2canvas export)
+    // copy typed values into clone (critical for html2canvas)
     syncLiveValuesToClone(form, clone);
 
-    // copy signatures (canvas drawings do not clone)
+    // signatures
     copyCanvasToCloneImage('pcSignature', clone);
     copyCanvasToCloneImage('saSignature', clone);
     copyCanvasToCloneImage('clientSignature', clone);
@@ -836,7 +953,7 @@
       });
     }
 
-    // expand textareas to avoid bottom line clipping
+    // expand textareas so bottom line isn't cut off
     clone.querySelectorAll("textarea").forEach(t => {
       t.style.height = "auto";
       t.style.minHeight = "0";
@@ -845,7 +962,6 @@
       t.style.height = t.scrollHeight + "px";
     });
 
-    // hide buttons in export
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
@@ -894,7 +1010,6 @@
 
       const x = (pageWidth - imgW) / 2;
       const y = margin;
-
       pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
     }
 
@@ -923,7 +1038,7 @@
       const file = new File([blob], 'WorksiteHazardAssessment.pdf', { type: 'application/pdf' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files:[file], title:'Worksite Hazard Assessment', text:'VistaGeomatics, Worksite Hazard Assessment PDF' });
+        await navigator.share({ files:[file], title:'Worksite Hazard Assessment', text:'VistaGeomatics – Worksite Hazard Assessment PDF' });
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -941,7 +1056,7 @@
     }
   });
 
-  /* ===== SIGNATURE PADS ===== */
+  /* ===================== SIGNATURES ===================== */
   function initSignaturePad(canvasId, clearButtonId) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
@@ -1029,62 +1144,16 @@
     document.querySelectorAll('.risk-output').forEach(o => o.value = "");
   });
 
-  /* ===== OFFLINE HAZARD RULE ENGINE (SELF-CONTAINED) =====
-     - No external links, rules are embedded below.
-     - Controls are kept <= 185 characters.
-     - F,S,P auto-fill only if blank, R auto-calculates.
+  /* ===================== HAZARD RULE ENGINE (FIXED MATCHING) =====================
+     Fixes:
+     - No false match from tiny keywords like "co" in "construction"
+     - Construction traffic / fencing reliably match
+     - Clearing hazard clears control + F/S/P/R
   */
-  const BASE_RULES = [
-    {name:'Traffic & vehicles', keywords:'traffic,vehicle,vehicles,road,highway,lane,shoulder,intersection,parking lot,alley,backing,reversing,spotter,haul truck,dump truck,construction traffic', control:'Work clear of live traffic and equipment routes. Wear hi-vis, use cones/signs as needed, use a spotter for backing, and make eye contact before crossing paths.', f:3,s:4,p:3},
-    {name:'Slips / trips / uneven ground', keywords:'uneven ground,slippery,ice,icy,snow,mud,ditch,embankment,hole,rut,loose gravel,wet grass,trip hazard,slip hazard,sidewalk,curb,stairs', control:'Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear of cords and debris.', f:3,s:3,p:3},
-    {name:'Cold stress', keywords:'cold,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero', control:'Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or high windchill.', f:3,s:4,p:2},
-    {name:'Heat stress', keywords:'heat,hot,uv,sun,sunburn,dehydration,heat stress,heat exhaustion,heat stroke', control:'Work in cooler periods, take shade and water breaks, and use hat and sunscreen. Watch for heat illness and stop work if symptoms occur.', f:3,s:4,p:2},
-    {name:'Rain / wet surfaces', keywords:'rain,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs', control:'Wear waterproof layers and slip-resistant footwear, slow down on wet surfaces, and avoid steep or unstable areas with poor footing.', f:3,s:3,p:3},
-    {name:'Wind / smoke / low visibility', keywords:'wind,windy,gust,gusts,smoke,wildfire smoke,fog,low visibility,blowing snow,dust', control:'Secure tripods and loose items, use lower wider setups in gusts, and delay work if wind, smoke, or visibility makes conditions unsafe.', f:3,s:3,p:3},
-    {name:'Dogs', keywords:'dog,dogs,aggressive dog,loose dog,barking,guard dog', control:'Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and do not enter until the area is clearly safe.', f:2,s:3,p:3},
-    {name:'Wildlife', keywords:'wildlife,bear,moose,coyote,cougar,wolf,elk,deer,goose,geese', control:'Stay alert, keep distance, secure food and garbage, carry bear spray where required, and leave the area if wildlife is near or unpredictable.', f:2,s:5,p:2},
-    {name:'Utilities', keywords:'utilities,power line,powerlines,overhead,underground,locate,locates,gas line,pipeline,telecom,fibre,fiber,manhole,vault,transformer', control:'Confirm locates and mark-outs before work. Keep poles outside limits of approach and do not dig, stake, or probe without verified clearance.', f:2,s:5,p:2},
-    {name:'Digging / excavation / pins', keywords:'digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins', control:'Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.', f:2,s:5,p:2},
-    {name:'Jackhammer', keywords:'jackhammer,breaker,demolition hammer,concrete,pavement,chipping,vibration,noise', control:'Wear eye and hearing protection and use stable footing. Control flying debris, confirm utilities below, and take breaks to reduce vibration exposure.', f:2,s:4,p:2},
-    {name:'Generator', keywords:'generator,generators,portable generator,genset,exhaust,carbon monoxide,co,fueling,extension cord', control:'Run generators outdoors away from openings. Route cords to prevent trips and refuel only when off and cooled. Store fuel safely.', f:2,s:5,p:2}
-  ];
 
-  const SHEET_RULES = [
-    {name:"Access, Egress and Material Storage",keywords:"access,egress,material,storage,stored,stacked,blocking,walkway,walkways,aisle,aisles",control:"Store materials safely and keep access and egress clear. Maintain housekeeping and safe walk paths. Use lighting where visibility is poor.",f:3,s:3,p:3},
-    {name:"Aggressive Public",keywords:"aggressive,public,landowner,homeowner,threat,threats,harassment,conflict,argument,dispute,trespass",control:"Avoid confrontation, keep distance, and leave if unsafe. Report to supervisor and follow the violence/harassment procedure.",f:2,s:4,p:2},
-    {name:"Airborne Hazards (Dust, Smoke, Air Quality)",keywords:"dust,smoke,air quality,airborne,silica,fumes,haze,poor air,respiratory",control:"Monitor air quality and visibility. Limit exposure, use respiratory protection if required, and delay work if conditions are unsafe.",f:3,s:3,p:2},
-    {name:"Allergies (Plants, Bites, Stings)",keywords:"allergy,allergies,plants,stings,bites,tick,ticks,mosquito,mosquitoes,wasp,wasps,bee,bees,hornet",control:"Identify allergy risks, carry required medication, use repellant, and avoid nests or dense vegetation. Seek medical help for reactions.",f:2,s:4,p:2},
-    {name:"Animal and Wildlife Encounters",keywords:"animal,animals,wildlife,bear,moose,coyote,cougar,deer,dog,dogs",control:"Stay alert, keep distance, and do not approach animals. Carry bear spray where required and leave the area if wildlife is present.",f:2,s:5,p:2},
-    {name:"Asbestos",keywords:"asbestos,suspect asbestos,renovation,demo,demolition,insulation,vermiculite",control:"Do not disturb suspect asbestos. Stop work, isolate the area, and notify the supervisor or site contact.",f:1,s:5,p:1},
-    {name:"Back Strain, Lifting and Carrying",keywords:"back,strain,lift,lifting,carry,carrying,manual handling,awkward,heavy,overhead lift",control:"Use proper lifting technique, keep loads close, and team lift heavy or awkward items. Use aids where available and take breaks.",f:3,s:3,p:3},
-    {name:"Batteries and Battery Charging",keywords:"battery,batteries,charging,charger,chargers,terminal,terminals,acid",control:"Charge batteries in a ventilated area away from heat. Inspect cords and chargers and follow manufacturer instructions.",f:2,s:3,p:2},
-    {name:"Bear Spray Use and Storage",keywords:"bear spray,pepper spray,wildlife deterrent,deterrent,storage,expiry",control:"Carry bear spray where required and keep it accessible. Store safely, check expiry, and ensure workers are trained on use and wind.",f:1,s:5,p:1},
-    {name:"Bee / Wasp Nests",keywords:"bee,bees,wasp,wasps,hornet,hornets,nest,nests",control:"Stay clear of nests and do not disturb. Use repellant and relocate work. Seek medical help for severe stings or reactions.",f:2,s:3,p:2},
-    {name:"Bloodborne Pathogens",keywords:"bloodborne,blood,bodily fluids,first aid,needle,needles,sharps",control:"Use gloves and barriers for first aid. Avoid contact with fluids and dispose of sharps safely. Wash hands and report exposures.",f:1,s:4,p:1},
-    {name:"Boats and Watercraft Use",keywords:"boat,boats,watercraft,river crossing,lake,shoreline",control:"Use a PFD on or near watercraft. Follow weather limits, maintain communication, and carry required rescue equipment.",f:1,s:5,p:1},
-    {name:"Bridge Work",keywords:"bridge,bridges,over water,edge,traffic on bridge,fall hazard",control:"Control traffic and maintain safe access. Use fall protection where required and keep clear of edges. Follow site rules.",f:2,s:5,p:2},
-    {name:"Buried Facilities",keywords:"buried,underground,utilities,gas line,pipe,pipeline,telecom,fibre,locates",control:"Confirm locates before staking, digging, or probing. Hand dig near marks and stop work if facility locations are uncertain.",f:2,s:5,p:2},
-    {name:"Chainsaw Use",keywords:"chainsaw,saw,cutting,tree,trees,brush,limbing,felling",control:"Use trained operators only. Wear required PPE and keep others at a safe distance. Refuel only when off, cooled, and away from ignition.",f:2,s:5,p:2},
-    {name:"Chemical Exposure",keywords:"chemical,chemicals,solvent,solvents,fuel,diesel,gasoline,propane,cleaner",control:"Review SDS, use required PPE, and ensure ventilation. Store and label chemicals properly and clean spills immediately.",f:2,s:4,p:2},
-    {name:"Confined Spaces",keywords:"confined space,manhole,vault,tank,pit,sewer,oxygen,methane,h2s",control:"Do not enter confined spaces without permit, training, and a rescue plan. Use gas monitoring and ventilation as required.",f:1,s:5,p:1},
-    {name:"Construction Traffic",keywords:"construction traffic,haul truck,excavator,loader,backhoe,skid steer,backing,spotter,blind spot",control:"Stay visible in hi-vis and keep out of blind spots. Use a spotter for backing and follow the site traffic plan.",f:3,s:4,p:3},
-    {name:"Electrical Hazards",keywords:"electrical,electricity,cord,cords,extension cord,power tool,shock,overhead line",control:"Inspect cords and tools before use. Keep clear of overhead powerlines and do not use damaged electrical equipment.",f:2,s:5,p:2},
-    {name:"Excavations and Trenches",keywords:"excavation,trench,trenches,collapse,edge,open trench,shoring",control:"Stay back from edges and do not enter excavations unless authorized and protected. Use safe crossings and follow site rules.",f:2,s:5,p:2},
-    {name:"Extreme Heat",keywords:"extreme heat,hot,heat wave,uv,heat illness,dehydration",control:"Increase water and shade breaks, adjust pace, and work in cooler periods. Watch for heat illness and stop work if symptoms occur.",f:3,s:4,p:2},
-    {name:"Fall Hazards",keywords:"fall,falls,height,ladder,roof,stairs,scaffold,open edge,opening",control:"Use ladders correctly and maintain three-point contact. Use fall protection where required and keep clear of edges and openings.",f:2,s:5,p:2},
-    {name:"Fire Ban",keywords:"fire ban,wildfire,ignition,sparks,smoking,open flame",control:"Follow fire-ban rules, avoid ignition sources, keep extinguishers available, and report smoke or fire immediately.",f:2,s:5,p:2},
-    {name:"H2S",keywords:"h2s,hydrogen sulfide,toxic gas,gas monitor,alarm,methane,oxygen",control:"Do not work in H2S areas without training and a working monitor. Follow emergency procedures and evacuate immediately on alarm.",f:2,s:5,p:2},
-    {name:"Manual Handling",keywords:"manual handling,lift,lifting,carry,carrying,awkward load,heavy,ergonomics",control:"Use proper technique, avoid twisting, and team lift heavy loads. Use carts or aids where available and take rest breaks.",f:3,s:3,p:3},
-    {name:"Overhead Powerlines",keywords:"overhead powerline,power line,lines,electrical,limit of approach,pole,tripod",control:"Maintain limits of approach and keep poles and tripods away from lines. Use a spotter and stop work if clearance is uncertain.",f:2,s:5,p:2},
-    {name:"Rain",keywords:"rain,rainy,wet,slippery,mud,puddles,reduced visibility",control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid unstable slopes. Drive to conditions.",f:3,s:3,p:3},
-    {name:"Slips Trips and Falls",keywords:"slip,slips,trip,trips,fall,falls,uneven,icy,slippery,mud,cord",control:"Walk the area first and keep paths clear. Use slip-resistant footwear and set equipment on firm ground. Use handrails where available.",f:3,s:3,p:3},
-    {name:"Traffic",keywords:"traffic,road,highway,vehicles,intersection,lane,shoulder,backing,spotter",control:"Wear hi-vis and work away from live lanes. Use cones/signs as needed, face traffic, and use a spotter for backing.",f:3,s:4,p:3},
-    {name:"Uneven Ground",keywords:"uneven ground,rut,ruts,hole,holes,ditch,embankment,loose gravel",control:"Watch footing and avoid unstable edges. Use proper footwear, keep hands free, and set tripods on firm ground. Use safe access routes.",f:3,s:3,p:3},
-    {name:"Wind",keywords:"wind,windy,gust,gusts,blowing snow,blowing dust,smoke,low visibility",control:"Secure tripods and loose items and use lower wider setups in gusts. Delay work if wind or visibility makes it unsafe.",f:3,s:3,p:3},
-    {name:"Winter Driving",keywords:"winter driving,black ice,icy roads,snow,slush,whiteout,poor traction",control:"Drive to conditions and increase following distance. Check tires and lights and carry emergency gear. Avoid travel in severe weather.",f:3,s:4,p:2}
-  ];
-
-  const hazardRules = [...BASE_RULES, ...SHEET_RULES];
+  // keywords under 3 chars are ignored entirely (prevents "co" matching "construction")
+  // 3-char tokens allowed only if in this set (so H2S works, etc.)
+  const ALLOW_SHORT = new Set(["h2s","uv","sds","pfd","gps","gnss","scba","sabe","co2"]);
 
   function normalize(text) {
     return (text || '')
@@ -1094,29 +1163,84 @@
       .trim();
   }
 
+  function tokenize(text) {
+    const t = normalize(text);
+    if (!t) return [];
+    return t.split(' ').filter(Boolean);
+  }
+
+  function clamp185(s) {
+    const str = String(s || "").trim();
+    if (str.length <= 185) return str;
+    return str.slice(0, 182).trimEnd() + "...";
+  }
+
+  // All controls are already written short; clamp is a safety net.
+  const hazardRules = [
+    { name:"Construction Traffic", keywords:"construction traffic,haul truck,haul trucks,dump truck,dump trucks,delivery truck,delivery trucks,site traffic,traffic control,flagger,flagging,backing,reversing,blind spot,swing radius", control:"Stay out of travel paths and swing radii. Wear hi-vis, use cones/signs if needed, use a spotter for backing, and make eye contact with operators.", f:3,s:4,p:3 },
+    { name:"Construction Fencing", keywords:"construction fencing,construction fence,temp fence,temporary fence,fence panel,fence panels,fence base,fence bases,site perimeter,gate,gates", control:"Use gates and crossings, watch bases and trip hazards, and keep clear when panels move. In wind, keep distance and do not lean on fencing.", f:2,s:3,p:3 },
+    { name:"Portable Generators", keywords:"generator,generators,portable generator,genset,genny,exhaust,carbon monoxide,extension cord,cords,fueling,refuel", control:"Run outdoors away from openings. Route cords to prevent trips. Refuel only when off and cooled, and store fuel safely.", f:2,s:5,p:2 },
+
+    { name:"Traffic & Vehicles", keywords:"traffic,road,roads,highway,lane,lanes,shoulder,intersection,crosswalk,parking lot,alley,backing,reversing,vehicle,vehicles,truck,trucks,bus,buses", control:"Work clear of live lanes and vehicle routes. Wear hi-vis, face traffic, use cones/signs if needed, and use a spotter for backing.", f:3,s:4,p:3 },
+    { name:"Slips / Trips / Falls", keywords:"slip,slips,trip,trips,fall,falls,uneven ground,slippery,ice,icy,snow,mud,ditch,embankment,hole,holes,rut,ruts,loose gravel,wet grass,stairs,curb,sidewalk", control:"Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear.", f:3,s:3,p:3 },
+    { name:"Cold Weather", keywords:"cold,cold weather,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero", control:"Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or windchill.", f:3,s:4,p:2 },
+    { name:"Rain / Wet Conditions", keywords:"rain,raining,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs", control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid steep or unstable areas with poor footing.", f:3,s:3,p:3 },
+    { name:"Wind / Low Visibility", keywords:"wind,windy,gust,gusts,blowing snow,dust,dust storm,fog,foggy,smoke,wildfire smoke,low visibility", control:"Secure tripods and loose items and use lower, wider setups. Delay work if wind, smoke, or visibility makes conditions unsafe.", f:3,s:3,p:3 },
+    { name:"Utilities", keywords:"utilities,utility,overhead,underground,locate,locates,power line,powerlines,gas line,pipeline,telecom,fibre,fiber,manhole,vault,transformer", control:"Confirm locates and mark-outs before work. Maintain limits of approach and do not dig, stake, or probe without verified clearance.", f:2,s:5,p:2 },
+    { name:"Digging / Pins", keywords:"digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins", control:"Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.", f:2,s:5,p:2 },
+    { name:"Jackhammer", keywords:"jackhammer,breaker,demolition hammer,concrete,pavement,chipping,vibration,noise", control:"Wear eye and hearing protection and use stable footing. Control flying debris, confirm utilities below, and take breaks to reduce vibration exposure.", f:2,s:4,p:2 },
+    { name:"Dogs", keywords:"dog,dogs,aggressive dog,loose dog,barking,guard dog", control:"Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and do not enter until the area is clearly safe.", f:2,s:3,p:3 },
+    { name:"Wildlife", keywords:"wildlife,bear,moose,coyote,cougar,wolf,elk,deer,goose,geese", control:"Stay alert, keep distance, secure food and garbage, carry bear spray where required, and leave if wildlife is near or unpredictable.", f:2,s:5,p:2 },
+    { name:"H2S / Gas", keywords:"h2s,hydrogen sulfide,methane,toxic gas,gas monitor,alarm,oxygen deficiency,confined space", control:"Do not work in H2S or hazardous atmospheres without training and a working monitor. Follow emergency procedures and evacuate on alarm.", f:2,s:5,p:2 },
+    { name:"Housekeeping / Material Storage", keywords:"housekeeping,access,egress,material storage,stored,stacked,blocking,walkway,walkways,aisle,aisles,debris", control:"Keep access and egress clear. Store materials safely and maintain housekeeping. Remove trip hazards and improve lighting if needed.", f:3,s:3,p:3 }
+  ].map(r => ({ ...r, control: clamp185(r.control) }));
+
+  function scoreRule(rule, text, tokens) {
+    const kList = (rule.keywords || "")
+      .split(',')
+      .map(k => normalize(k.trim()))
+      .filter(Boolean);
+
+    let score = 0;
+    const tokenSet = new Set(tokens);
+
+    for (const kw of kList) {
+      if (!kw) continue;
+
+      // ignore very short tokens like "co" to prevent false matches with "construction"
+      if (kw.length <= 2) continue;
+      if (kw.length === 3 && !ALLOW_SHORT.has(kw)) continue;
+
+      // phrase match (multi-word)
+      if (kw.includes(' ')) {
+        if (text.includes(kw)) { score += 10; continue; }
+        // partial phrase support: count if all words are present as full tokens
+        const parts = kw.split(' ').filter(Boolean);
+        if (parts.length >= 2 && parts.every(p => p.length >= 3 && tokenSet.has(p))) score += 6;
+        continue;
+      }
+
+      // single word match as full token preferred
+      if (tokenSet.has(kw)) { score += 6; continue; }
+
+      // weaker substring match (only for longer words to avoid "gas" issues etc.)
+      if (kw.length >= 5 && text.includes(kw)) score += 2;
+    }
+    return score;
+  }
+
   function bestRuleMatch(hazardText) {
     const text = normalize(hazardText);
     if (!text) return null;
+    const tokens = tokenize(text);
 
     let best = null;
     let bestScore = 0;
 
-    hazardRules.forEach(rule => {
-      const keywordsStr = rule.keywords || '';
-      const keywords = keywordsStr.split(',').map(k => normalize(k.trim())).filter(Boolean);
-      let score = 0;
-
-      keywords.forEach(kw => {
-        if (!kw) return;
-        if (text.includes(kw)) score += 4;
-        else {
-          const parts = kw.split(' ');
-          parts.forEach(part => { if (part.length > 3 && text.includes(part)) score += 1; });
-        }
-      });
-
-      if (score > bestScore) { bestScore = score; best = rule; }
-    });
+    for (const rule of hazardRules) {
+      const s = scoreRule(rule, text, tokens);
+      if (s > bestScore) { bestScore = s; best = rule; }
+    }
 
     return bestScore > 0 ? best : null;
   }
@@ -1140,29 +1264,35 @@
 
   function initHazardAutoSuggest() {
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+      input.addEventListener('input', e => {
+        const value = e.target.value.trim();
+        const row = e.target.name.split('_')[1];
+
+        // If hazard cleared -> clear control + ratings immediately
+        if (!value) {
+          clearRowControlsAndRatings(row);
+        }
+      });
+
       input.addEventListener('blur', e => {
         const hazardText = e.target.value.trim();
         const row = e.target.name.split('_')[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
         if (!controlField) return;
 
-        if (!hazardText) { controlField.value = ''; return; }
+        if (!hazardText) {
+          clearRowControlsAndRatings(row);
+          return;
+        }
 
         const rule = bestRuleMatch(hazardText);
 
-        if (!(controlField.value && controlField.value.length > 40)) {
-          if (rule && rule.control) controlField.value = rule.control;
+        // If user already wrote a long custom control, don't overwrite
+        if (!(controlField.value && controlField.value.trim().length > 40)) {
+          if (rule && rule.control) controlField.value = clamp185(rule.control);
         }
 
         autofillRiskIfBlank(row, rule);
-      });
-
-      input.addEventListener('input', e => {
-        const value = e.target.value.trim();
-        const row = e.target.name.split('_')[1];
-        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
-        if (!controlField) return;
-        if (!value) controlField.value = '';
       });
     });
   }
