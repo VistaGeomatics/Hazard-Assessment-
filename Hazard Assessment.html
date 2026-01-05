@@ -29,7 +29,10 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    .page-wrap { max-width: 1050px; margin: 0 auto; }
+    .page-wrap {
+      max-width: 1050px;
+      margin: 0 auto;
+    }
 
     .container {
       background: var(--bg-card);
@@ -68,9 +71,16 @@
       text-transform: uppercase;
     }
 
-    .header-left p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.9; }
+    .header-left p {
+      margin: 2px 0 0;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
 
-    .header-logo { height: 60px; filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35)); }
+    .header-logo {
+      height: 60px;
+      filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35));
+    }
 
     .page-title-bar {
       position: relative;
@@ -88,7 +98,11 @@
       color: var(--vista-blue-dark);
     }
 
-    .page-title-sub { margin-top: 3px; font-size: 0.78rem; color: var(--text-muted); }
+    .page-title-sub {
+      margin-top: 3px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
 
     .page-title-accent {
       width: 120px;
@@ -99,7 +113,12 @@
       box-shadow: 0 0 8px rgba(46,167,224,0.65);
     }
 
-    .page-body { position: relative; z-index: 1; padding: 10px 18px 14px; font-size: 0.8rem; }
+    .page-body {
+      position: relative;
+      z-index: 1;
+      padding: 10px 18px 14px;
+      font-size: 0.8rem;
+    }
 
     label {
       font-size: 0.78rem;
@@ -109,7 +128,7 @@
       color: var(--text-main);
     }
 
-    /* ===== INPUT/TEXT CLIPPING FIX ===== */
+    /* ===== INPUT/TEXT CLIPPING FIX (Safari/iPad + general) ===== */
     input[type="text"],
     input[type="date"],
     input[type="time"],
@@ -124,6 +143,8 @@
       border: 1px solid var(--border-soft);
       background: #f9fbff;
       transition: 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     input[type="text"],
@@ -133,8 +154,6 @@
       height: 34px;
       padding: 6px 8px;
       vertical-align: middle;
-      -webkit-appearance: none;
-      appearance: none;
     }
 
     textarea {
@@ -143,7 +162,8 @@
       resize: vertical;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--vista-blue-light);
       background: #fff;
@@ -158,7 +178,10 @@
       margin-bottom: 4px;
     }
 
-    .row > div { flex: 1; min-width: 150px; }
+    .row > div {
+      flex: 1;
+      min-width: 150px;
+    }
 
     .section-card {
       margin-top: 8px;
@@ -196,13 +219,17 @@
       letter-spacing: 0.05em;
     }
 
-    .section-note { font-size: 0.72rem; color: var(--text-muted); }
+    .section-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
 
     .inline-checkbox-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       font-size: 0.76rem;
+      align-items: center;
     }
 
     .inline-checkbox-group label {
@@ -220,12 +247,34 @@
       margin: 0;
     }
 
-    .small-text { font-size: 0.74rem; color: var(--text-muted); }
+    .small-text {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 4px; }
-    th, td { border: 1px solid var(--border-soft); padding: 3px 4px; vertical-align: top; }
-    th { background: #e8f0fb; font-weight: 600; color: var(--vista-blue-dark); }
-    td { background: #f9fbff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      margin-top: 4px;
+    }
+
+    th, td {
+      border: 1px solid var(--border-soft);
+      padding: 3px 4px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e8f0fb;
+      font-weight: 600;
+      color: var(--vista-blue-dark);
+    }
+
+    td {
+      background: #f9fbff;
+    }
+
     .center { text-align: center; }
 
     .signature-grid {
@@ -243,7 +292,12 @@
       font-size: 0.78rem;
     }
 
-    .signature-label { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); margin-bottom: 2px; }
+    .signature-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
 
     .signature-canvas {
       width: 100%;
@@ -256,12 +310,34 @@
       cursor: crosshair;
     }
 
-    .signature-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
-    .signature-actions button { padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.05em; }
-    .signature-row { display: flex; gap: 6px; margin-top: 4px; }
+    .signature-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .signature-actions button {
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    .signature-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
     .signature-row > div { flex: 1; }
 
-    .btn-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; margin-bottom: 4px; }
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
 
     button {
       border: none;
@@ -290,7 +366,10 @@
       border: 1px solid #d6d7dd;
     }
 
-    button:hover { transform: translateY(-1px); box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18); }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18);
+    }
 
     .control-text {
       width: 100%;
@@ -299,9 +378,11 @@
       padding: 6px 8px;
       line-height: 1.25;
       font-size: 0.74rem;
+      white-space: pre-wrap; /* helps exported rendering */
     }
 
-    .risk-input, .risk-output {
+    .risk-input,
+    .risk-output {
       height: 32px !important;
       padding: 5px 6px !important;
       line-height: 1.2 !important;
@@ -309,24 +390,34 @@
       text-align: center;
     }
 
-    /* Export textarea replacement look */
-    .export-textbox {
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: #f9fbff;
-      border: 1px solid var(--border-soft);
-      border-radius: 8px;
-      padding: 6px 8px;
+    /* Version stamp (prints + exports well) */
+    .version-stamp{
+      position: fixed;
+      right: 14px;
+      bottom: 10px;
+      z-index: 50;
       font-family: "Inter", sans-serif;
-      font-size: 0.74rem;
-      line-height: 1.25;
-      color: var(--text-main);
-      min-height: 56px;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: rgba(16,24,39,0.75);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(214,226,240,0.9);
+      padding: 4px 10px;
+      border-radius: 999px;
+      box-shadow: 0 4px 10px rgba(5,41,66,0.08);
+      backdrop-filter: blur(4px);
     }
 
     @media (max-width: 700px) {
-      .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .page-title-main { font-size: 1.05rem; letter-spacing: 0.12em; }
+      .header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .page-title-main {
+        font-size: 1.05rem;
+        letter-spacing: 0.12em;
+      }
     }
   </style>
 </head>
@@ -593,16 +684,16 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task. Controls are auto-suggested from an embedded ruleset.</div>
+        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task. Controls and ratings auto-suggest from an embedded ruleset.</div>
         <div class="page-title-accent"></div>
       </div>
 
       <div class="page-body">
         <!-- Common Occurring Hazards -->
-        <div class="section-card" id="commonHazardsCard">
+        <div class="section-card">
           <div class="section-header">
             <div class="section-title">Common Occurring Hazards</div>
-            <div class="section-note">Check all hazards that apply to today’s worksite. Unchecked rows will be removed from the PDF.</div>
+            <div class="section-note">Check all hazards that apply. Unchecked rows will be removed from the PDF.</div>
           </div>
 
           <table id="commonHazardsTable">
@@ -617,45 +708,27 @@
             <tr>
               <td class="center"><input type="checkbox" name="haz_buried_overhead"></td>
               <td>Buried or Overhead Facilities</td>
-              <td>
-                Use caution when working around buried or overhead facilities, especially when digging.
-                Always maintain a safe limit of approach and report any damaged facilities immediately.
-                Review company Safe Work Practice.
-              </td>
+              <td>Use caution near facilities. Maintain safe approach limits. Report damage immediately. Review SWP.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_hunting"></td>
               <td>Hunting Season</td>
-              <td>
-                Know the season dates and locations related to hunting season, stay together and make noise.
-                If hunters are seen, make contact and alert them of your presence. P.P.E. Reflective Clothing.
-              </td>
+              <td>Know season and areas, stay together, make noise. If hunters seen, advise presence. Wear hi-vis.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
               <td>Site Housekeeping</td>
-              <td>
-                Ensure all workplaces are kept clean and free from any obstructions that have the potential
-                to cause an incident. Review company Safe Work Practice.
-              </td>
+              <td>Keep areas clean and clear of obstructions. Remove trip hazards promptly. Review SWP.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_h2s"></td>
               <td>H2S Concerns</td>
-              <td>
-                Ensure you’ve received adequate training before working on a site that poses a potential
-                H2S risk. Review company Safe Work Practice. P.P.E. H2S gas detection monitors and
-                possible SCBA or SABE.
-              </td>
+              <td>Only work where trained. Use gas monitor, follow SWP, and use respiratory protection if required.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_open_excavation"></td>
               <td>Open Excavation</td>
-              <td>
-                Always be aware of your surroundings and ensure everyone on site is aware of any open excavation.
-                Keep a safe distance from any open excavation as much as possible and always cross at the appropriate
-                locations. Never jump over open trenches. P.P.E. Hard Hats, CSA Safety Boots with ankle support.
-              </td>
+              <td>Stay back from edges. Cross only at safe points. Never jump trenches. Wear hard hat and boots.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_fences"></td>
@@ -668,56 +741,32 @@
                   <input type="checkbox" name="fence_installed_no"> No
                 </label>
               </td>
-              <td>
-                Use caution when working around construction fences especially in windy conditions.
-                Always use designated crossing points whenever possible. If there is a requirement to
-                move or manipulate the fence, ensure all personnel and equipment is clear from the fence.
-                Make small adjustments at a time while constantly ensuring the stability of the fence remains.
-              </td>
+              <td>Use crossings, avoid fence bases, and adjust panels slowly. Keep clear in wind and when moving panels.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
               <td>Wild Animals</td>
-              <td>
-                Beware of your surroundings at all times. Never approach or interact with wild animals in any way.
-                Carry bear spray and properly store and discard food. Use of deterrents, such as bear spray, should
-                be used as a last resort. Review company Safe Work Practice.
-              </td>
+              <td>Stay alert, do not approach wildlife. Carry bear spray where applicable. Secure food and garbage.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_river"></td>
               <td>River: High/Low Spring Flood</td>
-              <td>
-                Always use caution and keep your distance if possible when working around river banks or any body
-                of water. If you need to cross a river, find an appropriate spot to mitigate/eliminate the potential
-                for an incident or any form of environmental impact.
-              </td>
+              <td>Keep distance from banks. Use safe crossing points or alternate routes. Stop if conditions worsen.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_traffic"></td>
               <td>On and Off Traffic or Construction</td>
-              <td>
-                Stay alert and be aware of your surroundings at all times. Establish eye contact with the operator
-                before approaching any vehicle, use extra caution when working along roadways or active construction sites.
-                P.P.E. Reflective Clothing.
-              </td>
+              <td>Stay visible and alert. Use spotter and eye contact. Keep setups away from travel paths. Wear hi-vis.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_icy"></td>
               <td>Icy Conditions</td>
-              <td>
-                Use extreme caution when working on icy and slippery surfaces. Walk slowly on designated walkways as much
-                as possible. Never walk with your hands in your pockets. Workers should ensure the proper footwear is used.
-                While driving, make sure you reduce your speed and ensure adequate tread on tires. Review company Safe Work Practice.
-              </td>
+              <td>Slow down and use slip-resistant footwear. Keep hands free. Reduce driving speed and increase distance.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_noise"></td>
               <td>Excessive Noise Levels</td>
-              <td>
-                Limit your exposure as much as possible. Stay alert and ensure you are fully aware of your surroundings.
-                Establish an effective method of communication. P.P.E. Hearing protection. Review company Safe Work Practice.
-              </td>
+              <td>Limit exposure, use hearing protection, and set clear communication methods. Stay aware of surroundings.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_wildfire"></td>
@@ -730,19 +779,12 @@
                   <input type="checkbox" name="fireban_no"> No
                 </label>
               </td>
-              <td>
-                Use extreme caution when working in dry conditions. Refrain from driving in long grass and always properly
-                discard and extinguish any form of accelerant (cigarettes). Ensure fire extinguishers are in good working order.
-                Review company Safe Work Practice.
-              </td>
+              <td>Follow fire-ban rules. Avoid ignition sources near dry grass. Keep extinguisher ready and inspected.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_farming"></td>
               <td>Farming Operations (cattle or other animals)</td>
-              <td>
-                Make your presence known, keep your distance from any livestock and refrain from using flagging in pastures.
-                P.P.E. Reflective Clothing.
-              </td>
+              <td>Make presence known, keep distance from livestock, and avoid flagging in pastures. Wear hi-vis.</td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_landowner"></td>
@@ -755,11 +797,7 @@
                   <input type="checkbox" name="landowner_no"> No
                 </label>
               </td>
-              <td>
-                If you encounter a disgruntled land owner or home owner stay calm and try to defuse the situation.
-                Never argue or get mad. Listen to concerns respectfully and explain the work being completed.
-                If the situation escalates, leave the site and report it to your supervisor and client contact.
-              </td>
+              <td>Stay calm, listen respectfully, explain work, and leave if escalating. Report to supervisor and client.</td>
             </tr>
             </tbody>
           </table>
@@ -769,7 +807,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">Hazard controls will auto-suggest from a simplified offline ruleset.</div>
+            <div class="section-note">Controls and ratings auto-suggest on leaving the hazard cell.</div>
           </div>
 
           <table>
@@ -787,12 +825,12 @@
             <tbody>
             <tr>
               <td><input type="text" name="task_1" /></td>
-              <td><input type="text" name="hazard_1" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. dog, traffic, construction fencing, digging, generator" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
-              <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+              <td><textarea name="control_1" class="control-text" placeholder="Controls auto-suggest when you leave the hazard cell."></textarea></td>
             </tr>
             <tr>
               <td><input type="text" name="task_2" /></td>
@@ -879,7 +917,10 @@
 
           <table style="margin-top:6px;">
             <thead>
-            <tr><th>Risk (Multiply Factors)</th><th>Risk Level</th></tr>
+            <tr>
+              <th>Risk (Multiply Factors)</th>
+              <th>Risk Level</th>
+            </tr>
             </thead>
             <tbody>
             <tr><td>0 – 25</td><td>Low risk</td></tr>
@@ -891,7 +932,7 @@
           </table>
 
           <div class="small-text" style="margin-top:4px;">
-            <strong>Note:</strong> If any task has a <strong>High</strong> or <strong>Severe</strong> risk rating, workers have the duty to refuse unsafe work and contact their supervisor or safety representative before proceeding.
+            <strong>Note:</strong> If any task has a <strong>High</strong> or <strong>Severe</strong> risk rating, stop work and contact your supervisor before proceeding.
           </div>
         </div>
 
@@ -899,16 +940,14 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Emergency Response Plan</div>
+            <div class="section-note">Type facility name or acronym (e.g., FMC, SHC, CUCC) and select from list.</div>
           </div>
 
           <div class="row">
             <div>
               <label for="nearest_hospital">Nearest first aid facility or hospital</label>
-              <input type="text" id="nearest_hospital" name="nearest_hospital" list="facilityList" placeholder="Type facility name or acronym (e.g., FMC, SHC)">
+              <input type="text" id="nearest_hospital" name="nearest_hospital" list="facilityList" placeholder="Start typing facility name or abbreviation">
               <datalist id="facilityList"></datalist>
-              <div class="small-text" style="margin-top:3px;">
-                Tip: type the acronym (example: FMC) or the facility name and select from the list.
-              </div>
             </div>
             <div>
               <label for="hospital_phone">Phone #</label>
@@ -999,6 +1038,7 @@
 
           <div class="btn-row" id="buttonRow">
             <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
+            <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
@@ -1008,303 +1048,662 @@
   </form>
 </div>
 
+<div class="version-stamp" id="versionStamp">v3.1</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn    = document.getElementById('shareBtn');
+  const nameBtn     = document.getElementById('nameBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  // =======================
-  //  MEDICAL FACILITY LIST (SELF-CONTAINED)
-  // =======================
- const MEDICAL_FACILITIES = [
-  { name:"Foothills Medical Centre", abbr:"FMC", type:"Hospital", address:"1403 29 St NW, Calgary, AB, T2N 2T9" },
-  { name:"Alberta Children's Hospital", abbr:"ACH", type:"Hospital", address:"28 Oki Dr NW, Calgary, AB, T3B 6A8" },
-  { name:"Peter Lougheed Centre", abbr:"PLC", type:"Hospital", address:"3500 26 Ave NE, Calgary, AB, T1Y 6J4" },
-  { name:"Rockyview General Hospital", abbr:"RGH", type:"Hospital", address:"7007 14 St SW, Calgary, AB, T2V 1P9" },
-  { name:"South Health Campus", abbr:"SHC", type:"Hospital", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
+  // ==========================
+  // FILE NAME (user can override)
+  // Default: JobNumber_DevelopedBy_YYYY-MM-DD
+  // ==========================
+  let userChosenFileName = "";
 
-  { name:"Royal Alexandra Hospital", abbr:"RAH", type:"Hospital", address:"10240 Kingsway NW, Edmonton, AB, T5H 3V9" },
-  { name:"University of Alberta Hospital", abbr:"UAH", type:"Hospital", address:"8440 112 St NW, Edmonton, AB, T6G 2B7" },
-  { name:"Misericordia Community Hospital", abbr:"MCH", type:"Hospital", address:"16940 87 Ave NW, Edmonton, AB, T5R 4H5" },
-  { name:"Grey Nuns Community Hospital", abbr:"GNH", type:"Hospital", address:"1100 Youville Dr W, Edmonton, AB, T6L 5X8" },
+  function safeFilePart(s) {
+    return (s || "")
+      .toString()
+      .trim()
+      .replace(/[\\/:*?"<>|]+/g, "")
+      .replace(/\s+/g, "_")
+      .slice(0, 60);
+  }
 
-  { name:"Red Deer Regional Hospital Centre", abbr:"RDRHC", type:"Hospital", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
-  { name:"Chinook Regional Hospital", abbr:"CRH", type:"Hospital", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
-  { name:"Medicine Hat Regional Hospital", abbr:"MHRH", type:"Hospital", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
-  { name:"Northern Lights Regional Health Centre", abbr:"NLRHC", type:"Hospital", address:"7 Hospital St, Fort McMurray, AB, T9H 1P2" },
-  { name:"Grande Prairie Regional Hospital", abbr:"GPRH", type:"Hospital", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
+  function yyyyMmDd(d = new Date()) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
 
-  { name:"Airdrie Community Health Centre", abbr:"ACHC", type:"Community Health Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
-  { name:"Drumheller Health Centre", abbr:"DHC", type:"Community Health Centre", address:"351 9 St NW, Drumheller, AB, T0J 0Y1" },
-  { name:"Brooks Health Centre", abbr:"BHC", type:"Community Health Centre", address:"440 3 St E, Brooks, AB, T1R 0G8" },
-  { name:"Strathmore District Health Services", abbr:"SDHS", type:"Community Health Centre", address:"200 Brent Blvd, Strathmore, AB, T1P 1J9" },
+  function getDefaultFileName() {
+    const job = safeFilePart(document.getElementById("job_number")?.value);
+    const dev = safeFilePart(document.getElementById("developed_by")?.value);
+    const today = yyyyMmDd(new Date());
+    const parts = [job || "Job", dev || "DevelopedBy", today];
+    return parts.filter(Boolean).join("_") + ".pdf";
+  }
 
-  { name:"Banff Mineral Springs Hospital", abbr:"BMSH", type:"Hospital", address:"305 Lynx St, Banff, AB, T1L 1C1" },
-  { name:"Canmore General Hospital", abbr:"CGH", type:"Hospital", address:"1100 Hospital Pl, Canmore, AB, T1W 1N2" },
+  function getFinalFileName() {
+    const base = (userChosenFileName || "").trim();
+    if (base) {
+      const cleaned = safeFilePart(base).replace(/\.pdf$/i, "");
+      return (cleaned || "WorksiteHazardAssessment") + ".pdf";
+    }
+    return getDefaultFileName();
+  }
 
-  { name:"Airdrie Urgent Care Centre", abbr:"AUCC", type:"Urgent Care Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
-  { name:"South Calgary Urgent Care Centre", abbr:"SCUC", type:"Urgent Care Centre", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
-  { name:"North Edmonton Urgent Care Centre", abbr:"NEDUCC", type:"Urgent Care Centre", address:"13403 97 St NW, Edmonton, AB, T5E 4L8" },
-  { name:"West Edmonton Urgent Care Centre", abbr:"WEUCC", type:"Urgent Care Centre", address:"1815 102 St NW, Edmonton, AB, T6J 4S5" },
-  { name:"Northeast Edmonton Urgent Care Centre", abbr:"NEEUCC", type:"Urgent Care Centre", address:"7911 137 Ave NW, Edmonton, AB, T5C 0K9" },
-  { name:"Red Deer Urgent Care Centre", abbr:"RDUCC", type:"Urgent Care Centre", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
-  { name:"Medicine Hat Urgent Care Centre", abbr:"MHUCC", type:"Urgent Care Centre", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
-  { name:"Grande Prairie Urgent Care Centre", abbr:"GPUCC", type:"Urgent Care Centre", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
-  { name:"Lethbridge Urgent Care Centre", abbr:"LHUCC", type:"Urgent Care Centre", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
-  { name:"Cochrane Urgent Care Centre", abbr:"CUCC", type:"Urgent Care Centre", address:"60 Grande Blvd, Cochrane, AB, T4C 0S4" }
-];
+  if (nameBtn) {
+    nameBtn.addEventListener("click", () => {
+      const suggested = getDefaultFileName().replace(/\.pdf$/i, "");
+      const input = prompt("Name the PDF file (without .pdf):", userChosenFileName || suggested);
+      if (input === null) return;
+      userChosenFileName = input.trim();
+    });
+  }
 
+  // ==========================
+  // RISK CALC (R = F × S × P)
+  // ==========================
+  function updateRiskForRow(row) {
+    const fInput = document.querySelector('input[name="f_' + row + '"]');
+    const sInput = document.querySelector('input[name="s_' + row + '"]');
+    const pInput = document.querySelector('input[name="p_' + row + '"]');
+    const rInput = document.querySelector('input[name="r_' + row + '"]');
+    if (!fInput || !sInput || !pInput || !rInput) return;
 
-  function norm(s) {
+    const f = parseInt(fInput.value, 10);
+    const s = parseInt(sInput.value, 10);
+    const p = parseInt(pInput.value, 10);
+
+    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) {
+      rInput.value = f * s * p;
+    } else {
+      rInput.value = "";
+    }
+  }
+
+  document.querySelectorAll('.risk-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const row = input.getAttribute('data-row');
+      if (row) updateRiskForRow(row);
+    });
+  });
+
+  // ==========================
+  // SIGNATURE PADS
+  // ==========================
+  function initSignaturePad(canvasId, clearButtonId) {
+    const canvas = document.getElementById(canvasId);
+    const clearBtn = document.getElementById(clearButtonId);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * ratio);
+      canvas.height = Math.floor(rect.height * ratio);
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#111827';
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function getPos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const isTouch = evt.touches && evt.touches[0];
+      const clientX = isTouch ? evt.touches[0].clientX : evt.clientX;
+      const clientY = isTouch ? evt.touches[0].clientY : evt.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDraw(evt) {
+      drawing = true;
+      const p = getPos(evt);
+      lastX = p.x;
+      lastY = p.y;
+    }
+
+    function drawLine(evt) {
+      if (!drawing) return;
+      const p = getPos(evt);
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      lastX = p.x;
+      lastY = p.y;
+    }
+
+    function endDraw() { drawing = false; }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', drawLine);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseleave', endDraw);
+
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(e); }, { passive: false });
+    canvas.addEventListener('touchmove', e => { e.preventDefault(); drawLine(e); }, { passive: false });
+    canvas.addEventListener('touchend',  e => { e.preventDefault(); endDraw(); }, { passive: false });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+    }
+  }
+
+  initSignaturePad('pcSignature', 'clearPcSig');
+  initSignaturePad('saSignature', 'clearSaSig');
+  initSignaturePad('clientSignature', 'clearClientSig');
+
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      ['pcSignature','saSignature','clientSignature'].forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      });
+      document.querySelectorAll('.risk-output').forEach(o => o.value = "");
+      userChosenFileName = "";
+    });
+  }
+
+  // ==========================
+  // SELF-CONTAINED EMERGENCY FACILITIES (FULL LIST)
+  // ==========================
+  const MEDICAL_FACILITIES = [
+    { name:"Foothills Medical Centre", abbr:"FMC", type:"Hospital", address:"1403 29 St NW, Calgary, AB, T2N 2T9" },
+    { name:"Alberta Children's Hospital", abbr:"ACH", type:"Hospital", address:"28 Oki Dr NW, Calgary, AB, T3B 6A8" },
+    { name:"Peter Lougheed Centre", abbr:"PLC", type:"Hospital", address:"3500 26 Ave NE, Calgary, AB, T1Y 6J4" },
+    { name:"Rockyview General Hospital", abbr:"RGH", type:"Hospital", address:"7007 14 St SW, Calgary, AB, T2V 1P9" },
+    { name:"South Health Campus", abbr:"SHC", type:"Hospital", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
+
+    { name:"Royal Alexandra Hospital", abbr:"RAH", type:"Hospital", address:"10240 Kingsway NW, Edmonton, AB, T5H 3V9" },
+    { name:"University of Alberta Hospital", abbr:"UAH", type:"Hospital", address:"8440 112 St NW, Edmonton, AB, T6G 2B7" },
+    { name:"Misericordia Community Hospital", abbr:"MCH", type:"Hospital", address:"16940 87 Ave NW, Edmonton, AB, T5R 4H5" },
+    { name:"Grey Nuns Community Hospital", abbr:"GNH", type:"Hospital", address:"1100 Youville Dr W, Edmonton, AB, T6L 5X8" },
+
+    { name:"Red Deer Regional Hospital Centre", abbr:"RDRHC", type:"Hospital", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
+    { name:"Chinook Regional Hospital", abbr:"CRH", type:"Hospital", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
+    { name:"Medicine Hat Regional Hospital", abbr:"MHRH", type:"Hospital", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
+    { name:"Northern Lights Regional Health Centre", abbr:"NLRHC", type:"Hospital", address:"7 Hospital St, Fort McMurray, AB, T9H 1P2" },
+    { name:"Grande Prairie Regional Hospital", abbr:"GPRH", type:"Hospital", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
+
+    { name:"Airdrie Community Health Centre", abbr:"ACHC", type:"Community Health Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
+    { name:"Drumheller Health Centre", abbr:"DHC", type:"Community Health Centre", address:"351 9 St NW, Drumheller, AB, T0J 0Y1" },
+    { name:"Brooks Health Centre", abbr:"BHC", type:"Community Health Centre", address:"440 3 St E, Brooks, AB, T1R 0G8" },
+    { name:"Strathmore District Health Services", abbr:"SDHS", type:"Community Health Centre", address:"200 Brent Blvd, Strathmore, AB, T1P 1J9" },
+
+    { name:"Banff Mineral Springs Hospital", abbr:"BMSH", type:"Hospital", address:"305 Lynx St, Banff, AB, T1L 1C1" },
+    { name:"Canmore General Hospital", abbr:"CGH", type:"Hospital", address:"1100 Hospital Pl, Canmore, AB, T1W 1N2" },
+
+    { name:"Airdrie Urgent Care Centre", abbr:"AUCC", type:"Urgent Care Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
+    { name:"South Calgary Urgent Care Centre", abbr:"SCUC", type:"Urgent Care Centre", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
+    { name:"North Edmonton Urgent Care Centre", abbr:"NEDUCC", type:"Urgent Care Centre", address:"13403 97 St NW, Edmonton, AB, T5E 4L8" },
+    { name:"West Edmonton Urgent Care Centre", abbr:"WEUCC", type:"Urgent Care Centre", address:"1815 102 St NW, Edmonton, AB, T6J 4S5" },
+    { name:"Northeast Edmonton Urgent Care Centre", abbr:"NEEUCC", type:"Urgent Care Centre", address:"7911 137 Ave NW, Edmonton, AB, T5C 0K9" },
+    { name:"Red Deer Urgent Care Centre", abbr:"RDUCC", type:"Urgent Care Centre", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
+    { name:"Medicine Hat Urgent Care Centre", abbr:"MHUCC", type:"Urgent Care Centre", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
+    { name:"Grande Prairie Urgent Care Centre", abbr:"GPUCC", type:"Urgent Care Centre", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
+    { name:"Lethbridge Urgent Care Centre", abbr:"LHUCC", type:"Urgent Care Centre", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
+    { name:"Cochrane Urgent Care Centre", abbr:"CUCC", type:"Urgent Care Centre", address:"60 Grande Blvd, Cochrane, AB, T4C 0S4" }
+  ];
+
+  const facilityInput = document.getElementById("nearest_hospital");
+  const facilityList  = document.getElementById("facilityList");
+  const phoneInput    = document.getElementById("hospital_phone");
+  const erTextarea    = document.getElementById("emergency_procedures");
+
+  function fillFacilityDatalist() {
+    if (!facilityList) return;
+    facilityList.innerHTML = "";
+    MEDICAL_FACILITIES.forEach(f => {
+      const opt1 = document.createElement("option");
+      opt1.value = f.name;
+      opt1.label = `${f.abbr} – ${f.type}`;
+      facilityList.appendChild(opt1);
+
+      const opt2 = document.createElement("option");
+      opt2.value = f.abbr;
+      opt2.label = f.name;
+      facilityList.appendChild(opt2);
+    });
+  }
+  fillFacilityDatalist();
+
+  function normalizeFacilityKey(s) {
     return (s || "")
       .toString()
       .trim()
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, " ")
       .replace(/\s+/g, " ");
   }
 
-  function buildFacilityDatalist() {
-    const dl = document.getElementById("facilityList");
-    if (!dl) return;
+  function findFacility(query) {
+    const q = normalizeFacilityKey(query);
+    if (!q) return null;
 
-    dl.innerHTML = "";
-    MEDICAL_FACILITIES.forEach(f => {
-      const opt = document.createElement("option");
-      opt.value = `${f.name}`;
-      opt.label = `${f.abbr ? f.abbr + " – " : ""}${f.address}`;
-      dl.appendChild(opt);
+    // exact abbreviation match
+    const byAbbr = MEDICAL_FACILITIES.find(f => normalizeFacilityKey(f.abbr) === q);
+    if (byAbbr) return byAbbr;
 
-      if (f.abbr) {
-        const opt2 = document.createElement("option");
-        opt2.value = f.abbr;
-        opt2.label = `${f.name} – ${f.address}`;
-        dl.appendChild(opt2);
+    // exact name match
+    const byName = MEDICAL_FACILITIES.find(f => normalizeFacilityKey(f.name) === q);
+    if (byName) return byName;
+
+    // strong prefix match (name)
+    const prefix = MEDICAL_FACILITIES.find(f => normalizeFacilityKey(f.name).startsWith(q));
+    if (prefix) return prefix;
+
+    // contains match (name)
+    const contains = MEDICAL_FACILITIES.find(f => normalizeFacilityKey(f.name).includes(q));
+    if (contains) return contains;
+
+    return null;
+  }
+
+  function setEmergencyAutofill(facility) {
+    if (!facility) return;
+    // Set facility full name if user typed acronym
+    if (facilityInput && normalizeFacilityKey(facilityInput.value) === normalizeFacilityKey(facility.abbr)) {
+      facilityInput.value = facility.name;
+    }
+    if (phoneInput) phoneInput.value = "911";
+    if (erTextarea) {
+      erTextarea.value =
+        `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${facility.name}, ${facility.address} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+    }
+  }
+
+  function clearEmergencyAutofill() {
+    if (phoneInput) phoneInput.value = "";
+    if (erTextarea) erTextarea.value = "";
+  }
+
+  if (facilityInput) {
+    facilityInput.addEventListener("input", () => {
+      const val = facilityInput.value || "";
+      if (!val.trim()) {
+        clearEmergencyAutofill();
+        return;
       }
+      // Only auto-fill when there is a confident match (abbr exact, name exact, or strong prefix >= 3 chars)
+      const match = findFacility(val);
+      const q = normalizeFacilityKey(val);
+      const strong = (q.length >= 3) || (q === normalizeFacilityKey(match?.abbr));
+      if (match && strong) setEmergencyAutofill(match);
+    });
+
+    facilityInput.addEventListener("blur", () => {
+      const val = facilityInput.value || "";
+      if (!val.trim()) {
+        clearEmergencyAutofill();
+        return;
+      }
+      const match = findFacility(val);
+      if (match) setEmergencyAutofill(match);
     });
   }
 
-  buildFacilityDatalist();
+  // ==========================
+  // OFFLINE HAZARD RULE ENGINE (improved matching, plural-handling, better construction rules)
+  // Controls are kept short (target < 185 chars)
+  // Includes "dog" keyword for dogs
+  // Auto-fills F/S/P if empty
+  // Clears control + F/S/P/R when hazard cleared
+  // ==========================
 
-  function findFacilityByInput(inputValue) {
-    const v = norm(inputValue);
-    if (!v) return null;
-
-    // Exact acronym match first
-    let match = MEDICAL_FACILITIES.find(f => norm(f.abbr) === v);
-    if (match) return match;
-
-    // Exact name match
-    match = MEDICAL_FACILITIES.find(f => norm(f.name) === v);
-    if (match) return match;
-
-    // Starts-with name (helps predictive typing)
-    match = MEDICAL_FACILITIES.find(f => norm(f.name).startsWith(v));
-    if (match) return match;
-
-    // Contains match
-    match = MEDICAL_FACILITIES.find(f => norm(f.name).includes(v));
-    return match || null;
+  // Helper: make controls short and safe
+  function clipControl(text, max = 185) {
+    const t = (text || "").replace(/\s+/g, " ").trim();
+    if (t.length <= max) return t;
+    return t.slice(0, max - 1).trimEnd() + "…";
   }
 
-  function setEmergencyAutoText(facility) {
-    const phone = document.getElementById("hospital_phone");
-    const procedures = document.getElementById("emergency_procedures");
-    const hospital = document.getElementById("nearest_hospital");
-    if (!phone || !procedures || !hospital) return;
+  function normalize(text) {
+    return (text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 
-    if (!facility) {
-      // Clear dependent fields when user clears hospital
-      if (!hospital.value.trim()) {
-        phone.value = "";
-        procedures.value = "";
+  function stemToken(tok) {
+    let t = tok;
+    if (t.length <= 3) return t;
+    // basic stemming for plural/gerund
+    if (t.endsWith("ies") && t.length > 4) t = t.slice(0, -3) + "y";
+    else if (t.endsWith("es") && t.length > 4) t = t.slice(0, -2);
+    else if (t.endsWith("s") && t.length > 3) t = t.slice(0, -1);
+    if (t.endsWith("ing") && t.length > 5) t = t.slice(0, -3);
+    return t;
+  }
+
+  function tokens(text) {
+    const n = normalize(text);
+    if (!n) return [];
+    return n.split(" ").map(stemToken).filter(Boolean);
+  }
+
+  // Rule format:
+  // { name, phrases:[], keywords:[], control, f,s,p }
+  const hazardRules = [
+    {
+      name: "Construction traffic / site traffic",
+      phrases: ["construction traffic", "haul truck", "dump truck", "site traffic"],
+      keywords: ["traffic","vehicle","car","truck","bus","road","highway","lane","shoulder","intersection","backing","reversing","haul","delivery","construction"],
+      control: clipControl("Stay visible and out of travel paths. Use cones/signs as needed, make eye contact, and use a spotter for backing or tight areas. Wear hi-vis."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      name: "Construction fencing",
+      phrases: ["construction fencing", "temporary fencing", "temp fence", "crowd control fence"],
+      keywords: ["fence","fencing","panel","gate","base","sandbag","perimeter"],
+      control: clipControl("Use designated gates and watch for fence bases and trip hazards. Do not lean on panels. Keep clear when panels move and in high winds."),
+      f: 3, s: 2, p: 3
+    },
+    {
+      name: "Portable generator",
+      phrases: ["portable generator", "gen set", "genset"],
+      keywords: ["generator","genny","exhaust","carbon","monoxide","fuel","refuel","cord","extension"],
+      control: clipControl("Run generators outdoors away from doors and intakes. Manage cords to prevent trips. Refuel only when off, cooled, and in a ventilated area."),
+      f: 2, s: 3, p: 2
+    },
+    {
+      name: "Dogs",
+      phrases: ["aggressive dog", "loose dog", "guard dog"],
+      keywords: ["dog","dogs","barking","bite","aggressive","loose"],
+      control: clipControl("Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and avoid the area until it is under control."),
+      f: 3, s: 2, p: 3
+    },
+    {
+      name: "Slips / trips / falls (terrain)",
+      phrases: ["uneven ground","trip hazard","slip hazard","hidden hole"],
+      keywords: ["uneven","slope","ditch","rut","mud","gravel","wet","snow","ice","slippery","curb","stairs","steps","hole"],
+      control: clipControl("Walk the area first and avoid unstable footing. Keep walk paths clear, set tripods on firm ground, and slow down on ice or wet surfaces."),
+      f: 4, s: 2, p: 3
+    },
+    {
+      name: "Utilities (overhead / underground)",
+      phrases: ["power line","overhead line","underground utility","gas line"],
+      keywords: ["utility","utilities","power","line","wire","cable","gas","pipeline","water","sewer","fibre","telecom","transformer","pedestal","vault","manhole"],
+      control: clipControl("Confirm locates before digging or staking. Maintain limits of approach to power lines and keep poles/rods clear. Stop if utilities are uncertain."),
+      f: 3, s: 4, p: 2
+    },
+    {
+      name: "Digging / excavation",
+      phrases: ["digging pin","open excavation","trench"],
+      keywords: ["digging","dig","excavation","trench","hole","auger","pin","posthole"],
+      control: clipControl("Confirm locates before digging. Hand-dig near marks, keep people back from edges, and stop if ground conditions or locates are unclear."),
+      f: 3, s: 3, p: 3
+    },
+    {
+      name: "Working alone / no signal",
+      phrases: ["working alone","no service","poor reception"],
+      keywords: ["alone","solo","remote","no signal","no service","dead phone","dead radio","lost contact"],
+      control: clipControl("Use a check-in plan with set times and backups. Confirm phones/radios are charged and working before starting lone-worker tasks."),
+      f: 3, s: 3, p: 2
+    },
+    {
+      name: "Wildlife",
+      phrases: ["bear","moose","cougar"],
+      keywords: ["wildlife","bear","moose","coyote","wolf","deer","elk","cougar","goose","geese"],
+      control: clipControl("Stay alert for wildlife and avoid close approach. Back away calmly, keep food secured, and relocate or leave if wildlife is near or unpredictable."),
+      f: 2, s: 4, p: 2
+    },
+    {
+      name: "Cold / windchill",
+      phrases: ["frostbite","hypothermia","wind chill"],
+      keywords: ["cold","freezing","winter","windchill","frostbite","hypothermia","below","minus","blizzard"],
+      control: clipControl("Dress in layers and warm up often. Cover skin in windchill and shorten tasks in extreme cold. Watch for cold-stress signs."),
+      f: 3, s: 3, p: 2
+    },
+    {
+      name: "Heat / sun",
+      phrases: ["heat stress","heat stroke"],
+      keywords: ["heat","hot","sun","uv","sunburn","temperature"],
+      control: clipControl("Drink water often and take shade breaks. Plan heavy tasks for cooler times and use sunscreen and breathable clothing. Stop if heat illness signs appear."),
+      f: 3, s: 3, p: 2
+    },
+    {
+      name: "Rain / wet surfaces",
+      phrases: ["slippery when wet"],
+      keywords: ["rain","wet","drizzle","downpour","puddle","slick"],
+      control: clipControl("Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid climbing on wet metal or steep areas."),
+      f: 3, s: 2, p: 3
+    },
+    {
+      name: "Noise",
+      phrases: ["excessive noise"],
+      keywords: ["noise","loud","jackhammer","breaker","demo hammer","hearing"],
+      control: clipControl("Use hearing protection and limit exposure. Maintain clear communication and stay aware of surrounding equipment and traffic."),
+      f: 2, s: 2, p: 3
+    },
+    {
+      name: "General hazard control",
+      phrases: ["unsafe","dangerous"],
+      keywords: ["hazard","risk","unsafe","danger","concern","issue"],
+      control: clipControl("Walk the site before starting and adjust the plan, PPE, or setup to control hazards. Stop and reassess if conditions change."),
+      f: 3, s: 3, p: 2
+    }
+  ];
+
+  // scoring: phrases weigh high and reduce wrong matches
+  function scoreRule(rule, hazardTextNorm, hazardTokens) {
+    let score = 0;
+
+    // phrase match (strong)
+    (rule.phrases || []).forEach(ph => {
+      const p = normalize(ph);
+      if (!p) return;
+      if (hazardTextNorm.includes(p)) score += 20;
+    });
+
+    // keyword token matches
+    const kwTokens = []
+      .concat(rule.keywords || [])
+      .map(k => tokens(k))
+      .flat()
+      .filter(Boolean);
+
+    const hazardSet = new Set(hazardTokens);
+    kwTokens.forEach(t => {
+      if (hazardSet.has(t)) score += 2;
+    });
+
+    // extra boost: if rule name keyword appears
+    const nameTokens = tokens(rule.name);
+    nameTokens.forEach(t => {
+      if (hazardSet.has(t)) score += 2;
+    });
+
+    return score;
+  }
+
+  function bestRuleForHazard(hazardText) {
+    const norm = normalize(hazardText);
+    if (!norm) return null;
+    const htoks = tokens(hazardText);
+
+    let best = null;
+    let bestScore = 0;
+
+    hazardRules.forEach(rule => {
+      const s = scoreRule(rule, norm, htoks);
+      if (s > bestScore) {
+        bestScore = s;
+        best = rule;
       }
-      return;
+    });
+
+    // require minimum confidence to avoid wrong matches like "construction" -> generator
+    // If the user typed "construction", this will prefer traffic/fencing because of rule keywords/phrases.
+    if (!best || bestScore < 6) return null;
+    return best;
+  }
+
+  function clearRow(row) {
+    const f = document.querySelector(`input[name="f_${row}"]`);
+    const s = document.querySelector(`input[name="s_${row}"]`);
+    const p = document.querySelector(`input[name="p_${row}"]`);
+    const r = document.querySelector(`input[name="r_${row}"]`);
+    const c = document.querySelector(`textarea[name="control_${row}"]`);
+    if (f) f.value = "";
+    if (s) s.value = "";
+    if (p) p.value = "";
+    if (r) r.value = "";
+    if (c) c.value = "";
+  }
+
+  function applyRuleToRow(rule, row) {
+    const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+    const fField = document.querySelector(`input[name="f_${row}"]`);
+    const sField = document.querySelector(`input[name="s_${row}"]`);
+    const pField = document.querySelector(`input[name="p_${row}"]`);
+
+    if (controlField) {
+      // only overwrite if blank or very short
+      if (!controlField.value || controlField.value.trim().length < 15) {
+        controlField.value = rule.control || "";
+      }
     }
 
-    // If user typed acronym, replace field with official facility name
-    hospital.value = facility.name;
+    // auto-fill F/S/P only if empty
+    if (fField && !fField.value && rule.f) fField.value = String(rule.f);
+    if (sField && !sField.value && rule.s) sField.value = String(rule.s);
+    if (pField && !pField.value && rule.p) pField.value = String(rule.p);
 
-    phone.value = "911";
-    const insertFacility = `${facility.name} , ${facility.address}`;
-    procedures.value =
-      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${insertFacility} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+    updateRiskForRow(row);
   }
 
-  function initEmergencyAutoFill() {
-    const hospital = document.getElementById("nearest_hospital");
-    const phone = document.getElementById("hospital_phone");
-    const procedures = document.getElementById("emergency_procedures");
-    if (!hospital || !phone || !procedures) return;
+  function initHazardAutoSuggest() {
+    document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+      input.addEventListener('blur', e => {
+        const hazardText = (e.target.value || "").trim();
+        const row = e.target.name.split('_')[1];
 
-    let lastAppliedKey = "";
-
-    hospital.addEventListener("input", () => {
-      const raw = hospital.value;
-
-      // If user cleared it, clear dependents immediately
-      if (!raw.trim()) {
-        phone.value = "";
-        procedures.value = "";
-        lastAppliedKey = "";
-        return;
-      }
-
-      // Predict while typing (but do not override too aggressively)
-      const f = findFacilityByInput(raw);
-      const fKey = f ? `${f.name}|${f.abbr}|${f.address}` : "";
-
-      // Only apply when we find a confident match:
-      // - exact acronym typed OR exact name OR user chose a datalist option (common on iPad/PC)
-      const rawNorm = norm(raw);
-      const confident =
-        !!f && (rawNorm === norm(f.abbr) || rawNorm === norm(f.name) || norm(f.name).startsWith(rawNorm));
-
-      if (confident && fKey && fKey !== lastAppliedKey) {
-        setEmergencyAutoText(f);
-        lastAppliedKey = fKey;
-      }
-    });
-
-    hospital.addEventListener("blur", () => {
-      const raw = hospital.value;
-      if (!raw.trim()) {
-        phone.value = "";
-        procedures.value = "";
-        lastAppliedKey = "";
-        return;
-      }
-      const f = findFacilityByInput(raw);
-      if (f) {
-        setEmergencyAutoText(f);
-        lastAppliedKey = `${f.name}|${f.abbr}|${f.address}`;
-      }
-    });
-  }
-
-  initEmergencyAutoFill();
-
-  // =======================
-  //  PDF GENERATION (LEGAL SIZE)
-  //  FIX: COPY INPUT/TEXTAREA VALUES INTO CLONE + SHOW CONTROLS ON EXPORT
-  //  FIX: PROMPT USER FOR FILE NAME (DEFAULT: Job#, Developed By, Current Date)
-  //  FIX: REMOVE UNCHECKED COMMON HAZARDS + REMOVE CARD IF EMPTY
-  // =======================
-
-  function formatLocalDateYYYYMMDD(d = new Date()) {
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
-  function sanitizeFilename(name) {
-    return (name || "")
-      .toString()
-      .trim()
-      .replace(/[\/\\:*?"<>|]+/g, " ")
-      .replace(/\s+/g, " ")
-      .trim()
-      .slice(0, 120);
-  }
-
-  function getDefaultFileName() {
-    const job = (document.getElementById("job_number")?.value || "").trim();
-    const dev = (document.getElementById("developed_by")?.value || "").trim();
-    const d = formatLocalDateYYYYMMDD(new Date());
-
-    const parts = [];
-    if (job) parts.push(job);
-    if (dev) parts.push(dev);
-    parts.push(d);
-
-    const base = parts.join(" ");
-    return sanitizeFilename(base) || `WorksiteHazardAssessment ${d}`;
-  }
-
-  function syncFormValuesToClone(originalForm, cloneForm) {
-    const originalFields = originalForm.querySelectorAll("input, textarea, select");
-    originalFields.forEach(orig => {
-      const key = orig.name || orig.id;
-      if (!key) return;
-
-      const clone = cloneForm.querySelector(`[name="${CSS.escape(orig.name)}"]`) || cloneForm.querySelector(`#${CSS.escape(orig.id)}`);
-      if (!clone) return;
-
-      if (orig.tagName === "INPUT") {
-        const type = (orig.getAttribute("type") || "").toLowerCase();
-
-        if (type === "checkbox" || type === "radio") {
-          clone.checked = orig.checked;
-          if (orig.checked) clone.setAttribute("checked", "checked");
-          else clone.removeAttribute("checked");
-        } else {
-          clone.value = orig.value;
-          clone.setAttribute("value", orig.value);
+        if (!hazardText) {
+          clearRow(row);
+          return;
         }
-      } else if (orig.tagName === "TEXTAREA") {
-        clone.value = orig.value;
-        clone.textContent = orig.value; // helps html2canvas in some cases
-      } else if (orig.tagName === "SELECT") {
-        clone.value = orig.value;
-      }
+
+        const rule = bestRuleForHazard(hazardText);
+        if (!rule) {
+          // If there is no confident match, do not overwrite user entries; still compute risk if they typed F/S/P
+          updateRiskForRow(row);
+          return;
+        }
+        applyRuleToRow(rule, row);
+      });
+
+      input.addEventListener('input', e => {
+        const value = (e.target.value || "").trim();
+        const row = e.target.name.split('_')[1];
+        if (!value) {
+          clearRow(row);
+        }
+      });
     });
   }
+  initHazardAutoSuggest();
 
-  function embedSignatureImages(originalForm, cloneForm) {
-    const pairs = [
-      { canvasId: "pcSignature", label: "pcSignature" },
-      { canvasId: "saSignature", label: "saSignature" },
-      { canvasId: "clientSignature", label: "clientSignature" }
-    ];
+  // ==========================
+  // PDF GENERATION (LEGAL SIZE)
+  // Fix: ensure inputs + textareas are copied into clone so exports show:
+  // - job tasks, hazards, F/S/P/R, control plans
+  // - also copy signature canvases
+  // Also removes unchecked common hazards rows to reduce PDF size
+  // ==========================
 
-    pairs.forEach(p => {
-      const origCanvas = document.getElementById(p.canvasId);
-      const cloneCanvas = cloneForm.querySelector(`#${CSS.escape(p.canvasId)}`);
-      if (!origCanvas || !cloneCanvas) return;
+  function copyFormValuesToClone(original, clone) {
+    // inputs & textareas
+    const origFields = original.querySelectorAll("input, textarea, select");
+    origFields.forEach(orig => {
+      const name = orig.getAttribute("name");
+      const id = orig.getAttribute("id");
 
-      // Replace clone canvas with an <img> to guarantee export
-      try {
+      let sel = null;
+      if (id) sel = clone.querySelector(`#${CSS.escape(id)}`);
+      if (!sel && name) sel = clone.querySelector(`[name="${CSS.escape(name)}"]`);
+      if (!sel) return;
+
+      if (orig.tagName.toLowerCase() === "textarea") {
+        sel.value = orig.value;
+        sel.textContent = orig.value; // important for html2canvas
+      } else if (orig.type === "checkbox") {
+        sel.checked = orig.checked;
+        if (orig.checked) sel.setAttribute("checked", "checked");
+        else sel.removeAttribute("checked");
+      } else if (orig.type === "radio") {
+        sel.checked = orig.checked;
+        if (orig.checked) sel.setAttribute("checked", "checked");
+        else sel.removeAttribute("checked");
+      } else {
+        sel.value = orig.value;
+        sel.setAttribute("value", orig.value); // helps clone rendering
+      }
+    });
+
+    // signature canvases
+    ["pcSignature","saSignature","clientSignature"].forEach(cid => {
+      const origCanvas = document.getElementById(cid);
+      const cloneCanvas = clone.querySelector(`#${CSS.escape(cid)}`);
+      if (origCanvas && cloneCanvas) {
+        // size clone canvas to match display size
+        const rect = cloneCanvas.getBoundingClientRect();
+        const ratio = 1;
+        cloneCanvas.width = Math.floor((rect.width || 300) * ratio);
+        cloneCanvas.height = Math.floor((rect.height || 80) * ratio);
+        const cctx = cloneCanvas.getContext("2d");
         const dataUrl = origCanvas.toDataURL("image/png");
-        const img = document.createElement("img");
+        const img = new Image();
+        img.onload = () => {
+          cctx.clearRect(0,0,cloneCanvas.width, cloneCanvas.height);
+          cctx.drawImage(img, 0, 0, cloneCanvas.width, cloneCanvas.height);
+        };
         img.src = dataUrl;
-        img.alt = "Signature";
-        img.style.width = "100%";
-        img.style.height = "80px";
-        img.style.objectFit = "contain";
-        img.style.background = "#ffffff";
-        img.style.border = "1px solid var(--border-soft)";
-        img.style.borderRadius = "8px";
-        img.style.display = "block";
-
-        cloneCanvas.parentNode.replaceChild(img, cloneCanvas);
-      } catch (e) {
-        // If toDataURL fails, keep canvas
       }
     });
   }
 
-  function replaceTextareasForExport(cloneForm) {
-    // Replace textareas with divs so the text always appears in the PDF
-    const textareas = cloneForm.querySelectorAll("textarea");
-    textareas.forEach(ta => {
-      const div = document.createElement("div");
-      div.className = "export-textbox";
-
-      // preserve size similar to textarea
-      const minH = parseInt(getComputedStyle(ta).minHeight || "56", 10);
-      div.style.minHeight = (Number.isFinite(minH) ? minH : 56) + "px";
-
-      div.textContent = ta.value || "";
-      ta.parentNode.replaceChild(div, ta);
+  function expandTextareasForExport(cloneRoot) {
+    cloneRoot.querySelectorAll("textarea").forEach(t => {
+      t.style.height = "auto";
+      t.style.minHeight = "0";
+      t.style.maxHeight = "none";
+      t.style.overflow = "visible";
+      // ensure value is present in textContent too
+      t.textContent = t.value || t.textContent || "";
+      t.style.height = (t.scrollHeight + 2) + "px";
     });
   }
 
-  function pruneUncheckedCommonHazards(cloneForm) {
-    const commonTableBody = cloneForm.querySelector("#commonHazardsTable tbody");
+  function createFilteredFormClone() {
+    const form = document.getElementById('hazardForm');
+    const clone = form.cloneNode(true);
+
+    // Copy values (CRITICAL fix for exported job tasks/hazards/controls)
+    copyFormValuesToClone(form, clone);
+
+    // Remove unchecked common hazard rows
+    const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
     if (commonTableBody) {
       Array.from(commonTableBody.rows).forEach(row => {
         const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
@@ -1312,70 +1711,67 @@
           row.remove();
         }
       });
-
-      // If nothing remains, remove the whole card to eliminate blank space
-      const remaining = commonTableBody.querySelectorAll("tr").length;
-      if (remaining === 0) {
-        const card = cloneForm.querySelector("#commonHazardsCard");
-        if (card) card.remove();
+      // If none selected, remove table entirely to reduce blank space
+      if (commonTableBody.rows.length === 0) {
+        const tbl = clone.querySelector("#commonHazardsTable");
+        if (tbl) tbl.remove();
       }
     }
-  }
 
-  function createFilteredFormClone() {
-    const originalForm = document.getElementById("hazardForm");
-    const clone = originalForm.cloneNode(true);
+    // Remove buttons in export
+    const clonedButtonRow = clone.querySelector('#buttonRow');
+    if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
-    // 1) Copy all live values into the clone (this is the big fix for iPad/PC exports)
-    syncFormValuesToClone(originalForm, clone);
+    // Make sure datalist doesn't show as field content
+    const dl = clone.querySelector("#facilityList");
+    if (dl) dl.remove();
 
-    // 2) Remove unchecked common hazards + collapse space
-    pruneUncheckedCommonHazards(clone);
+    // Add version stamp to clone
+    const stamp = document.getElementById("versionStamp");
+    if (stamp) clone.appendChild(stamp.cloneNode(true));
 
-    // 3) Ensure signature shows in PDF
-    embedSignatureImages(originalForm, clone);
-
-    // 4) Replace textareas with divs so "Control Plan" and other entries always show
-    replaceTextareasForExport(clone);
-
-    // 5) Hide buttons in the clone
-    const clonedButtonRow = clone.querySelector("#buttonRow");
-    if (clonedButtonRow) clonedButtonRow.style.display = "none";
+    // Expand textareas to show full text in export
+    expandTextareasForExport(clone);
 
     return clone;
   }
 
   async function generatePdf() {
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "legal");
+    const pdf = new jsPDF('p', 'mm', 'legal');
 
     const clone = createFilteredFormClone();
 
-    const tempContainer = document.createElement("div");
-    tempContainer.style.position = "fixed";
-    tempContainer.style.left = "-9999px";
-    tempContainer.style.top = "0";
-    tempContainer.style.width = "1050px";
-    tempContainer.style.background = "#ffffff";
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'fixed';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.top = '0';
+    tempContainer.style.width = '1050px';
+    tempContainer.style.background = '#ffffff';
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
-    const clonePage1 = clone.querySelector("#page1");
-    const clonePage2 = clone.querySelector("#page2");
+    // Let async canvas copies (signature images) paint
+    await new Promise(r => setTimeout(r, 150));
+
+    const clonePage1 = clone.querySelector('#page1');
+    const clonePage2 = clone.querySelector('#page2');
 
     async function addPage(div, addNew) {
       if (!div) return;
       if (addNew) pdf.addPage();
 
+      // Ensure textarea expansion just before capture
+      expandTextareasForExport(clone);
+
       const canvas = await html2canvas(div, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
-        scrollY: 0,
-        scrollX: 0
+        windowWidth: 1050
       });
 
-      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 8;
@@ -1391,7 +1787,7 @@
       const x = (pageWidth - imgW) / 2;
       const y = margin;
 
-      pdf.addImage(imgData, "JPEG", x, y, imgW, imgH);
+      pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
     }
 
     await addPage(clonePage1, false);
@@ -1401,283 +1797,50 @@
     return pdf;
   }
 
-  async function runExport(mode) {
-    try {
-      if (buttonRow) buttonRow.style.display = "none";
-
-      const defaultName = getDefaultFileName();
-      const entered = window.prompt("File name (no extension needed):", defaultName);
-      const finalName = sanitizeFilename(entered || defaultName) || defaultName;
-      const fileName = finalName.endsWith(".pdf") ? finalName : (finalName + ".pdf");
-
-      const pdf = await generatePdf();
-
-      if (mode === "download") {
-        pdf.save(fileName);
-        return;
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', async () => {
+      try {
+        if (buttonRow) buttonRow.style.display = 'none';
+        const pdf = await generatePdf();
+        pdf.save(getFinalFileName());
+      } finally {
+        if (buttonRow) buttonRow.style.display = 'flex';
       }
-
-      // share
-      const blob = pdf.output("blob");
-      const file = new File([blob], fileName, { type: "application/pdf" });
-
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Worksite Hazard Assessment",
-          text: "VistaGeomatics – Worksite Hazard Assessment PDF"
-        });
-      } else {
-        // fallback to download if share not supported
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      }
-    } finally {
-      if (buttonRow) buttonRow.style.display = "flex";
-    }
-  }
-
-  if (downloadBtn) downloadBtn.addEventListener("click", () => runExport("download"));
-  if (shareBtn) shareBtn.addEventListener("click", () => runExport("share"));
-
-  // ======== RISK CALC (R = F × S × P) ========
-  function updateRiskForRow(row) {
-    const fInput = document.querySelector('input[name="f_' + row + '"]');
-    const sInput = document.querySelector('input[name="s_' + row + '"]');
-    const pInput = document.querySelector('input[name="p_' + row + '"]');
-    const rInput = document.querySelector('input[name="r_' + row + '"]');
-    if (!fInput || !sInput || !pInput || !rInput) return;
-
-    const f = parseInt(fInput.value, 10);
-    const s = parseInt(sInput.value, 10);
-    const p = parseInt(pInput.value, 10);
-
-    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) rInput.value = f * s * p;
-    else rInput.value = "";
-  }
-
-  document.querySelectorAll(".risk-input").forEach(input => {
-    input.addEventListener("input", () => {
-      const row = input.getAttribute("data-row");
-      if (row) updateRiskForRow(row);
-    });
-  });
-
-  // ======== SIGNATURE PADS ========
-  function initSignaturePad(canvasId, clearButtonId) {
-    const canvas = document.getElementById(canvasId);
-    const clearBtn = document.getElementById(clearButtonId);
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    let drawing = false;
-    let lastX = 0, lastY = 0;
-
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      ctx.lineWidth = 2;
-      ctx.lineCap = "round";
-      ctx.strokeStyle = "#111827";
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    function startDraw(x, y) { drawing = true; lastX = x; lastY = y; }
-    function drawLine(x, y) {
-      if (!drawing) return;
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      lastX = x; lastY = y;
-    }
-    function endDraw() { drawing = false; }
-
-    canvas.addEventListener("mousedown", e => {
-      const rect = canvas.getBoundingClientRect();
-      startDraw(e.clientX - rect.left, e.clientY - rect.top);
-    });
-    canvas.addEventListener("mousemove", e => {
-      const rect = canvas.getBoundingClientRect();
-      drawLine(e.clientX - rect.left, e.clientY - rect.top);
-    });
-    canvas.addEventListener("mouseup", endDraw);
-    canvas.addEventListener("mouseleave", endDraw);
-
-    canvas.addEventListener("touchstart", e => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      startDraw(touch.clientX - rect.left, touch.clientY - rect.top);
-    }, { passive: false });
-
-    canvas.addEventListener("touchmove", e => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      drawLine(touch.clientX - rect.left, touch.clientY - rect.top);
-    }, { passive: false });
-
-    canvas.addEventListener("touchend", e => { e.preventDefault(); endDraw(); }, { passive: false });
-
-    if (clearBtn) clearBtn.addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
-  }
-
-  initSignaturePad("pcSignature", "clearPcSig");
-  initSignaturePad("saSignature", "clearSaSig");
-  initSignaturePad("clientSignature", "clearClientSig");
-
-  const resetBtn = document.getElementById("resetBtn");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      ["pcSignature","saSignature","clientSignature"].forEach(id => {
-        const c = document.getElementById(id);
-        if (c) c.getContext("2d").clearRect(0, 0, c.width, c.height);
-      });
-      document.querySelectorAll(".risk-output").forEach(o => o.value = "");
-      // Clear emergency auto fields if hospital cleared by reset
-      document.getElementById("hospital_phone").value = "";
-      document.getElementById("emergency_procedures").value = "";
     });
   }
 
-  // ======== OFFLINE HAZARD RULE ENGINE – (unchanged from your version) ========
-  const DEFAULT_RULES = [
-    {
-      name: "Traffic & vehicles (roads, sites, parking)",
-      keywords: "traffic, vehicle, vehicles, car, cars, truck, trucks, bus, buses, van, vans, road, roads, highway, lane, lanes, shoulder, parking lot, alley, intersection, crosswalk, speeding, passing, tailgating, construction traffic, haul truck, dump truck, delivery truck, backing vehicle, reversing, blind corner",
-      control: "Set crews and equipment well clear of live lanes and blind spots. Use cones or signs as needed, wear hi-vis, use a spotter for backing, and make eye contact with drivers before entering vehicle paths."
-    },
-    {
-      name: "Winter driving & poor road conditions",
-      keywords: "icy road, icy roads, snow covered roads, slush, black ice, poor road conditions, gravel road, washboard, ruts, deep ruts, soft shoulder, fog on road, low visibility driving, winter storm, whiteout",
-      control: "Reduce speed, increase following distance, and avoid sudden braking or lane changes. Delay travel or reroute if visibility or traction is too poor to drive safely."
-    },
-    {
-      name: "Terrain, footing & slips / trips / falls",
-      keywords: "uneven ground, uneven, slope, slopes, steep slope, ditch, ditches, embankment, bank, banks, hole, holes, rut, ruts, mud, muddy, soft ground, loose gravel, loose rock, wet grass, snow, ice, icy, slippery, trip hazard, slip hazard, falling, sidewalk, curb, stairs, step, steps, tall grass, hidden hole",
-      control: "Walk the area first and avoid unstable, icy, or uneven ground. Set tripods and ladders on firm, level footing and keep walk paths free of holes, debris, cords, and loose material."
-    },
-    {
-      name: "Water, ice & drowning hazards",
-      keywords: "river, creek, stream, canal, ditch with water, pond, lake, reservoir, culvert, storm pond, open water, deep water, fast moving water, current, flooding, flood, rising water, ice, thin ice, river ice, lake ice, snow covered ice, falling into water, drowning",
-      control: "Keep a safe distance from edges, undercut banks, and thin or unknown ice. Choose safe crossing points or alternate routes and stop work if there is a real risk of falling into deep or fast-moving water."
-    },
-    {
-      name: "Cold weather & winter exposure",
-      keywords: "cold, cold weather, freezing, frost, frostbite, hypothermia, winter, windchill, minus, below zero, snowstorm, blizzard",
-      control: "Dress in layers, cover exposed skin, and take warm-up breaks in a heated vehicle or shelter. Shorten tasks in extreme cold and watch each other for early signs of cold stress."
-    },
-    {
-      name: "Wind, visibility & smoke",
-      keywords: "wind, winds, windy, gust, gusts, chinook, high winds, blowing snow, dust, dust storm, fog, foggy, smoke, wildfire smoke, low visibility, poor visibility",
-      control: "Secure tripods, fencing, and loose materials in high winds and avoid working near overhead hazards in strong gusts. Use extra lighting or delay work if visibility or air quality becomes too poor to work safely."
-    },
-    {
-      name: "Domestic dogs",
-      keywords: "dog, dogs, barking dog, aggressive dog, guard dog, loose dog",
-      control: "Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and avoid entering the area until it is clearly under control."
-    },
-    {
-      name: "Construction fencing & site perimeter",
-      keywords: "construction fence, construction fencing, temporary fence, temp fence, fence base, fence bases, fence gate, swinging gate, crowd control fence, site perimeter, snow drift on fence",
-      control: "Do not lean on or climb temporary fencing and watch for bases or sandbags that create trip hazards. Use designated gates and keep clear when panels or gates are being moved or when winds are high."
-    },
-    {
-      name: "Portable generators",
-      keywords: "generator, generators, genny, portable generator, gen set, genset",
-      control: "Set the generator outdoors on level ground away from doors and air intakes, route cords so they do not create trip hazards, and refuel only when the unit is off, cooled, and in a well-ventilated area."
-    }
-  ];
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      try {
+        if (buttonRow) buttonRow.style.display = 'none';
+        const pdf = await generatePdf();
+        const blob = pdf.output('blob');
+        const fileName = getFinalFileName();
+        const file = new File([blob], fileName, { type: 'application/pdf' });
 
-  const hazardRules = DEFAULT_RULES;
-
-  function normalize(text) {
-    return (text || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  function getSuggestionFromRules(hazardText) {
-    const text = normalize(hazardText);
-    if (!text) return "";
-
-    let bestIndex = -1;
-    let bestScore = 0;
-
-    hazardRules.forEach((rule, index) => {
-      const keywords = (rule.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
-      let score = 0;
-
-      keywords.forEach(kw => {
-        const normKw = normalize(kw);
-        if (!normKw) return;
-
-        // Score exact/phrase match higher
-        if (text.includes(normKw)) score += 6;
-        else {
-          const parts = normKw.split(" ");
-          parts.forEach(part => {
-            if (part.length > 3 && text.includes(part)) score += 1;
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Worksite Hazard Assessment',
+            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
           });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
         }
-      });
-
-      if (score > bestScore) { bestScore = score; bestIndex = index; }
-    });
-
-    if (bestIndex >= 0 && bestScore > 0) return hazardRules[bestIndex].control || "";
-    return "";
-  }
-
-  function initHazardAutoSuggest() {
-    document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
-      input.addEventListener("blur", e => {
-        const hazardText = e.target.value.trim();
-        const row = e.target.name.split("_")[1];
-        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
-        const rField = document.querySelector(`input[name="r_${row}"]`);
-        if (!controlField) return;
-
-        if (!hazardText) {
-          controlField.value = "";
-          if (rField) rField.value = "";
-          return;
-        }
-
-        if (controlField.value && controlField.value.length > 40) return;
-
-        const suggestion = getSuggestionFromRules(hazardText);
-        if (suggestion) controlField.value = suggestion;
-      });
-
-      input.addEventListener("input", e => {
-        const value = e.target.value.trim();
-        const row = e.target.name.split("_")[1];
-        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
-        const rField = document.querySelector(`input[name="r_${row}"]`);
-        if (!controlField) return;
-
-        // When user deletes hazard, clear control + risk rating (requested behavior)
-        if (!value) {
-          controlField.value = "";
-          if (rField) rField.value = "";
-        }
-      });
+      } catch (e) {
+        console.error('Share failed:', e);
+      } finally {
+        if (buttonRow) buttonRow.style.display = 'flex';
+      }
     });
   }
-
-  initHazardAutoSuggest();
 </script>
 </body>
 </html>
