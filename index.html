@@ -784,15 +784,19 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.7</div>
+<div class="version-stamp" id="versionStamp">v3.8</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
      ./jspdf.umd.min.js
      ./html2canvas.min.js
 -->
-<script src="./jspdf.umd.min.js"></script>
-<script src="./html2canvas.min.js"></script>
+<script src="./jspdf.umd.min.js"
+        onerror="console.error('FAILED to load jspdf.umd.min.js (check path / filename case / location)')"></script>
+
+<script src="./html2canvas.min.js"
+        onerror="console.error('FAILED to load html2canvas.min.js (check path / filename case / location)')"></script>
+
 
 <script>
   // ============================================================
@@ -1764,14 +1768,37 @@ function bestEntryForHazard(hazardText) {
     return clone;
   }
 
-  async function generatePdf() {
-    if (!window.jspdf || !window.html2canvas) {
-      alert("Missing PDF libraries. Ensure jspdf.umd.min.js and html2canvas.min.js are in the same folder as this HTML.");
-      throw new Error("Missing libraries");
-    }
+ async function generatePdf() {
+  // jsPDF can be exposed as window.jspdf.jsPDF (UMD) OR window.jsPDF (some builds)
+  const jsPDFCtor = window.jspdf?.jsPDF || window.jsPDF;
+  const h2c = window.html2canvas;
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'legal');
+  const hasJsPDF = (typeof jsPDFCtor === "function");
+  const hasH2C = (typeof h2c === "function");
+
+  if (!hasJsPDF || !hasH2C) {
+    const missing = [
+      !hasJsPDF ? "jsPDF (jspdf.umd.min.js)" : null,
+      !hasH2C ? "html2canvas (html2canvas.min.js)" : null
+    ].filter(Boolean).join(" and ");
+
+    alert(
+      `Missing PDF libraries: ${missing}.\n\n` +
+      `Open your browser DevTools → Console/Network to see if the .js files are 404/not loading.\n` +
+      `Also confirm filenames are EXACT (GitHub Pages is case-sensitive).`
+    );
+
+    console.error("Library check failed:", {
+      "window.jspdf": window.jspdf,
+      "window.jspdf?.jsPDF": window.jspdf?.jsPDF,
+      "window.jsPDF": window.jsPDF,
+      "window.html2canvas": window.html2canvas
+    });
+
+    throw new Error("Missing libraries: " + missing);
+  }
+
+  const pdf = new jsPDFCtor("p", "mm", "legal");
 
     const clone = createFilteredFormClone();
 
@@ -1795,7 +1822,7 @@ function bestEntryForHazard(hazardText) {
 
       expandTextareasForExport(clone);
 
-      const canvas = await html2canvas(div, {
+      const canvas = await h2c(div, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
