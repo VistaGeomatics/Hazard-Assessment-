@@ -784,7 +784,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.9</div>
+<div class="version-stamp" id="versionStamp">v4.0</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -1780,6 +1780,39 @@ function bestEntryForHazard(hazardText) {
       t.style.height = (t.scrollHeight + 2) + "px";
     });
   }
+function replaceTextareasWithDivsForExport(cloneRoot) {
+  cloneRoot.querySelectorAll("textarea").forEach(t => {
+    const div = document.createElement("div");
+
+    // keep some semantics for debugging (optional)
+    if (t.name) div.setAttribute("data-name", t.name);
+    if (t.id) div.setAttribute("data-id", t.id);
+
+    const text = (t.value != null ? t.value : t.textContent) || "";
+    div.textContent = text;
+
+    // style to mimic your textarea look, but expand naturally
+    div.style.width = "100%";
+    div.style.whiteSpace = "pre-wrap";
+    div.style.wordBreak = "break-word";
+    div.style.fontFamily = '"Inter", sans-serif';
+    div.style.fontSize = "0.74rem";
+    div.style.lineHeight = "1.25";
+    div.style.color = "var(--text-main)";
+    div.style.background = "#ffffff";
+    div.style.border = "1px solid var(--border-soft)";
+    div.style.borderRadius = "8px";
+    div.style.padding = "6px 8px";
+    div.style.boxShadow = "inset 0 1px 2px rgba(15, 23, 42, 0.08)";
+
+    // keep your min-heights so it visually matches the form
+    const isControl = t.classList.contains("control-text");
+    div.style.minHeight = isControl ? "80px" : "56px";
+
+    // replace textarea in clone
+    t.parentNode.replaceChild(div, t);
+  });
+}
 
   function createFilteredFormClone() {
     const form = document.getElementById('hazardForm');
@@ -1808,8 +1841,8 @@ function bestEntryForHazard(hazardText) {
     const stamp = document.getElementById("versionStamp");
     if (stamp) clone.appendChild(stamp.cloneNode(true));
 
-    expandTextareasForExport(clone);
-    return clone;
+   replaceTextareasWithDivsForExport(clone);
+return clone;
   }
 
  async function generatePdf() {
@@ -1844,7 +1877,7 @@ await ensurePdfLibsLoaded();
     throw new Error("Missing libraries: " + missing);
   }
 
-  const pdf = new jsPDFCtor("p", "mm", "legal");
+  const pdf = new jsPDFCtor("p", "mm", "letter");
 
     const clone = createFilteredFormClone();
 
@@ -1862,39 +1895,70 @@ await ensurePdfLibsLoaded();
     const clonePage1 = clone.querySelector('#page1');
     const clonePage2 = clone.querySelector('#page2');
 
-    async function addPage(div, addNew) {
-      if (!div) return;
-      if (addNew) pdf.addPage();
+    async function addDivPaged(div, useCurrentPage) {
+  if (!div) return;
 
-      expandTextareasForExport(clone);
+  const canvas = await h2c(div, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: "#ffffff",
+    windowWidth: 1050
+  });
 
-      const canvas = await h2c(div, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        windowWidth: 1050
-      });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 8;
 
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 8;
+  const usableW = pageWidth - margin * 2;
+  const usableH = pageHeight - margin * 2;
 
-      let imgW = pageWidth - margin * 2;
-      let imgH = canvas.height * (imgW / canvas.width);
+  // mm per px when canvas width is scaled to usableW
+  const mmPerPx = usableW / canvas.width;
 
-      if (imgH > pageHeight - margin * 2) {
-        imgH = pageHeight - margin * 2;
-        imgW = canvas.width * (imgH / canvas.height);
-      }
+  // canvas pixels that fit vertically on one PDF page
+  const sliceHeightPx = Math.floor(usableH / mmPerPx);
 
-      const x = (pageWidth - imgW) / 2;
-      const y = margin;
-      pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+  let yPx = 0;
+  let first = true;
+
+  while (yPx < canvas.height) {
+    const thisSlicePx = Math.min(sliceHeightPx, canvas.height - yPx);
+
+    const slice = document.createElement("canvas");
+    slice.width = canvas.width;
+    slice.height = thisSlicePx;
+
+    const sctx = slice.getContext("2d");
+    sctx.drawImage(
+      canvas,
+      0, yPx, canvas.width, thisSlicePx,
+      0, 0, canvas.width, thisSlicePx
+    );
+
+    const imgData = slice.toDataURL("image/jpeg", 0.95);
+    const imgH = thisSlicePx * mmPerPx;
+
+    // page handling
+    if (first) {
+      if (!useCurrentPage) pdf.addPage();
+    } else {
+      pdf.addPage();
     }
 
-    await addPage(clonePage1, false);
-    await addPage(clonePage2, true);
+    pdf.addImage(imgData, "JPEG", margin, margin, usableW, imgH);
+
+    first = false;
+    yPx += thisSlicePx;
+
+    // after first slice, always new pages
+    useCurrentPage = false;
+  }
+}
+
+
+    await addDivPaged(clonePage1, true);   // use first PDF page
+await addDivPaged(clonePage2, false);  // start a new page for page 2 (and continue if needed)
+
 
     document.body.removeChild(tempContainer);
     return pdf;
