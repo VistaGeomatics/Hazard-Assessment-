@@ -70,10 +70,7 @@
 
     .header-left p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.9; }
 
-    .header-logo {
-      height: 60px;
-      filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35));
-    }
+    .header-logo { height: 60px; filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35)); }
 
     .page-title-bar {
       position: relative;
@@ -112,7 +109,7 @@
       color: var(--text-main);
     }
 
-    /* ===== INPUT/TEXT CLIPPING FIX (Safari/iPad + general) ===== */
+    /* ===== INPUT/TEXT CLIPPING FIX ===== */
     input[type="text"],
     input[type="date"],
     input[type="time"],
@@ -140,17 +137,13 @@
       appearance: none;
     }
 
-    input[type="date"],
-    input[type="time"] { background-clip: padding-box; }
-
     textarea {
       padding: 6px 8px;
       min-height: 56px;
       resize: vertical;
     }
 
-    input:focus,
-    textarea:focus {
+    input:focus, textarea:focus {
       outline: none;
       border-color: var(--vista-blue-light);
       background: #fff;
@@ -229,27 +222,10 @@
 
     .small-text { font-size: 0.74rem; color: var(--text-muted); }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-      margin-top: 4px;
-    }
-
-    th, td {
-      border: 1px solid var(--border-soft);
-      padding: 3px 4px;
-      vertical-align: top;
-    }
-
-    th {
-      background: #e8f0fb;
-      font-weight: 600;
-      color: var(--vista-blue-dark);
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 4px; }
+    th, td { border: 1px solid var(--border-soft); padding: 3px 4px; vertical-align: top; }
+    th { background: #e8f0fb; font-weight: 600; color: var(--vista-blue-dark); }
     td { background: #f9fbff; }
-
     .center { text-align: center; }
 
     .signature-grid {
@@ -267,12 +243,7 @@
       font-size: 0.78rem;
     }
 
-    .signature-label {
-      font-size: 0.74rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-    }
+    .signature-label { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); margin-bottom: 2px; }
 
     .signature-canvas {
       width: 100%;
@@ -286,9 +257,7 @@
     }
 
     .signature-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
-
     .signature-actions button { padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.05em; }
-
     .signature-row { display: flex; gap: 6px; margin-top: 4px; }
     .signature-row > div { flex: 1; }
 
@@ -332,8 +301,7 @@
       font-size: 0.74rem;
     }
 
-    .risk-input,
-    .risk-output {
+    .risk-input, .risk-output {
       height: 32px !important;
       padding: 5px 6px !important;
       line-height: 1.2 !important;
@@ -341,30 +309,20 @@
       text-align: center;
     }
 
-    /* Emergency autocomplete dropdown (works on iPad + PC) */
-    .suggest-wrap { position: relative; }
-    .suggest-list {
-      position: absolute;
-      z-index: 50;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      max-height: 220px;
-      overflow: auto;
+    /* Export textarea replacement look */
+    .export-textbox {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #f9fbff;
       border: 1px solid var(--border-soft);
-      border-radius: 10px;
-      background: #fff;
-      box-shadow: 0 12px 26px rgba(15,23,42,0.14);
-      display: none;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-family: "Inter", sans-serif;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      color: var(--text-main);
+      min-height: 56px;
     }
-    .suggest-item {
-      padding: 8px 10px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      line-height: 1.2;
-    }
-    .suggest-item:hover { background: #f4f8fd; }
-    .suggest-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
 
     @media (max-width: 700px) {
       .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -521,7 +479,7 @@
           </div>
 
           <div class="small-text" style="margin-top:4px;">
-            <strong>Note:</strong> Check-in intervals are based on risk level –
+            <strong>Note:</strong> Check-in intervals are based on risk level,
             High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
           </div>
         </div>
@@ -635,13 +593,13 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Enter hazards to auto-suggest controls and auto-fill risk ratings (F, S, P). Clearing a hazard clears its controls and risk.</div>
+        <div class="page-title-sub">Use F, S and P ratings to calculate risk for each task. Controls are auto-suggested from an embedded ruleset.</div>
         <div class="page-title-accent"></div>
       </div>
 
       <div class="page-body">
         <!-- Common Occurring Hazards -->
-        <div class="section-card">
+        <div class="section-card" id="commonHazardsCard">
           <div class="section-header">
             <div class="section-title">Common Occurring Hazards</div>
             <div class="section-note">Check all hazards that apply to today’s worksite. Unchecked rows will be removed from the PDF.</div>
@@ -659,27 +617,45 @@
             <tr>
               <td class="center"><input type="checkbox" name="haz_buried_overhead"></td>
               <td>Buried or Overhead Facilities</td>
-              <td>Confirm locates/limits and keep safe approach to overhead lines. Stop if unsure and report damage immediately.</td>
+              <td>
+                Use caution when working around buried or overhead facilities, especially when digging.
+                Always maintain a safe limit of approach and report any damaged facilities immediately.
+                Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_hunting"></td>
               <td>Hunting Season</td>
-              <td>Know season/area, stay together, make noise, wear hi-vis, and speak with hunters if encountered.</td>
+              <td>
+                Know the season dates and locations related to hunting season, stay together and make noise.
+                If hunters are seen, make contact and alert them of your presence. P.P.E. Reflective Clothing.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
               <td>Site Housekeeping</td>
-              <td>Keep work areas clear of obstructions, cords, and debris. Maintain clean walk paths and good footing.</td>
+              <td>
+                Ensure all workplaces are kept clean and free from any obstructions that have the potential
+                to cause an incident. Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_h2s"></td>
               <td>H2S Concerns</td>
-              <td>Use a calibrated gas monitor, follow H2S training and site rules, and leave if alarms activate.</td>
+              <td>
+                Ensure you’ve received adequate training before working on a site that poses a potential
+                H2S risk. Review company Safe Work Practice. P.P.E. H2S gas detection monitors and
+                possible SCBA or SABE.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_open_excavation"></td>
               <td>Open Excavation</td>
-              <td>Stay back from edges, use safe crossings only, and never jump trenches. Wear proper PPE and watch footing.</td>
+              <td>
+                Always be aware of your surroundings and ensure everyone on site is aware of any open excavation.
+                Keep a safe distance from any open excavation as much as possible and always cross at the appropriate
+                locations. Never jump over open trenches. P.P.E. Hard Hats, CSA Safety Boots with ankle support.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_fences"></td>
@@ -692,32 +668,56 @@
                   <input type="checkbox" name="fence_installed_no"> No
                 </label>
               </td>
-              <td>Use gates/crossings, don’t lean or climb, watch bases/trip hazards, and keep clear while panels move or winds are high.</td>
+              <td>
+                Use caution when working around construction fences especially in windy conditions.
+                Always use designated crossing points whenever possible. If there is a requirement to
+                move or manipulate the fence, ensure all personnel and equipment is clear from the fence.
+                Make small adjustments at a time while constantly ensuring the stability of the fence remains.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
               <td>Wild Animals</td>
-              <td>Stay alert, never approach wildlife, secure food/garbage, carry deterrent where required, and leave if unsafe.</td>
+              <td>
+                Beware of your surroundings at all times. Never approach or interact with wild animals in any way.
+                Carry bear spray and properly store and discard food. Use of deterrents, such as bear spray, should
+                be used as a last resort. Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_river"></td>
               <td>River: High/Low Spring Flood</td>
-              <td>Keep back from unstable banks and fast water. Use safe crossings or reroute; stop work if fall-in risk exists.</td>
+              <td>
+                Always use caution and keep your distance if possible when working around river banks or any body
+                of water. If you need to cross a river, find an appropriate spot to mitigate/eliminate the potential
+                for an incident or any form of environmental impact.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_traffic"></td>
               <td>On and Off Traffic or Construction</td>
-              <td>Stay alert, wear hi-vis, keep clear of equipment paths, and make eye contact with operators before approaching.</td>
+              <td>
+                Stay alert and be aware of your surroundings at all times. Establish eye contact with the operator
+                before approaching any vehicle, use extra caution when working along roadways or active construction sites.
+                P.P.E. Reflective Clothing.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_icy"></td>
               <td>Icy Conditions</td>
-              <td>Slow down, use traction footwear, avoid hands in pockets, and reduce driving speed with extra following distance.</td>
+              <td>
+                Use extreme caution when working on icy and slippery surfaces. Walk slowly on designated walkways as much
+                as possible. Never walk with your hands in your pockets. Workers should ensure the proper footwear is used.
+                While driving, make sure you reduce your speed and ensure adequate tread on tires. Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_noise"></td>
               <td>Excessive Noise Levels</td>
-              <td>Limit exposure, use hearing protection, confirm communication method, and stay aware of surroundings.</td>
+              <td>
+                Limit your exposure as much as possible. Stay alert and ensure you are fully aware of your surroundings.
+                Establish an effective method of communication. P.P.E. Hearing protection. Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_wildfire"></td>
@@ -730,12 +730,19 @@
                   <input type="checkbox" name="fireban_no"> No
                 </label>
               </td>
-              <td>Follow fire ban rules, avoid ignition sources, park off long grass, and confirm extinguisher is present and usable.</td>
+              <td>
+                Use extreme caution when working in dry conditions. Refrain from driving in long grass and always properly
+                discard and extinguish any form of accelerant (cigarettes). Ensure fire extinguishers are in good working order.
+                Review company Safe Work Practice.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_farming"></td>
               <td>Farming Operations (cattle or other animals)</td>
-              <td>Make presence known, keep distance from livestock, avoid flagging in pastures, and reroute if animals react.</td>
+              <td>
+                Make your presence known, keep your distance from any livestock and refrain from using flagging in pastures.
+                P.P.E. Reflective Clothing.
+              </td>
             </tr>
             <tr>
               <td class="center"><input type="checkbox" name="haz_landowner"></td>
@@ -748,7 +755,11 @@
                   <input type="checkbox" name="landowner_no"> No
                 </label>
               </td>
-              <td>Stay calm and respectful, don’t argue, explain the work, and leave/report if anyone becomes aggressive.</td>
+              <td>
+                If you encounter a disgruntled land owner or home owner stay calm and try to defuse the situation.
+                Never argue or get mad. Listen to concerns respectfully and explain the work being completed.
+                If the situation escalates, leave the site and report it to your supervisor and client contact.
+              </td>
             </tr>
             </tbody>
           </table>
@@ -758,7 +769,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">Controls + risk ratings auto-suggest when you leave the hazard cell.</div>
+            <div class="section-note">Hazard controls will auto-suggest from a simplified offline ruleset.</div>
           </div>
 
           <table>
@@ -774,10 +785,9 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 6 rows -->
             <tr>
               <td><input type="text" name="task_1" /></td>
-              <td><input type="text" name="hazard_1" placeholder="e.g. dogs, cold weather, rain, construction traffic, construction fencing, digging, jackhammer, generator" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. dog, cold weather, rain, traffic, digging, jackhammer" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
@@ -854,37 +864,22 @@
             <tbody>
             <tr>
               <td><strong>Frequency (F)</strong></td>
-              <td>Never</td>
-              <td>Yearly</td>
-              <td>Monthly</td>
-              <td>Weekly</td>
-              <td>Daily</td>
+              <td>Never</td><td>Yearly</td><td>Monthly</td><td>Weekly</td><td>Daily</td>
             </tr>
             <tr>
               <td><strong>Severity (S)</strong></td>
-              <td>No injury</td>
-              <td>Minor injury</td>
-              <td>Serious / Medical aid</td>
-              <td>Lost time</td>
-              <td>Fatality</td>
+              <td>No injury</td><td>Minor injury</td><td>Serious / Medical aid</td><td>Lost time</td><td>Fatality</td>
             </tr>
             <tr>
               <td><strong>Probability (P)</strong></td>
-              <td>Very unlikely</td>
-              <td>Unlikely</td>
-              <td>Possible</td>
-              <td>Significant</td>
-              <td>Certainty</td>
+              <td>Very unlikely</td><td>Unlikely</td><td>Possible</td><td>Significant</td><td>Certainty</td>
             </tr>
             </tbody>
           </table>
 
           <table style="margin-top:6px;">
             <thead>
-            <tr>
-              <th>Risk (Multiply Factors)</th>
-              <th>Risk Level</th>
-            </tr>
+            <tr><th>Risk (Multiply Factors)</th><th>Risk Level</th></tr>
             </thead>
             <tbody>
             <tr><td>0 – 25</td><td>Low risk</td></tr>
@@ -904,14 +899,16 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Emergency Response Plan</div>
-            <div class="section-note">Start typing a facility name or acronym (e.g., FMC, PLC, RGH). Select one to auto-fill phone and procedures.</div>
           </div>
 
           <div class="row">
-            <div class="suggest-wrap">
+            <div>
               <label for="nearest_hospital">Nearest first aid facility or hospital</label>
-              <input type="text" id="nearest_hospital" name="nearest_hospital" autocomplete="off" placeholder="Type name or acronym (e.g., FMC)">
-              <div id="facilitySuggest" class="suggest-list"></div>
+              <input type="text" id="nearest_hospital" name="nearest_hospital" list="facilityList" placeholder="Type facility name or acronym (e.g., FMC, SHC)">
+              <datalist id="facilityList"></datalist>
+              <div class="small-text" style="margin-top:3px;">
+                Tip: type the acronym (example: FMC) or the facility name and select from the list.
+              </div>
             </div>
             <div>
               <label for="hospital_phone">Phone #</label>
@@ -937,14 +934,6 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Acknowledgement &amp; Sign-off</div>
-            <div class="section-note">PDF filename defaults to Job #, Developed By, and today’s date. You can edit it.</div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label for="pdf_filename">PDF File Name (optional)</label>
-              <input type="text" id="pdf_filename" name="pdf_filename" placeholder="Auto-filled">
-            </div>
           </div>
 
           <div class="signature-grid">
@@ -1027,195 +1016,510 @@
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  // =========================
-  //  HELPERS
-  // =========================
-  function safeFilePart(s) {
+  // =======================
+  //  MEDICAL FACILITY LIST (SELF-CONTAINED)
+  // =======================
+  const MEDICAL_FACILITIES = [
+  {
+    "name": "Foothills Medical Centre",
+    "abbr": "FMC",
+    "type": "Hospital",
+    "address": "1403 29 St NW, Calgary, AB, T2N 2T9"
+  },
+  {
+    "name": "Alberta Children's Hospital",
+    "abbr": "ACH",
+    "type": "Hospital",
+    "address": "28 Oki Dr NW, Calgary, AB, T3B 6A8"
+  },
+  {
+    "name": "Peter Lougheed Centre",
+    "abbr": "PLC",
+    "type": "Hospital",
+    "address": "3500 26 Ave NE, Calgary, AB, T1Y 6J4"
+  },
+  {
+    "name": "Rockyview General Hospital",
+    "abbr": "RGH",
+    "type": "Hospital",
+    "address": "7007 14 St SW, Calgary, AB, T2V 1P9"
+  },
+  {
+    "name": "South Health Campus",
+    "abbr": "SHC",
+    "type": "Hospital",
+    "address": "4448 Front St SE, Calgary, AB, T3M 1M4"
+  },
+  {
+    "name": "Sheldon M. Chumir Health Centre",
+    "abbr": "SMCHC",
+    "type": "Community Health",
+    "address": "1213 4 St SW, Calgary, AB, T2R 0X7"
+  },
+  {
+    "name": "Airdrie Community Health Centre",
+    "abbr": "ACHC",
+    "type": "Community Health",
+    "address": "604 Main St S, Airdrie, AB, T4B 3K7"
+  },
+  {
+    "name": "Okotoks Health and Wellness Centre",
+    "abbr": "OHWC",
+    "type": "Community Health",
+    "address": "11 Cimarron Common, Okotoks, AB, T1S 2E6"
+  },
+  {
+    "name": "Cochrane Community Health Centre",
+    "abbr": "CCHC",
+    "type": "Community Health",
+    "address": "60 Grande Blvd, Cochrane, AB, T4C 1P8"
+  },
+  {
+    "name": "Cochrane Urgent Care",
+    "abbr": "CUC",
+    "type": "Urgent Care",
+    "address": "100, 371 1 St W, Cochrane, AB, T4C 2E7"
+  },
+  {
+    "name": "Canmore General Hospital",
+    "abbr": "CGH",
+    "type": "Hospital",
+    "address": "1100 Hospital Pl, Canmore, AB, T1W 1N2"
+  },
+  {
+    "name": "Banff Mineral Springs Hospital",
+    "abbr": "BMSH",
+    "type": "Hospital",
+    "address": "305 Lynx St, Banff, AB, T1L 1E4"
+  },
+  {
+    "name": "High River General Hospital",
+    "abbr": "HRGH",
+    "type": "Hospital",
+    "address": "560 9 Ave W, High River, AB, T1V 1B3"
+  },
+  {
+    "name": "Didsbury District Health Services",
+    "abbr": "DDHS",
+    "type": "Hospital",
+    "address": "2014 15 Ave, Didsbury, AB, T0M 0W0"
+  },
+  {
+    "name": "Strathmore District Health Services",
+    "abbr": "SDHS",
+    "type": "Hospital",
+    "address": "200 Brent Blvd, Strathmore, AB, T1P 1J9"
+  },
+  {
+    "name": "Black Diamond Health Centre",
+    "abbr": "BDHC",
+    "type": "Community Health",
+    "address": "326 Center Ave W, Black Diamond, AB, T0L 0H0"
+  },
+  {
+    "name": "Chestermere Community Health Centre",
+    "abbr": "CMECHC",
+    "type": "Community Health",
+    "address": "100 Marina Dr, Chestermere, AB, T1X 0B9"
+  },
+  {
+    "name": "Siksika Health Services",
+    "abbr": "SHS",
+    "type": "Community Health",
+    "address": "Siksika Nation, Siksika, AB"
+  },
+  {
+    "name": "Claresholm General Hospital",
+    "abbr": "CLGH",
+    "type": "Hospital",
+    "address": "360 9 Ave W, Claresholm, AB, T0L 0T0"
+  },
+  {
+    "name": "Nanton Community Health Centre",
+    "abbr": "NCHC",
+    "type": "Community Health",
+    "address": "5719 19 St, Nanton, AB, T0L 1R0"
+  },
+  {
+    "name": "Vulcan Community Health Centre",
+    "abbr": "VCHC",
+    "type": "Community Health",
+    "address": "404 3 Ave S, Vulcan, AB, T0L 2B0"
+  },
+  {
+    "name": "Oilfields General Hospital",
+    "abbr": "OGH",
+    "type": "Hospital",
+    "address": "302 Third St W, Black Diamond, AB, T0L 0H0"
+  },
+  {
+    "name": "Turner Valley Medical Clinic",
+    "abbr": "TVMC",
+    "type": "Community Health",
+    "address": "4901 50 Ave, Turner Valley, AB, T0L 2A0"
+  },
+  {
+    "name": "Drumheller Health Centre",
+    "abbr": "DHC",
+    "type": "Hospital",
+    "address": "351 9 St NW, Drumheller, AB, T0J 0Y1"
+  },
+  {
+    "name": "Three Hills Health Centre",
+    "abbr": "THHC",
+    "type": "Hospital",
+    "address": "1012 2 Ave N, Three Hills, AB, T0M 2A0"
+  },
+  {
+    "name": "Olds Hospital and Care Centre",
+    "abbr": "OHCC",
+    "type": "Hospital",
+    "address": "3901 57 Ave, Olds, AB, T4H 1T4"
+  },
+  {
+    "name": "Innisfail Health Centre",
+    "abbr": "IHC",
+    "type": "Community Health",
+    "address": "5023 52 St, Innisfail, AB, T4G 1S6"
+  },
+  {
+    "name": "Sundre Hospital and Care Centre",
+    "abbr": "SHCC",
+    "type": "Hospital",
+    "address": "102 Centre St N, Sundre, AB, T0M 1X0"
+  },
+  {
+    "name": "Rocky Mountain House Health Centre",
+    "abbr": "RMHHC",
+    "type": "Hospital",
+    "address": "5010 39 St, Rocky Mountain House, AB, T4T 1A7"
+  },
+  {
+    "name": "Rimbey Hospital and Care Centre",
+    "abbr": "RHCC",
+    "type": "Hospital",
+    "address": "5225 50 Ave, Rimbey, AB, T0C 2J0"
+  }
+];
+
+  function norm(s) {
     return (s || "")
       .toString()
       .trim()
-      .replace(/[\\/:*?"<>|]+/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ");
+  }
+
+  function buildFacilityDatalist() {
+    const dl = document.getElementById("facilityList");
+    if (!dl) return;
+
+    dl.innerHTML = "";
+    MEDICAL_FACILITIES.forEach(f => {
+      const opt = document.createElement("option");
+      opt.value = `${f.name}`;
+      opt.label = `${f.abbr ? f.abbr + " – " : ""}${f.address}`;
+      dl.appendChild(opt);
+
+      if (f.abbr) {
+        const opt2 = document.createElement("option");
+        opt2.value = f.abbr;
+        opt2.label = `${f.name} – ${f.address}`;
+        dl.appendChild(opt2);
+      }
+    });
+  }
+
+  buildFacilityDatalist();
+
+  function findFacilityByInput(inputValue) {
+    const v = norm(inputValue);
+    if (!v) return null;
+
+    // Exact acronym match first
+    let match = MEDICAL_FACILITIES.find(f => norm(f.abbr) === v);
+    if (match) return match;
+
+    // Exact name match
+    match = MEDICAL_FACILITIES.find(f => norm(f.name) === v);
+    if (match) return match;
+
+    // Starts-with name (helps predictive typing)
+    match = MEDICAL_FACILITIES.find(f => norm(f.name).startsWith(v));
+    if (match) return match;
+
+    // Contains match
+    match = MEDICAL_FACILITIES.find(f => norm(f.name).includes(v));
+    return match || null;
+  }
+
+  function setEmergencyAutoText(facility) {
+    const phone = document.getElementById("hospital_phone");
+    const procedures = document.getElementById("emergency_procedures");
+    const hospital = document.getElementById("nearest_hospital");
+    if (!phone || !procedures || !hospital) return;
+
+    if (!facility) {
+      // Clear dependent fields when user clears hospital
+      if (!hospital.value.trim()) {
+        phone.value = "";
+        procedures.value = "";
+      }
+      return;
+    }
+
+    // If user typed acronym, replace field with official facility name
+    hospital.value = facility.name;
+
+    phone.value = "911";
+    const insertFacility = `${facility.name} , ${facility.address}`;
+    procedures.value =
+      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${insertFacility} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+  }
+
+  function initEmergencyAutoFill() {
+    const hospital = document.getElementById("nearest_hospital");
+    const phone = document.getElementById("hospital_phone");
+    const procedures = document.getElementById("emergency_procedures");
+    if (!hospital || !phone || !procedures) return;
+
+    let lastAppliedKey = "";
+
+    hospital.addEventListener("input", () => {
+      const raw = hospital.value;
+
+      // If user cleared it, clear dependents immediately
+      if (!raw.trim()) {
+        phone.value = "";
+        procedures.value = "";
+        lastAppliedKey = "";
+        return;
+      }
+
+      // Predict while typing (but do not override too aggressively)
+      const f = findFacilityByInput(raw);
+      const fKey = f ? `${f.name}|${f.abbr}|${f.address}` : "";
+
+      // Only apply when we find a confident match:
+      // - exact acronym typed OR exact name OR user chose a datalist option (common on iPad/PC)
+      const rawNorm = norm(raw);
+      const confident =
+        !!f && (rawNorm === norm(f.abbr) || rawNorm === norm(f.name) || norm(f.name).startsWith(rawNorm));
+
+      if (confident && fKey && fKey !== lastAppliedKey) {
+        setEmergencyAutoText(f);
+        lastAppliedKey = fKey;
+      }
+    });
+
+    hospital.addEventListener("blur", () => {
+      const raw = hospital.value;
+      if (!raw.trim()) {
+        phone.value = "";
+        procedures.value = "";
+        lastAppliedKey = "";
+        return;
+      }
+      const f = findFacilityByInput(raw);
+      if (f) {
+        setEmergencyAutoText(f);
+        lastAppliedKey = `${f.name}|${f.abbr}|${f.address}`;
+      }
+    });
+  }
+
+  initEmergencyAutoFill();
+
+  // =======================
+  //  PDF GENERATION (LEGAL SIZE)
+  //  FIX: COPY INPUT/TEXTAREA VALUES INTO CLONE + SHOW CONTROLS ON EXPORT
+  //  FIX: PROMPT USER FOR FILE NAME (DEFAULT: Job#, Developed By, Current Date)
+  //  FIX: REMOVE UNCHECKED COMMON HAZARDS + REMOVE CARD IF EMPTY
+  // =======================
+
+  function formatLocalDateYYYYMMDD(d = new Date()) {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function sanitizeFilename(name) {
+    return (name || "")
+      .toString()
+      .trim()
+      .replace(/[\/\\:*?"<>|]+/g, " ")
       .replace(/\s+/g, " ")
-      .substring(0, 80);
+      .trim()
+      .slice(0, 120);
   }
 
-  function formatLocalYYYYMMDD(d) {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
-
-  function defaultPdfFileName() {
-    const job = safeFilePart(document.getElementById("job_number")?.value);
-    const dev = safeFilePart(document.getElementById("developed_by")?.value);
-    const dateInput = document.getElementById("date")?.value; // YYYY-MM-DD
-    const dateStr = safeFilePart(dateInput || formatLocalYYYYMMDD(new Date()));
+  function getDefaultFileName() {
+    const job = (document.getElementById("job_number")?.value || "").trim();
+    const dev = (document.getElementById("developed_by")?.value || "").trim();
+    const d = formatLocalDateYYYYMMDD(new Date());
 
     const parts = [];
     if (job) parts.push(job);
     if (dev) parts.push(dev);
-    if (dateStr) parts.push(dateStr);
+    parts.push(d);
 
-    const base = parts.join(" - ") || `WorksiteHazardAssessment - ${dateStr}`;
-    return `${base}.pdf`;
+    const base = parts.join(" ");
+    return sanitizeFilename(base) || `WorksiteHazardAssessment ${d}`;
   }
 
-  function updatePdfFilenameField() {
-    const field = document.getElementById("pdf_filename");
-    if (!field) return;
+  function syncFormValuesToClone(originalForm, cloneForm) {
+    const originalFields = originalForm.querySelectorAll("input, textarea, select");
+    originalFields.forEach(orig => {
+      const key = orig.name || orig.id;
+      if (!key) return;
 
-    // Only auto-fill if empty or still matches prior default style
-    if (!field.value || field.dataset.autofilled === "true") {
-      field.value = defaultPdfFileName().replace(/\.pdf$/i, "");
-      field.dataset.autofilled = "true";
-    }
-  }
+      const clone = cloneForm.querySelector(`[name="${CSS.escape(orig.name)}"]`) || cloneForm.querySelector(`#${CSS.escape(orig.id)}`);
+      if (!clone) return;
 
-  ["job_number","developed_by","date"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener("input", updatePdfFilenameField);
-    if (el) el.addEventListener("change", updatePdfFilenameField);
-  });
+      if (orig.tagName === "INPUT") {
+        const type = (orig.getAttribute("type") || "").toLowerCase();
 
-  // Initial
-  updatePdfFilenameField();
-
-  // =========================
-  //  PDF GENERATION
-  //  - Copies live values into clone (fixes: tasks/hazards/FSP/R/controls missing)
-  //  - Removes unchecked common hazards (no blank space)
-  //  - Ensures textarea heights expand (prevents bottom cut-off)
-  // =========================
-
-  function copyLiveValuesIntoClone(originalRoot, cloneRoot) {
-    const origFields = originalRoot.querySelectorAll("input, textarea, select");
-    origFields.forEach(origEl => {
-      const name = origEl.getAttribute("name");
-      const id = origEl.getAttribute("id");
-
-      let selector = null;
-      if (name) selector = `[name="${CSS.escape(name)}"]`;
-      else if (id) selector = `#${CSS.escape(id)}`;
-      else return;
-
-      const cloneEl = cloneRoot.querySelector(selector);
-      if (!cloneEl) return;
-
-      const tag = (origEl.tagName || "").toLowerCase();
-      const type = (origEl.getAttribute("type") || "").toLowerCase();
-
-      if (tag === "textarea") {
-        cloneEl.value = origEl.value;
-        cloneEl.textContent = origEl.value;
-      } else if (tag === "select") {
-        cloneEl.value = origEl.value;
-      } else if (tag === "input" && (type === "checkbox" || type === "radio")) {
-        cloneEl.checked = origEl.checked;
-        if (origEl.checked) cloneEl.setAttribute("checked", "checked");
-        else cloneEl.removeAttribute("checked");
-      } else if (tag === "input") {
-        cloneEl.value = origEl.value;
-        cloneEl.setAttribute("value", origEl.value);
+        if (type === "checkbox" || type === "radio") {
+          clone.checked = orig.checked;
+          if (orig.checked) clone.setAttribute("checked", "checked");
+          else clone.removeAttribute("checked");
+        } else {
+          clone.value = orig.value;
+          clone.setAttribute("value", orig.value);
+        }
+      } else if (orig.tagName === "TEXTAREA") {
+        clone.value = orig.value;
+        clone.textContent = orig.value; // helps html2canvas in some cases
+      } else if (orig.tagName === "SELECT") {
+        clone.value = orig.value;
       }
     });
+  }
 
-    // Copy signature canvases as images into clone (so signatures export)
-    const sigIds = ["pcSignature","saSignature","clientSignature"];
-    sigIds.forEach(cid => {
-      const origCanvas = document.getElementById(cid);
-      const cloneCanvas = cloneRoot.querySelector(`#${CSS.escape(cid)}`);
+  function embedSignatureImages(originalForm, cloneForm) {
+    const pairs = [
+      { canvasId: "pcSignature", label: "pcSignature" },
+      { canvasId: "saSignature", label: "saSignature" },
+      { canvasId: "clientSignature", label: "clientSignature" }
+    ];
+
+    pairs.forEach(p => {
+      const origCanvas = document.getElementById(p.canvasId);
+      const cloneCanvas = cloneForm.querySelector(`#${CSS.escape(p.canvasId)}`);
       if (!origCanvas || !cloneCanvas) return;
 
-      // Replace clone canvas with an <img> snapshot to guarantee export
-      const img = document.createElement("img");
-      img.alt = "Signature";
-      img.style.width = "100%";
-      img.style.height = "80px";
-      img.style.objectFit = "contain";
-      img.style.display = "block";
-      img.style.background = "#fff";
-      img.style.borderRadius = "8px";
-      img.style.border = "1px solid var(--border-soft)";
+      // Replace clone canvas with an <img> to guarantee export
+      try {
+        const dataUrl = origCanvas.toDataURL("image/png");
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        img.alt = "Signature";
+        img.style.width = "100%";
+        img.style.height = "80px";
+        img.style.objectFit = "contain";
+        img.style.background = "#ffffff";
+        img.style.border = "1px solid var(--border-soft)";
+        img.style.borderRadius = "8px";
+        img.style.display = "block";
 
-      try { img.src = origCanvas.toDataURL("image/png"); } catch(e) { img.src = ""; }
-      cloneCanvas.replaceWith(img);
+        cloneCanvas.parentNode.replaceChild(img, cloneCanvas);
+      } catch (e) {
+        // If toDataURL fails, keep canvas
+      }
     });
   }
 
-  function expandAllTextareas(root) {
-    root.querySelectorAll("textarea").forEach(t => {
-      t.style.height = "auto";
-      t.style.minHeight = "0";
-      t.style.maxHeight = "none";
-      t.style.overflow = "visible";
-      // Use scrollHeight after value is set
-      t.style.height = (t.scrollHeight + 6) + "px";
+  function replaceTextareasForExport(cloneForm) {
+    // Replace textareas with divs so the text always appears in the PDF
+    const textareas = cloneForm.querySelectorAll("textarea");
+    textareas.forEach(ta => {
+      const div = document.createElement("div");
+      div.className = "export-textbox";
+
+      // preserve size similar to textarea
+      const minH = parseInt(getComputedStyle(ta).minHeight || "56", 10);
+      div.style.minHeight = (Number.isFinite(minH) ? minH : 56) + "px";
+
+      div.textContent = ta.value || "";
+      ta.parentNode.replaceChild(div, ta);
     });
   }
 
-  function createFilteredFormClone() {
-    const form = document.getElementById('hazardForm');
-    const clone = form.cloneNode(true);
-
-    // 1) Copy values FIRST (fix: job tasks/hazards/FSP/R/controls missing)
-    copyLiveValuesIntoClone(form, clone);
-
-    // 2) Remove unchecked "Common Occurring Hazards" rows
-    const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
+  function pruneUncheckedCommonHazards(cloneForm) {
+    const commonTableBody = cloneForm.querySelector("#commonHazardsTable tbody");
     if (commonTableBody) {
       Array.from(commonTableBody.rows).forEach(row => {
         const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
-        if (appliesCheckbox && !appliesCheckbox.checked) row.remove();
+        if (appliesCheckbox && !appliesCheckbox.checked) {
+          row.remove();
+        }
       });
+
+      // If nothing remains, remove the whole card to eliminate blank space
+      const remaining = commonTableBody.querySelectorAll("tr").length;
+      if (remaining === 0) {
+        const card = cloneForm.querySelector("#commonHazardsCard");
+        if (card) card.remove();
+      }
     }
+  }
 
-    // 3) Expand textareas so content isn't cut off in export
-    expandAllTextareas(clone);
+  function createFilteredFormClone() {
+    const originalForm = document.getElementById("hazardForm");
+    const clone = originalForm.cloneNode(true);
 
-    // 4) Hide buttons in export
-    const clonedButtonRow = clone.querySelector('#buttonRow');
-    if (clonedButtonRow) clonedButtonRow.style.display = 'none';
+    // 1) Copy all live values into the clone (this is the big fix for iPad/PC exports)
+    syncFormValuesToClone(originalForm, clone);
 
-    // 5) Hide the filename helper row if you want (keep it visible in export if preferred)
-    // (Leaving it visible is usually fine.)
+    // 2) Remove unchecked common hazards + collapse space
+    pruneUncheckedCommonHazards(clone);
+
+    // 3) Ensure signature shows in PDF
+    embedSignatureImages(originalForm, clone);
+
+    // 4) Replace textareas with divs so "Control Plan" and other entries always show
+    replaceTextareasForExport(clone);
+
+    // 5) Hide buttons in the clone
+    const clonedButtonRow = clone.querySelector("#buttonRow");
+    if (clonedButtonRow) clonedButtonRow.style.display = "none";
 
     return clone;
   }
 
   async function generatePdf() {
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'legal');
+    const pdf = new jsPDF("p", "mm", "legal");
 
     const clone = createFilteredFormClone();
 
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'fixed';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.top = '0';
-    tempContainer.style.width = '1050px';
-    tempContainer.style.background = 'transparent';
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "fixed";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.top = "0";
+    tempContainer.style.width = "1050px";
+    tempContainer.style.background = "#ffffff";
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
-    const clonePage1 = clone.querySelector('#page1');
-    const clonePage2 = clone.querySelector('#page2');
+    const clonePage1 = clone.querySelector("#page1");
+    const clonePage2 = clone.querySelector("#page2");
 
     async function addPage(div, addNew) {
       if (!div) return;
       if (addNew) pdf.addPage();
 
-      // Ensure fonts/layout settle
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
       const canvas = await html2canvas(div, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
-        windowWidth: 1050
+        scrollY: 0,
+        scrollX: 0
       });
 
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 8;
@@ -1231,7 +1535,7 @@
       const x = (pageWidth - imgW) / 2;
       const y = margin;
 
-      pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+      pdf.addImage(imgData, "JPEG", x, y, imgW, imgH);
     }
 
     await addPage(clonePage1, false);
@@ -1241,59 +1545,52 @@
     return pdf;
   }
 
-  function finalPdfFileName() {
-    const userName = document.getElementById("pdf_filename")?.value;
-    const base = safeFilePart(userName) || safeFilePart(defaultPdfFileName().replace(/\.pdf$/i,""));
-    return (base ? base : "WorksiteHazardAssessment") + ".pdf";
-  }
+  async function runExport(mode) {
+    try {
+      if (buttonRow) buttonRow.style.display = "none";
 
-  if (downloadBtn) {
-    downloadBtn.addEventListener('click', async () => {
-      try {
-        if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        pdf.save(finalPdfFileName());
-      } finally {
-        if (buttonRow) buttonRow.style.display = 'flex';
+      const defaultName = getDefaultFileName();
+      const entered = window.prompt("File name (no extension needed):", defaultName);
+      const finalName = sanitizeFilename(entered || defaultName) || defaultName;
+      const fileName = finalName.endsWith(".pdf") ? finalName : (finalName + ".pdf");
+
+      const pdf = await generatePdf();
+
+      if (mode === "download") {
+        pdf.save(fileName);
+        return;
       }
-    });
-  }
 
-  if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
-      try {
-        if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        const blob = pdf.output('blob');
-        const file = new File([blob], finalPdfFileName(), { type: 'application/pdf' });
+      // share
+      const blob = pdf.output("blob");
+      const file = new File([blob], fileName, { type: "application/pdf" });
 
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Worksite Hazard Assessment',
-            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
-          });
-        } else {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = finalPdfFileName();
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        }
-      } catch (e) {
-        console.error('Share failed:', e);
-      } finally {
-        if (buttonRow) buttonRow.style.display = 'flex';
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Worksite Hazard Assessment",
+          text: "VistaGeomatics – Worksite Hazard Assessment PDF"
+        });
+      } else {
+        // fallback to download if share not supported
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
       }
-    });
+    } finally {
+      if (buttonRow) buttonRow.style.display = "flex";
+    }
   }
 
-  // =========================
-  //  RISK CALC (R = F × S × P)
-  // =========================
+  if (downloadBtn) downloadBtn.addEventListener("click", () => runExport("download"));
+  if (shareBtn) shareBtn.addEventListener("click", () => runExport("share"));
+
+  // ======== RISK CALC (R = F × S × P) ========
   function updateRiskForRow(row) {
     const fInput = document.querySelector('input[name="f_' + row + '"]');
     const sInput = document.querySelector('input[name="s_' + row + '"]');
@@ -1309,59 +1606,33 @@
     else rInput.value = "";
   }
 
-  function clearRowRiskAndControl(row) {
-    const f = document.querySelector(`input[name="f_${row}"]`);
-    const s = document.querySelector(`input[name="s_${row}"]`);
-    const p = document.querySelector(`input[name="p_${row}"]`);
-    const r = document.querySelector(`input[name="r_${row}"]`);
-    const c = document.querySelector(`textarea[name="control_${row}"]`);
-    if (f) f.value = "";
-    if (s) s.value = "";
-    if (p) p.value = "";
-    if (r) r.value = "";
-    if (c) c.value = "";
-  }
-
-  document.querySelectorAll('.risk-input').forEach(input => {
-    input.addEventListener('input', () => {
-      const row = input.getAttribute('data-row');
+  document.querySelectorAll(".risk-input").forEach(input => {
+    input.addEventListener("input", () => {
+      const row = input.getAttribute("data-row");
       if (row) updateRiskForRow(row);
     });
   });
 
-  // =========================
-  //  SIGNATURE PADS
-  // =========================
+  // ======== SIGNATURE PADS ========
   function initSignaturePad(canvasId, clearButtonId) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     let drawing = false;
     let lastX = 0, lastY = 0;
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
-      const old = document.createElement("canvas");
-      old.width = canvas.width; old.height = canvas.height;
-      const oldCtx = old.getContext("2d");
-
-      try { oldCtx.drawImage(canvas, 0, 0); } catch(e) {}
-
       canvas.width = rect.width;
       canvas.height = rect.height;
-
       ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#111827';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Redraw old content scaled
-      try { ctx.drawImage(old, 0, 0, canvas.width, canvas.height); } catch(e) {}
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#111827";
     }
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     function startDraw(x, y) { drawing = true; lastX = x; lastY = y; }
     function drawLine(x, y) {
@@ -1374,212 +1645,100 @@
     }
     function endDraw() { drawing = false; }
 
-    canvas.addEventListener('mousedown', e => {
+    canvas.addEventListener("mousedown", e => {
       const rect = canvas.getBoundingClientRect();
       startDraw(e.clientX - rect.left, e.clientY - rect.top);
     });
-    canvas.addEventListener('mousemove', e => {
+    canvas.addEventListener("mousemove", e => {
       const rect = canvas.getBoundingClientRect();
       drawLine(e.clientX - rect.left, e.clientY - rect.top);
     });
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('mouseleave', endDraw);
+    canvas.addEventListener("mouseup", endDraw);
+    canvas.addEventListener("mouseleave", endDraw);
 
-    canvas.addEventListener('touchstart', e => {
+    canvas.addEventListener("touchstart", e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
       startDraw(touch.clientX - rect.left, touch.clientY - rect.top);
     }, { passive: false });
 
-    canvas.addEventListener('touchmove', e => {
+    canvas.addEventListener("touchmove", e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
       drawLine(touch.clientX - rect.left, touch.clientY - rect.top);
     }, { passive: false });
 
-    canvas.addEventListener('touchend', e => { e.preventDefault(); endDraw(); }, { passive: false });
+    canvas.addEventListener("touchend", e => { e.preventDefault(); endDraw(); }, { passive: false });
 
-    if (clearBtn) clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+    if (clearBtn) clearBtn.addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
   }
 
-  initSignaturePad('pcSignature', 'clearPcSig');
-  initSignaturePad('saSignature', 'clearSaSig');
-  initSignaturePad('clientSignature', 'clearClientSig');
+  initSignaturePad("pcSignature", "clearPcSig");
+  initSignaturePad("saSignature", "clearSaSig");
+  initSignaturePad("clientSignature", "clearClientSig");
 
-  const resetBtn = document.getElementById('resetBtn');
+  const resetBtn = document.getElementById("resetBtn");
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      ['pcSignature','saSignature','clientSignature'].forEach(id => {
-        const canvas = document.getElementById(id);
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+    resetBtn.addEventListener("click", () => {
+      ["pcSignature","saSignature","clientSignature"].forEach(id => {
+        const c = document.getElementById(id);
+        if (c) c.getContext("2d").clearRect(0, 0, c.width, c.height);
       });
-      document.querySelectorAll('.risk-output').forEach(o => o.value = "");
-      updatePdfFilenameField();
+      document.querySelectorAll(".risk-output").forEach(o => o.value = "");
+      // Clear emergency auto fields if hospital cleared by reset
+      document.getElementById("hospital_phone").value = "";
+      document.getElementById("emergency_procedures").value = "";
     });
   }
 
-  // =========================
-  //  OFFLINE HAZARD RULE ENGINE
-  //  - Better matching (fixes: "construction" picking wrong control)
-  //  - Plural handling via keyword sets (dog/dogs, fence/fences, etc.)
-  //  - Auto-fill F/S/P defaults per hazard
-  //  - Controls are capped < 185 chars
-  // =========================
-
-  function cap185(s) {
-    const str = (s || "").toString().trim();
-    return str.length <= 185 ? str : (str.substring(0, 182).trimEnd() + "…");
-  }
-
+  // ======== OFFLINE HAZARD RULE ENGINE – (unchanged from your version) ========
   const DEFAULT_RULES = [
     {
-      id: "construction_traffic",
-      priority: 100,
-      name: "Construction traffic",
-      keywords: "construction traffic, haul truck, dump truck, delivery truck, concrete truck, backing truck, reversing truck, spotter, equipment path, live traffic, site traffic",
-      control: cap185("Stay out of travel paths and blind spots, wear hi-vis, use a spotter for backing, and make eye contact with operators. Relocate setups if traffic gets too close."),
-      f: 4, s: 3, p: 3
+      name: "Traffic & vehicles (roads, sites, parking)",
+      keywords: "traffic, vehicle, vehicles, car, cars, truck, trucks, bus, buses, van, vans, road, roads, highway, lane, lanes, shoulder, parking lot, alley, intersection, crosswalk, speeding, passing, tailgating, construction traffic, haul truck, dump truck, delivery truck, backing vehicle, reversing, blind corner",
+      control: "Set crews and equipment well clear of live lanes and blind spots. Use cones or signs as needed, wear hi-vis, use a spotter for backing, and make eye contact with drivers before entering vehicle paths."
     },
     {
-      id: "traffic",
-      priority: 60,
-      name: "Traffic & vehicles",
-      keywords: "traffic, vehicle, vehicles, car, cars, truck, trucks, bus, buses, van, vans, road, roads, highway, lane, lanes, shoulder, intersection, crosswalk, speeding, backing, reversing, blind corner",
-      control: cap185("Work well clear of live lanes and blind spots. Use cones/signs if needed, wear hi-vis, use a spotter for backing, and make eye contact before entering vehicle paths."),
-      f: 4, s: 3, p: 3
+      name: "Winter driving & poor road conditions",
+      keywords: "icy road, icy roads, snow covered roads, slush, black ice, poor road conditions, gravel road, washboard, ruts, deep ruts, soft shoulder, fog on road, low visibility driving, winter storm, whiteout",
+      control: "Reduce speed, increase following distance, and avoid sudden braking or lane changes. Delay travel or reroute if visibility or traction is too poor to drive safely."
     },
     {
-      id: "construction_fencing",
-      priority: 90,
-      name: "Construction fencing",
-      keywords: "construction fence, construction fencing, temp fence, temporary fence, fence, fences, fence base, fence bases, fence panel, fence panels, fence gate, site perimeter",
-      control: cap185("Use designated gates/crossings, don’t lean or climb, watch bases for trips, and keep clear while panels move. In wind, keep distance and stop if unstable."),
-      f: 3, s: 2, p: 3
+      name: "Terrain, footing & slips / trips / falls",
+      keywords: "uneven ground, uneven, slope, slopes, steep slope, ditch, ditches, embankment, bank, banks, hole, holes, rut, ruts, mud, muddy, soft ground, loose gravel, loose rock, wet grass, snow, ice, icy, slippery, trip hazard, slip hazard, falling, sidewalk, curb, stairs, step, steps, tall grass, hidden hole",
+      control: "Walk the area first and avoid unstable, icy, or uneven ground. Set tripods and ladders on firm, level footing and keep walk paths free of holes, debris, cords, and loose material."
     },
     {
-      id: "winter_driving",
-      priority: 70,
-      name: "Winter driving & road conditions",
-      keywords: "icy road, icy roads, snow covered roads, slush, black ice, poor road conditions, winter storm, whiteout, low visibility driving, fog on road",
-      control: cap185("Reduce speed, increase following distance, and avoid sudden moves. Delay travel or reroute if traction or visibility is too poor to drive safely."),
-      f: 4, s: 4, p: 3
+      name: "Water, ice & drowning hazards",
+      keywords: "river, creek, stream, canal, ditch with water, pond, lake, reservoir, culvert, storm pond, open water, deep water, fast moving water, current, flooding, flood, rising water, ice, thin ice, river ice, lake ice, snow covered ice, falling into water, drowning",
+      control: "Keep a safe distance from edges, undercut banks, and thin or unknown ice. Choose safe crossing points or alternate routes and stop work if there is a real risk of falling into deep or fast-moving water."
     },
     {
-      id: "slips_trips",
-      priority: 50,
-      name: "Slips / trips / falls",
-      keywords: "uneven ground, uneven, slope, ditch, ditches, embankment, hole, holes, rut, ruts, mud, muddy, loose gravel, wet grass, snow, ice, icy, slippery, trip hazard, slip hazard, sidewalk, curb, stairs, step, steps",
-      control: cap185("Walk the area first and avoid unstable, icy, or uneven ground. Set tripods on firm footing and keep walk paths clear of holes, debris, cords, and loose material."),
-      f: 4, s: 3, p: 3
+      name: "Cold weather & winter exposure",
+      keywords: "cold, cold weather, freezing, frost, frostbite, hypothermia, winter, windchill, minus, below zero, snowstorm, blizzard",
+      control: "Dress in layers, cover exposed skin, and take warm-up breaks in a heated vehicle or shelter. Shorten tasks in extreme cold and watch each other for early signs of cold stress."
     },
     {
-      id: "water",
-      priority: 55,
-      name: "Water / ice / drowning",
-      keywords: "river, creek, stream, canal, pond, lake, reservoir, culvert, storm pond, open water, deep water, fast moving water, current, flooding, flood, thin ice, river ice, lake ice, drowning",
-      control: cap185("Keep back from edges, undercut banks, and thin/unknown ice. Use safe crossings or reroute, and stop work if there’s a real fall-in risk."),
-      f: 3, s: 4, p: 2
+      name: "Wind, visibility & smoke",
+      keywords: "wind, winds, windy, gust, gusts, chinook, high winds, blowing snow, dust, dust storm, fog, foggy, smoke, wildfire smoke, low visibility, poor visibility",
+      control: "Secure tripods, fencing, and loose materials in high winds and avoid working near overhead hazards in strong gusts. Use extra lighting or delay work if visibility or air quality becomes too poor to work safely."
     },
     {
-      id: "cold",
-      priority: 40,
-      name: "Cold weather",
-      keywords: "cold, freezing, frost, frostbite, hypothermia, winter, windchill, blizzard, snowstorm, below zero, minus",
-      control: cap185("Dress in layers, cover skin, and take warm-up breaks. Shorten tasks in extreme cold and monitor each other for early cold-stress signs."),
-      f: 4, s: 3, p: 3
-    },
-    {
-      id: "heat",
-      priority: 40,
-      name: "Heat / sun",
-      keywords: "heat, hot, heat stress, heat exhaustion, heat stroke, sun, uv, sunburn, high temperature",
-      control: cap185("Take frequent water and shade breaks, wear sun protection, and slow down in heat. Stop and cool down if anyone shows heat-stress symptoms."),
-      f: 4, s: 3, p: 3
-    },
-    {
-      id: "rain",
-      priority: 35,
-      name: "Rain / wet surfaces",
-      keywords: "rain, raining, wet, drizzle, showers, downpour, puddles, slick, slippery when wet, wet stairs, wet ladder",
-      control: cap185("Use waterproof layers and slip-resistant footwear and move slowly on wet surfaces, stairs, and ladders. Avoid climbing on wet metal where footing is poor."),
-      f: 3, s: 3, p: 3
-    },
-    {
-      id: "wind",
-      priority: 45,
-      name: "Wind / poor visibility",
-      keywords: "wind, winds, windy, gust, gusts, high winds, blowing snow, dust, fog, foggy, smoke, wildfire smoke, low visibility, poor visibility",
-      control: cap185("Step in tripods and secure loose items in wind. Avoid overhead hazards in strong gusts and delay work if visibility or air quality becomes unsafe."),
-      f: 3, s: 3, p: 3
-    },
-    {
-      id: "dogs",
-      priority: 65,
       name: "Domestic dogs",
-      keywords: "dog, dogs, barking dog, barking dogs, aggressive dog, aggressive dogs, guard dog, guard dogs, loose dog, loose dogs, pet",
-      control: cap185("Do not approach unknown dogs. Ask the owner to secure the dog and avoid entering the area until it is under control."),
-      f: 3, s: 3, p: 3
+      keywords: "dog, dogs, barking dog, aggressive dog, guard dog, loose dog",
+      control: "Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and avoid entering the area until it is clearly under control."
     },
     {
-      id: "livestock",
-      priority: 55,
-      name: "Livestock",
-      keywords: "cattle, cow, cows, bull, livestock, herd, horse, horses, sheep, goats, farm animal, farm animals",
-      control: cap185("Give livestock space and avoid walking between animals and fences. Reroute if animals appear stressed, protective, or aggressive."),
-      f: 3, s: 3, p: 2
+      name: "Construction fencing & site perimeter",
+      keywords: "construction fence, construction fencing, temporary fence, temp fence, fence base, fence bases, fence gate, swinging gate, crowd control fence, site perimeter, snow drift on fence",
+      control: "Do not lean on or climb temporary fencing and watch for bases or sandbags that create trip hazards. Use designated gates and keep clear when panels or gates are being moved or when winds are high."
     },
     {
-      id: "wildlife",
-      priority: 55,
-      name: "Wildlife",
-      keywords: "wildlife, bear, bears, cougar, moose, deer, elk, coyote, coyotes, wolf, wolves, goose, geese",
-      control: cap185("Stay alert for wildlife and keep distance. Back away calmly, secure food/garbage, and relocate or leave if wildlife is nearby or unpredictable."),
-      f: 2, s: 4, p: 2
-    },
-    {
-      id: "utilities",
-      priority: 80,
-      name: "Utilities (overhead/underground)",
-      keywords: "power line, power lines, overhead line, hydro, electrical, electric, gas line, pipeline, water line, sewer, storm sewer, fibre, fiber, telecom, utility, utilities, manhole, vault, transformer",
-      control: cap185("Confirm locates and mark utilities before work. Keep metal poles/rods outside limits of approach and do not probe/dig without confirmation."),
-      f: 3, s: 4, p: 3
-    },
-    {
-      id: "digging",
-      priority: 75,
-      name: "Digging / excavation / digging pins",
-      keywords: "digging, dig, excavation, excavations, trench, trenches, trenching, post hole, auger, digging pin, digging pins, dig pin, dig pins",
-      control: cap185("Confirm utilities and hand-dig carefully near marks. Keep people/spoil back from edges, use correct tools for pins, and stop if locates/ground conditions are uncertain."),
-      f: 3, s: 4, p: 3
-    },
-    {
-      id: "jackhammer",
-      priority: 70,
-      name: "Jackhammer / breaking tools",
-      keywords: "jackhammer, jack hammer, breaker, demo hammer, demolition hammer, concrete breaking, pavement breaker, chipping hammer",
-      control: cap185("Wear eye/hearing/hand PPE, keep stable footing and both hands on the tool, control flying chips, take vibration breaks, and confirm no utilities below."),
-      f: 3, s: 3, p: 3
-    },
-    {
-      id: "generator",
-      priority: 60,
       name: "Portable generators",
       keywords: "generator, generators, genny, portable generator, gen set, genset",
-      control: cap185("Run generators outdoors on level ground away from doors/intakes, route cords to prevent trips, and refuel only when off, cooled, and ventilated."),
-      f: 2, s: 4, p: 2
-    },
-    {
-      id: "manual_handling",
-      priority: 40,
-      name: "Tools / manual handling",
-      keywords: "tripod, tripods, rod, prism, total station, gnss, gps, pole, battery, batteries, heavy, lift, lifting, carry, carrying, strain, back, shoulder, extension cord, cords, cable, cables",
-      control: cap185("Use safe lifting and split heavy loads. Check clamps/straps before use and manage cords and sharp tools to prevent trips and cuts."),
-      f: 4, s: 2, p: 3
+      control: "Set the generator outdoors on level ground away from doors and air intakes, route cords so they do not create trip hazards, and refuel only when the unit is off, cooled, and in a well-ventilated area."
     }
   ];
 
@@ -1593,176 +1752,76 @@
       .trim();
   }
 
-  function tokenize(text) {
-    const t = normalize(text);
-    if (!t) return [];
-    return t.split(" ").filter(Boolean);
-  }
-
-  function phraseScore(hText, phrase) {
-    // Prefer exact phrase hits, then word hits
-    const h = normalize(hText);
-    const p = normalize(phrase);
-    if (!p) return 0;
-    if (h.includes(p)) return 12; // strong phrase match
-    // otherwise partial word match
-    const parts = p.split(" ").filter(Boolean);
-    let sc = 0;
-    parts.forEach(w => { if (w.length > 2 && h.includes(w)) sc += 2; });
-    return sc;
-  }
-
-  function getBestRule(hazardText) {
+  function getSuggestionFromRules(hazardText) {
     const text = normalize(hazardText);
-    if (!text) return null;
+    if (!text) return "";
 
-    let best = null;
-    let bestScore = -1;
+    let bestIndex = -1;
+    let bestScore = 0;
 
-    for (const rule of hazardRules) {
-      const kws = (rule.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
+    hazardRules.forEach((rule, index) => {
+      const keywords = (rule.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
       let score = 0;
 
-      // priority baseline so "construction fencing" wins over generic "traffic"
-      score += (rule.priority || 0) * 0.25;
+      keywords.forEach(kw => {
+        const normKw = normalize(kw);
+        if (!normKw) return;
 
-      for (const kw of kws) score += phraseScore(text, kw);
+        // Score exact/phrase match higher
+        if (text.includes(normKw)) score += 6;
+        else {
+          const parts = normKw.split(" ");
+          parts.forEach(part => {
+            if (part.length > 3 && text.includes(part)) score += 1;
+          });
+        }
+      });
 
-      // tie-breaker: longer keyword phrases favored
-      const lenBoost = Math.min(8, Math.floor(text.length / 8));
-      score += lenBoost * 0.2;
+      if (score > bestScore) { bestScore = score; bestIndex = index; }
+    });
 
-      if (score > bestScore) { bestScore = score; best = rule; }
-    }
-
-    // Require a minimum score so random text doesn't pick a rule
-    if (bestScore < 6) return null;
-    return best;
-  }
-
-  function autoFillFSP(row, rule) {
-    const fInput = document.querySelector(`input[name="f_${row}"]`);
-    const sInput = document.querySelector(`input[name="s_${row}"]`);
-    const pInput = document.querySelector(`input[name="p_${row}"]`);
-
-    if (!rule) return;
-
-    // only fill if blank (so users can override)
-    if (fInput && !fInput.value) fInput.value = String(rule.f || "");
-    if (sInput && !sInput.value) sInput.value = String(rule.s || "");
-    if (pInput && !pInput.value) pInput.value = String(rule.p || "");
-
-    updateRiskForRow(row);
+    if (bestIndex >= 0 && bestScore > 0) return hazardRules[bestIndex].control || "";
+    return "";
   }
 
   function initHazardAutoSuggest() {
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
-      input.addEventListener('blur', e => {
+      input.addEventListener("blur", e => {
         const hazardText = e.target.value.trim();
-        const parts = e.target.name.split('_');
-        const row = parts[1];
+        const row = e.target.name.split("_")[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+        const rField = document.querySelector(`input[name="r_${row}"]`);
         if (!controlField) return;
 
-        // If hazard cleared -> clear control + risk
         if (!hazardText) {
-          clearRowRiskAndControl(row);
+          controlField.value = "";
+          if (rField) rField.value = "";
           return;
         }
 
-        const rule = getBestRule(hazardText);
-        if (rule) {
-          // Only overwrite controls if user hasn't written much
-          if (!controlField.value || controlField.value.trim().length < 40) controlField.value = rule.control || "";
-          autoFillFSP(row, rule);
-        }
+        if (controlField.value && controlField.value.length > 40) return;
+
+        const suggestion = getSuggestionFromRules(hazardText);
+        if (suggestion) controlField.value = suggestion;
       });
 
-      input.addEventListener('input', e => {
+      input.addEventListener("input", e => {
         const value = e.target.value.trim();
-        const parts = e.target.name.split('_');
-        const row = parts[1];
+        const row = e.target.name.split("_")[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+        const rField = document.querySelector(`input[name="r_${row}"]`);
+        if (!controlField) return;
 
-        // Clear when hazard is deleted
-        if (!value) clearRowRiskAndControl(row);
-
-        // Optional: live update risk when user edits hazard text after auto-fill
-        if (controlField && !value) controlField.value = "";
+        // When user deletes hazard, clear control + risk rating (requested behavior)
+        if (!value) {
+          controlField.value = "";
+          if (rField) rField.value = "";
+        }
       });
     });
   }
 
   initHazardAutoSuggest();
-
-  // =========================
-  //  EMERGENCY RESPONSE AUTOCOMPLETE (self-contained list)
-  //  - Select facility -> fills: phone=911, procedures template with selected facility + address
-  //  - Works on iPad + PC (custom dropdown, not datalist)
-  // =========================
-
-  const MEDICAL_FACILITIES = [{"name":"Foothills Medical Centre","abbr":"FMC","type":"Hospital","address":"1403 29 St NW","city":"Calgary","postal":"T2N 2T9"},{"name":"Alberta Children's Hospital","abbr":"ACH","type":"Hospital","address":"28 Oki Dr NW","city":"Calgary","postal":"T3B 6A8"},{"name":"Peter Lougheed Centre","abbr":"PLC","type":"Hospital","address":"3500 26 Ave NE","city":"Calgary","postal":"T1Y 6J4"},{"name":"Rockyview General Hospital","abbr":"RGH","type":"Hospital","address":"7007 14 St SW","city":"Calgary","postal":"T2V 1P9"},{"name":"South Health Campus","abbr":"SHC","type":"Hospital","address":"4448 Front St SE","city":"Calgary","postal":"T3M 1M4"},{"name":"Sheldon M. Chumir Health Centre","abbr":"SMCHC","type":"Urgent Care / Community Health","address":"1213 4 St SW","city":"Calgary","postal":"T2R 0X7"},{"name":"Richmond Road Diagnostic and Treatment Centre","abbr":"RRDTC","type":"Urgent Care / Community Health","address":"1820 Richmond Rd SW","city":"Calgary","postal":"T2T 5C7"},{"name":"Airdrie Urgent Care","abbr":"AUC","type":"Urgent Care / Community Health","address":"604 Main St S","city":"Airdrie","postal":"T4B 3E2"},{"name":"Okotoks Health and Wellness Centre","abbr":"OHWC","type":"Urgent Care / Community Health","address":"11 Cimarron Common","city":"Okotoks","postal":"T1S 2E5"},{"name":"High River Hospital","abbr":"HRH","type":"Hospital","address":"560 9 Ave W","city":"High River","postal":"T1V 1B3"},{"name":"Didsbury District Health Services","abbr":"DDHS","type":"Hospital","address":"2221 20 Ave","city":"Didsbury","postal":"T0M 0W0"},{"name":"Canmore General Hospital","abbr":"CGH","type":"Hospital","address":"2000 Hospital Pl","city":"Canmore","postal":"T1W 1N2"},{"name":"Banff Mineral Springs Hospital","abbr":"BMSH","type":"Hospital","address":"305 Lynx St","city":"Banff","postal":"T1L 1C1"},{"name":"Strathmore Hospital","abbr":"STH","type":"Hospital","address":"200 Brent Blvd","city":"Strathmore","postal":"T1P 1J9"},{"name":"Claresholm General Hospital","abbr":"CLGH","type":"Hospital","address":"431 S Railway Ave","city":"Claresholm","postal":"T0L 0T0"},{"name":"Nanton Community Health Centre","abbr":"NCHC","type":"Urgent Care / Community Health","address":"430 Centre St","city":"Nanton","postal":"T0L 1R0"},{"name":"Cochrane Community Health Centre","abbr":"CCHC","type":"Urgent Care / Community Health","address":"117 2 Ave W","city":"Cochrane","postal":"T4C 1A3"},{"name":"Siksika Health Services","abbr":"SHS","type":"Urgent Care / Community Health","address":"Siksika Nation, Hwy 1","city":"Siksika Nation","postal":"T0J 3W0"},{"name":"Chestermere Health Centre","abbr":"CHC","type":"Urgent Care / Community Health","address":"300 Merganser Dr W","city":"Chestermere","postal":"T1X 0L4"},{"name":"Dunmore Health Centre","abbr":"DHC","type":"Urgent Care / Community Health","address":"100 Dunmore Rd SE","city":"Medicine Hat","postal":"T1B 2S4"},{"name":"Medicine Hat Regional Hospital","abbr":"MHRH","type":"Hospital","address":"666 5 St SW","city":"Medicine Hat","postal":"T1A 4H6"},{"name":"Lethbridge Regional Hospital","abbr":"LRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Chinook Regional Hospital","abbr":"CRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Taber Health Centre","abbr":"THC","type":"Urgent Care / Community Health","address":"4326 50 Ave","city":"Taber","postal":"T1G 1N9"},{"name":"Brooks Health Centre","abbr":"BHC","type":"Hospital","address":"440 3 St E","city":"Brooks","postal":"T1R 0J3"},{"name":"Vulcan Community Health Centre","abbr":"VCHC","type":"Urgent Care / Community Health","address":"318 Centre St S","city":"Vulcan","postal":"T0L 2B0"},{"name":"Three Hills Health Centre","abbr":"THHC","type":"Urgent Care / Community Health","address":"1020 2 St N","city":"Three Hills","postal":"T0M 2A0"},{"name":"Olds Hospital and Care Centre","abbr":"OHCC","type":"Hospital","address":"3901 57 Ave","city":"Olds","postal":"T4H 1S9"},{"name":"Rocky Mountain House Health Centre","abbr":"RMHHC","type":"Urgent Care / Community Health","address":"5000 50 St","city":"Rocky Mountain House","postal":"T4T 1A5"},{"name":"Sundre Hospital and Care Centre","abbr":"SHCC","type":"Hospital","address":"101 1 Ave NW","city":"Sundre","postal":"T0M 1X0"}];
-
-  const facilityInput = document.getElementById("nearest_hospital");
-  const facilitySuggest = document.getElementById("facilitySuggest");
-  const phoneInput = document.getElementById("hospital_phone");
-  const procTextarea = document.getElementById("emergency_procedures");
-
-  function facilityLabel(f) {
-    const ab = f.abbr ? ` (${f.abbr})` : "";
-    const addr = [f.address, f.city, f.postal].filter(Boolean).join(", ");
-    return { title: `${f.name}${ab}`, meta: `${f.type || "Facility"} • ${addr}`.trim(), addr };
-  }
-
-  function renderFacilitySuggestions(list) {
-    facilitySuggest.innerHTML = "";
-    if (!list.length) { facilitySuggest.style.display = "none"; return; }
-
-    list.slice(0, 12).forEach(f => {
-      const item = document.createElement("div");
-      item.className = "suggest-item";
-      const lab = facilityLabel(f);
-      item.innerHTML = `<div><strong>${lab.title}</strong></div><div class="suggest-meta">${lab.meta}</div>`;
-      item.addEventListener("mousedown", (e) => { e.preventDefault(); selectFacility(f); });
-      item.addEventListener("click", () => selectFacility(f));
-      facilitySuggest.appendChild(item);
-    });
-
-    facilitySuggest.style.display = "block";
-  }
-
-  function searchFacilities(q) {
-    const n = normalize(q);
-    if (!n) return MEDICAL_FACILITIES.slice(); // show all on empty (so full list is available)
-    return MEDICAL_FACILITIES.filter(f => {
-      const hay = normalize(`${f.name} ${f.abbr} ${f.type} ${f.address} ${f.city} ${f.postal}`);
-      return hay.includes(n);
-    });
-  }
-
-  function selectFacility(f) {
-    const lab = facilityLabel(f);
-    facilityInput.value = lab.title;
-    facilitySuggest.style.display = "none";
-
-    // Auto-fill phone + procedures
-    if (phoneInput) phoneInput.value = "911";
-
-    const addrFull = [f.name, f.address, f.city, f.postal].filter(Boolean).join(", ");
-    const template =
-      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${addrFull} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
-
-    if (procTextarea) procTextarea.value = template;
-  }
-
-  if (facilityInput) {
-    facilityInput.addEventListener("focus", () => renderFacilitySuggestions(searchFacilities(facilityInput.value)));
-    facilityInput.addEventListener("input", () => renderFacilitySuggestions(searchFacilities(facilityInput.value)));
-    facilityInput.addEventListener("blur", () => setTimeout(() => { facilitySuggest.style.display = "none"; }, 140));
-    document.addEventListener("click", (e) => {
-      if (!facilitySuggest.contains(e.target) && e.target !== facilityInput) facilitySuggest.style.display = "none";
-    });
-  }
 </script>
 </body>
 </html>
