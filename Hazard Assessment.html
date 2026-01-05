@@ -1423,15 +1423,7 @@
       "Establish exclusion zones and communicate with the operator, never approach the nozzle without permission, and stop if control is lost."
     ]
   },
-  {
-    "name": "Fire and Heat Hazard Near Welding Operations",
-    "keywords": "fire,fires,heat,hot,welding,weld,welds,arc flash,slag,sparks,shield,shields,FR PPE,leather gloves,burn,burns,ignite,ignition,welding operations",
-    "risk": { "F": 3, "S": 3, "P": 1, "R": 5 },
-    "controls": [
-      "Use welding shields to block arc flash and slag, wear FR PPE near welding, and avoid looking at the arc.",
-      "Watch for sparks and hot materials, wear leather gloves when handling, and keep combustibles clear of the welding area."
-    ]
-  },
+ 
   {
     "name": "Injuries resulting from the improper use of a chainsaw.",
     "keywords": "chainsaw,chainsaws,saw,saws,cut,cutting,kickback,kickbacks,PPE,authorization,authorized,spotter,spotters,communication,crew,crews,party chief,party chiefs,improper use chainsaw",
@@ -1525,7 +1517,7 @@
   },
   {
     "name": "Heat Stress",
-    "keywords": "heat,hot,heat stress,overheat,overheating,dehydration,dehydrate,sweat,sweating,dizzy,dizziness,nausea,disorientation,rest,shade,water,fluids,cool,cooling,medical assistance",
+    "keywords": "heat,heat stress,overheat,overheating,dehydration,dehydrate,sweat,sweating,dizzy,dizziness,nausea,disorientation,rest,shade,water,fluids,cool,cooling,medical assistance",
     "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
     "controls": [
       "Watch for heat stress signs (dizziness, heavy sweating, nausea, disorientation), stop work, cool down, drink fluids, and rest.",
@@ -1638,46 +1630,66 @@
   }
 
   function scoreEntry(entry, hazardNorm, hazardTokens) {
-    let score = 0;
-    const hs = new Set(hazardTokens);
-    const kws = getKeywordsArray(entry);
+  let score = 0;
+  const hs = new Set(hazardTokens);
+  const kws = getKeywordsArray(entry);
 
-    // Phrase match: if a multi-word keyword appears in hazard text
-    kws.forEach(k => {
-      const kn = normalize(k);
-      if (!kn) return;
-      if (kn.includes(" ") && hazardNorm.includes(kn)) score += 18;
-    });
+  let matchedTokens = 0;
 
-    // Token overlap between hazard tokens and keyword tokens
-    kws.forEach(k => {
-      tokens(k).forEach(t => { if (hs.has(t)) score += 2; });
-    });
+  for (const k of kws) {
+    const kn = normalize(k);
+    if (!kn) continue;
 
-    // Small boost if hazard contains tokens from the hazard name
-    tokens(entry.name).forEach(t => { if (hs.has(t)) score += 2; });
-
-    return score;
-  }
-
-  function bestEntryForHazard(hazardText) {
-    const hazardNorm = normalize(hazardText);
-    if (!hazardNorm) return null;
-
-    const htoks = tokens(hazardText);
-    let best = null;
-    let bestScore = 0;
-
-    for (const entry of HAZARD_LIBRARY) {
-      const s = scoreEntry(entry, hazardNorm, htoks);
-
-      if (s > bestScore) { bestScore = s; best = entry; }
+    if (hazardNorm === kn) {
+      score += 30;
+      matchedTokens += 2;
+      continue;
     }
 
-    // minimum confidence to prevent wrong matches
-    if (!best || bestScore < 8) return null;
-    return best;
+    if (kn.includes(" ") && hazardNorm.includes(kn)) {
+      score += 18;
+      matchedTokens += 2;
+      continue;
+    }
+
+    const ktoks = tokens(k);
+    for (const t of ktoks) {
+      if (hs.has(t)) {
+        matchedTokens++;
+        score += (ktoks.length === 1 ? 8 : 2);
+      }
+    }
   }
+
+  for (const t of tokens(entry.name)) {
+    if (hs.has(t)) {
+      matchedTokens++;
+      score += 2;
+    }
+  }
+
+  if (matchedTokens >= 2) score += 4;
+  if (matchedTokens >= 3) score += 6;
+
+  return score;
+}
+
+function bestEntryForHazard(hazardText) {
+  const hazardNorm = normalize(hazardText);
+  if (!hazardNorm) return null;
+
+  const htoks = tokens(hazardText);
+  let best = null;
+  let bestScore = 0;
+
+  for (const entry of HAZARD_LIBRARY) {
+    const s = scoreEntry(entry, hazardNorm, htoks);
+    if (s > bestScore) { bestScore = s; best = entry; }
+  }
+
+  if (!best || bestScore < 8) return null;
+  return best;
+}
 
   function clearRow(row) {
     const f = document.querySelector(`input[name="f_${row}"]`);
