@@ -518,6 +518,7 @@
             <label>Other: <input type="text" name="ppe_other" style="width:160px;"></label>
           </div>
 
+
         </div>
       </div>
     </div>
@@ -639,7 +640,6 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 6 rows -->
             <tr>
               <td><input type="text" name="task_1" /></td>
               <td><input type="text" name="hazard_1" placeholder="e.g. dog, traffic, construction fencing, digging, generator" /></td>
@@ -666,7 +666,6 @@
               <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
               <td><textarea name="control_3" class="control-text"></textarea></td>
-
             </tr>
             <tr>
               <td><input type="text" name="task_4" /></td>
@@ -785,7 +784,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.2</div>
+<div class="version-stamp" id="versionStamp">v3.3</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -941,7 +940,6 @@
       });
       document.querySelectorAll('.risk-output').forEach(o => o.value = "");
       userChosenFileName = "";
-      // clear ER autofill
       clearEmergencyAutofill();
     });
   }
@@ -1012,15 +1010,12 @@
     const q = normalizeFacilityKey(query);
     if (!q) return null;
 
-    // exact abbr
     let f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.abbr) === q);
     if (f) return f;
 
-    // exact name
     f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.name) === q);
     if (f) return f;
 
-    // strong prefix (name)
     if (q.length >= 3) {
       f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.name).startsWith(q));
       if (f) return f;
@@ -1063,9 +1058,536 @@
 
   // ============================================================
   // HAZARD LIBRARY (OFFLINE, SELF-CONTAINED)
-  // - Each entry has: name, keywords[], ratings{f,s,p}, controls[2]
-  // - Controls are <=185 characters
+  // - Each entry has: name, keywords (string or array), risk{F,S,P,R}, controls[2]
+  // - Controls are clipped to keep export tidy
   // ============================================================
+
+  const HAZARD_LIBRARY = [
+    {
+      name: "Employees not fit for duty",
+      keywords: "employee,employees,fit,fits,duty,duties,fitness,drug,drugs,alcohol,fatigue,policy,impairment,employees not fit for duty",
+      risk: { F: 1, S: 5, P: 1, R: 5 },
+      controls: [
+        "Follow Vista Geomatics drug and alcohol policy and Fatigue Management Program, report unfit-for-duty concerns immediately.",
+        "Verify fitness before starting work, monitor for impairment, and use Stop Work Authority if anyone is unfit or unsafe."
+      ]
+    },
+    {
+       "name": "Unsuitable PPE",
+    "keywords": "ppe,ppes,unsuitable,unsuitables,glasses,glass,hard hat,hard hats,boots,boot,steel toe,steel toes,vest,vests,hi vis,high visibility,CSA,CSAs,unsuitable PPE",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Wear required CSA PPE, safety glasses, hard hat, 6 in steel-toe boots, and reflective survey vest or jacket before starting work.",
+      "Inspect PPE for damage and fit, replace defective items, and confirm site-specific PPE requirements during the pre-job review."
+    ]
+  },
+  {
+    "name": "Overall Workplace Safety",
+    "keywords": "safety,safeties,workplace,workplaces,rules,rule,site,sites,compliance,compliances,awareness,awarenesses,housekeeping,communication,communications,overall workplace safety",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Communicate company and site rules, confirm worker awareness, and reinforce safe practices and compliance throughout the shift.",
+      "Complete pre-job hazard review, maintain housekeeping, correct unsafe acts or conditions immediately, and stop work when controls fail."
+    ]
+  },
+  {
+    "name": "Unfamiliar with Task at Hand",
+    "keywords": "unfamiliar,unfamiliars,task,tasks,procedure,procedures,training,trainings,competency,competencies,briefing,briefings,stop work,authority,unfamiliar with task at hand",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Ensure workers understand the task procedures before starting, review steps, hazards, and required controls for the work.",
+      "Confirm competency and supervision, ask questions when unsure, and use Stop Work Authority if the task cannot be done safely."
+    ]
+  },
+  {
+    "name": "Unfamiliar task/conditions",
+    "keywords": "unfamiliar,unfamiliars,conditions,condition,scope,scopes,hazard assessment,hazard assessments,FLHA,FLHAs,reassess,reassesses,change,changes,supervisor,supervisors,unfamiliar task/conditions",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Review scope of work and hazard assessment with all participants, and reassess whenever conditions change.",
+      "If unsure, contact your supervisor before proceeding, confirm controls are effective, and stop work if hazards are not controlled."
+    ]
+  },
+  {
+    "name": "Incorrect or incomplete information supplied to permit dispatcher",
+    "keywords": "permit,permits,dispatcher,dispatchers,information,infos,incomplete,incompletes,incorrect,incorrects,receiver,receivers,training,trainings,duties,duty,responsibilities,responsibility,permit dispatcher",
+    "risk": { "F": 2, "S": 1, "P": 3, "R": 5 },
+    "controls": [
+      "Ensure the permit receiver is trained, provides complete and accurate information, and understands all duties and responsibilities.",
+      "Verify permit details before dispatch, clarify uncertainties immediately, and document changes so the dispatcher has current info."
+    ]
+  },
+  {
+    "name": "Lack of Knowledge/Training",
+    "keywords": "knowledge,knowledges,training,trainings,competent,competents,qualified,qualifieds,competency,competencies,orientation,orientations,coach,coaches,supervision,supervisions,lack of knowledge/training",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Match training to the task and assign competent, qualified workers for the work being performed.",
+      "Provide coaching and supervision as needed, verify understanding before work starts, and do not assign tasks beyond competency."
+    ]
+  },
+  {
+    "name": "Stress from factors such as lack of job control, bullying, not knowing their role etc.",
+    "keywords": "stress,stresses,bullying,bullies,harassment,harassments,role,roles,job control,workload,workloads,mental health,wellbeing,report,reports,confidential,confidentially,work stress",
+    "risk": { "F": 1, "S": 4, "P": 1, "R": 5 },
+    "controls": [
+      "Speak confidentially to your manager or supervisor (no-blame) if you feel unwell, unsafe, or stressed due to work factors.",
+      "Clarify roles and expectations early, address bullying promptly, and access support resources through HR or HSE as needed."
+    ]
+  },
+  {
+    "name": "Violence on the workplace",
+    "keywords": "violence,violences,workplace,workplaces,threat,threats,assault,assaults,aggressive,aggressions,911,help,helps,report,reports,HR,policy,policies,workplace violence",
+    "risk": { "F": 2, "S": 4, "P": 2, "R": 5 },
+    "controls": [
+      "Leave dangerous situations and call for help, call 911 for immediate threats, avoid escalation, and report all violence to HR or supervisor.",
+      "Follow the workplace violence policy, use de-escalation where safe, and document and report threats, intimidation, or incidents."
+    ]
+  },
+  {
+    "name": "Harassment in the workplace",
+    "keywords": "harassment,harassments,workplace,workplaces,bully,bullies,unwelcome,conduct,behaviour,behavior,report,reports,record,records,HR,HSE,supervisor,supervisors,harassment policy",
+    "risk": { "F": 2, "S": 4, "P": 2, "R": 5 },
+    "controls": [
+      "Tell the harasser the behaviour is unwelcome and must stop, document incidents, and report to HSE, supervisor, or President.",
+      "Follow the harassment policy, keep records of dates and details, and seek support promptly so issues are addressed early."
+    ]
+  },
+  {
+    "name": "Mechanical Failure",
+    "keywords": "mechanical,mechanicals,failure,failures,vehicle,vehicles,breakdown,breakdowns,inspection,inspections,pretrip,pre-trip,checklist,checklists,maintenance,maintenances,mechanical failure",
+    "risk": { "F": 2, "S": 1, "P": 3, "R": 5 },
+    "controls": [
+      "Inspect vehicles daily, complete pre-trip checks, and complete the Monthly Vehicle Checklist as required.",
+      "Report defects immediately, remove unsafe vehicles from service, and ensure repairs are completed before returning to operation."
+    ]
+  },
+  {
+    "name": "Collision with other vehicles or personnel",
+    "keywords": "collision,collisions,vehicle,vehicles,pedestrian,pedestrians,spotter,spotters,confined,unfamiliar,defensive,driving,vigilance,right of way,parking,traffic,other vehicles or personnel",
+    "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
+    "controls": [
+      "Drive defensively, stay vigilant, yield to pedestrians, and use a spotter in confined or unfamiliar areas.",
+      "Slow down in pedestrian zones, maintain safe separation, and stop operations if visibility or control is inadequate."
+    ]
+  },
+  {
+    "name": "Non-compliance with site traffic regulations",
+    "keywords": "traffic,traffics,regulation,regulations,sign,signs,signage,ROW,intersection,intersections,right of way,heavy equipment,bus,buses,emergency vehicle,site rules,non-compliance traffic",
+    "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
+    "controls": [
+      "Follow posted signage and site traffic rules, yield right of way to heavy equipment, buses, and emergency vehicles on the ROW.",
+      "Drive at safe speeds for conditions, confirm route rules during site orientation, and stop if unsure of traffic requirements."
+    ]
+  },
+  {
+    "name": "Icy or Slippery Road Conditions",
+    "keywords": "icy,ice,slippery,slips,road,roads,winter,winters,4x4,traction,braking,stopping distance,following distance,speed,speeds,icy road conditions",
+    "risk": { "F": 2, "S": 4, "P": 3, "R": 5 },
+    "controls": [
+      "Use 4x4 as needed, reduce speed for conditions, and increase stopping and following distance on icy or slippery roads.",
+      "Avoid sudden inputs, plan braking early, and postpone travel if conditions are unsafe or outside driver and vehicle capability."
+    ]
+  },
+  {
+    "name": "Distracted Driving",
+    "keywords": "distracted,distracts,driving,drive,phone,phones,cellular,cell,gps,device,devices,text,texts,call,calls,electronic,electronics,roadside, distracted driving",
+    "risk": { "F": 1, "S": 5, "P": 1, "R": 5 },
+    "controls": [
+      "Do not use phones, GPS, or devices while driving, only operate electronics when stopped and safely pulled off the roadway.",
+      "Set routes before driving, silence notifications, and pull over safely if a call, message, or navigation update is needed."
+    ]
+  },
+  {
+    "name": "Debris Falling From Other Vehicles",
+    "keywords": "debris,debri,falling,falls,load,loads,material,materials,following distance,traffic,vehicle,vehicles,windshield,windshields,road hazard,road hazards, debris falling",
+    "risk": { "F": 1, "S": 3, "P": 3, "R": 5 },
+    "controls": [
+      "Maintain safe following distance, at least three vehicle lengths, and stay alert for falling debris or unsecured loads ahead.",
+      "Scan far ahead, avoid tailgating, and change lanes or slow down when approaching trucks or vehicles carrying loose materials."
+    ]
+  },
+  {
+    "name": "Soil Contamination from Leaks and Spills",
+    "keywords": "spill,spills,leak,leaks,contamination,contaminations,soil,soils,fuel,fuels,oil,oils,hydraulic,hydraulics,report,reports,cleanup,containment,spill kit",
+    "risk": { "F": 1, "S": 1, "P": 3, "R": 5 },
+    "controls": [
+      "Report spills immediately, inspect vehicles daily, repair deficiencies promptly, and carry a spill containment kit in each vehicle.",
+      "Stop the source if safe, contain and clean up per procedure, and dispose of contaminated materials according to requirements."
+    ]
+  },
+  {
+    "name": "Rough or Uneven Terrain",
+    "keywords": "rough,roughs,uneven,unevens,terrain,terrains,obstacle,obstacles,slope,slopes,steep,steeps,route,routes,scan,scans,offroad,off-road,rollover,rollovers",
+    "risk": { "F": 3, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Scan the route for obstacles, drive at reduced speed, choose safer routes where possible, and avoid steep slopes.",
+      "Use a spotter where needed, maintain control and clearance, and stop and reassess if terrain risks exceed safe limits."
+    ]
+  },
+  {
+    "name": "Driving at Night or in Reduced Visibility",
+    "keywords": "night,nights,visibility,visibilities,fog,fogs,dark,darks,headlight,headlights,high beam,beacon,buggy whip,lights,mirrors,windows,following distance,speed reduction",
+    "risk": { "F": 4, "S": 5, "P": 2, "R": 4 },
+    "controls": [
+      "Reduce speed, double following distance, use high beams when appropriate, and use beacon and buggy whip on site for visibility.",
+      "Ensure lights, windows, and mirrors are clean and working, and stop driving if visibility becomes unsafe."
+    ]
+  },
+  {
+    "name": "Driver Distraction",
+    "keywords": "distraction,distractions,driver,drivers,phone,phones,text,texts,email,emails,focus,focused,attention,attentions,pull over,park,parking,driver distraction",
+    "risk": { "F": 3, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Drive free of distractions, no calls, texts, or emails while moving, pull over and park safely if attention is compromised.",
+      "Plan communications before travel, set device to do-not-disturb, and take breaks if fatigue or stress affects focus."
+    ]
+  },
+  {
+    "name": "Wildlife Encounter",
+    "keywords": "wildlife,wildlifes,animal,animals,deer,deers,moose,mooses,bear,bears,ditch,ditches,tree line,tree lines,scan,scans,avoid,avoids,collision,collisions,wildlife encounter",
+    "risk": { "F": 2, "S": 3, "P": 3, "R": 5 },
+    "controls": [
+      "Watch for wildlife while driving, scan ditches and treelines, and slow down where wildlife activity is likely.",
+      "Avoid swerving into other lanes, brake smoothly, and report significant wildlife hazards per site or company procedures."
+    ]
+  },
+  {
+    "name": "Collision with Vehicles Personnel, or Structures,",
+    "keywords": "collision,collisions,reversing,reverse,backing,backup,spotter,spotters,horn,horns,alarm,alarms,structure,structures,parking,turnaround,objects,object,vehicles personnel structures",
+    "risk": { "F": 2, "S": 2, "P": 2, "R": 5 },
+    "controls": [
+      "When reversing, check behind, use a spotter when practicable, and sound horn twice if no site horn rules exist.",
+      "Follow site backing procedures, maintain line of sight, and stop immediately if the spotter is lost or hazards appear."
+    ]
+  },
+  {
+    "name": "Muscle Strains and Injury",
+    "keywords": "muscle,muscles,strain,strains,sprain,sprains,injury,injuries,lift,lifts,lifting,twist,twists,bend,bends,warm up,warm ups,stretch,stretches,material handling,back injury",
+    "risk": { "F": 5, "S": 2, "P": 2, "R": 5 },
+    "controls": [
+      "Warm up and stretch before lifting, use proper lifting technique, avoid bending or twisting, and use help or aids for heavy loads.",
+      "Plan lifts, keep loads close, use team lifts when needed, and take breaks to prevent overexertion and repetitive strain."
+    ]
+  },
+  {
+    "name": "Pinch and Crush Injuries to Hands and Feet",
+    "keywords": "pinch,pinches,crush,crushes,hand,hands,finger,fingers,foot,feet,toolbox,toolboxes,drawer,drawers,tailgate,tailgates,door,doors,material,materials,lowering,loading",
+    "risk": { "F": 5, "S": 2, "P": 2, "R": 5 },
+    "controls": [
+      "Open and close doors, drawers, and tailgates using handles, plan lifts, and keep hands and feet clear when lowering materials.",
+      "Wear gloves and safety boots, use clear communication during moves, and never place hands or feet under suspended or moving items."
+    ]
+  },
+  {
+    "name": "Hazardous Materials",
+    "keywords": "hazardous,hazardous materials,chemical,chemicals,SDS,SDSs,MSDS,MSDSs,consult,consults,exposure,exposures,storage,storages,handling,handlings,spill,spills",
+    "risk": { "F": 2, "S": 3, "P": 1, "R": 5 },
+    "controls": [
+      "Consult the current SDS or MSDS before using any chemical or hazardous material, and follow the listed precautions.",
+      "Use required PPE and ventilation, label and store products correctly, and report spills or exposures immediately."
+    ]
+  },
+  {
+    "name": "Walking on Uneven Ground – Slips, Trips and Falls",
+    "keywords": "walking,walks,uneven,unevens,ground,grounds,slip,slips,trip,trips,fall,falls,slope,slopes,route,routes,footing,footings,walking aid,walking aids,slips trips falls",
+    "risk": { "F": 5, "S": 2, "P": 3, "R": 4 },
+    "controls": [
+      "Take the safest route, avoid slopes where possible, scan for loose material, and use walking aids when needed.",
+      "Keep three points of contact on steep or unstable areas, slow down, and stop work if footing cannot be made safe."
+    ]
+  },
+  {
+    "name": "Icy or Slippery Ground",
+    "keywords": "icy,ice,slippery,slip,slips,ground,grounds,mud,muddy,traction,boot,boots,YakTrax,walking aid,walking aids,sand,ice melt,freeze,freezes",
+    "risk": { "F": 3, "S": 2, "P": 3, "R": 5 },
+    "controls": [
+      "Wear high-traction boots, walk slowly on slippery surfaces, avoid icy areas where possible, and apply traction sand or ice melt when allowed.",
+      "Use traction aids like YakTrax where permitted, use walking aids, and stop work if slip risk cannot be controlled."
+    ]
+  },
+  {
+    "name": "Traffic Collision with Vehicle and Mobile Equipment Traffic",
+    "keywords": "traffic,traffics,collision,collisions,road,roads,vehicle,vehicles,mobile equipment,cones,signage,signs,high visibility,reflective,vest,vests,hard hat striping,work zone,work zones",
+    "risk": { "F": 2, "S": 3, "P": 1, "R": 5 },
+    "controls": [
+      "Avoid working near roads when possible, wear high-visibility PPE, and set cones or signage to warn traffic.",
+      "Establish a safe work zone, keep escape routes, face traffic when feasible, and stop work if controls are insufficient."
+    ]
+  },
+  {
+    "name": "Equipment Damage",
+    "keywords": "equipment,equipments,damage,damages,traffic,traffics,pedestrian,pedestrians,unattended,cone,cones,flagging,barricade,barricades,demarcate,demarcation,total station,total stations,GPS,GNSS",
+    "risk": { "F": 3, "S": 1, "P": 3, "R": 5 },
+    "controls": [
+      "Place equipment clear of vehicle and pedestrian traffic and do not leave it unattended unless the area is demarcated.",
+      "Use cones, flagging, or barricades, secure tripods, and position gear to avoid drive paths, blind spots, and pinch points."
+    ]
+  },
+  {
+    "name": "Exposure to Hazardous Atmospheres",
+    "keywords": "hazardous atmosphere,hazardous atmospheres,gas,gases,testing,tests,monitor,monitors,O2,oxygen,LEL,H2S,carbon monoxide,CO,air monitoring,personal monitor,FR PPE,H2S training",
+    "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
+    "controls": [
+      "If hazardous air is suspected, test before work and monitor O2, LEL, H2S, CO, and any identified chemicals.",
+      "Wear a personal gas monitor and FR PPE when required, ensure H2S and gas awareness training, and stop work if limits are exceeded."
+    ]
+  },
+  {
+    "name": "Wildlife Encounters",
+    "keywords": "wildlife,wildlifes,encounter,encounters,animal,animals,bear,bears,moose,mooses,report,reports,air horn,air horns,withdraw,withdraws,do not engage,site reporting,site procedures",
+    "risk": { "F": 2, "S": 3, "P": 3, "R": 5 },
+    "controls": [
+      "Stay aware for wildlife, report sightings immediately per site procedure, do not engage, and withdraw slowly to a safe location.",
+      "Use an air horn or yelling to deter animals when safe, keep groups together, and stop work until the area is safe."
+    ]
+  },
+  {
+    "name": "Fallout from Overhead Work",
+    "keywords": "overhead,overheads,fallout,fallouts,dropped object,dropped objects,look up,communication,crew,crews,coordination,FLHA,exchange,exchanges,overhead work",
+    "risk": { "F": 1, "S": 3, "P": 3, "R": 5 },
+    "controls": [
+      "Look up before entering the area, identify overhead hazards, and communicate with crews working above to coordinate work.",
+      "Exchange FLHA information, establish exclusion zones if needed, and do not work under overhead activity without controls."
+    ]
+  },
+  {
+    "name": "Sharp Edges and Protruding Materials",
+    "keywords": "sharp,sharps,edge,edges,protruding,protrusions,material,materials,caution tape,danger tape,cut,cuts,laceration,lacerations,glove,gloves,handle,handles,sharp edges",
+    "risk": { "F": 3, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Stay clear of sharp or protruding materials, mark off hazards with caution or danger tape, and plan work to avoid contact.",
+      "If handling is required, wear leather gloves, maintain control of materials, and use proper tools to prevent cuts or punctures."
+    ]
+  },
+  {
+    "name": "Tripping and Falling",
+    "keywords": "trip,trips,tripping,fall,falls,falling,snow,snows,hidden hazards,housekeeping,scan,scans,shovel,shovels,mark,marks,barricade,barricades,walkway,walkways",
+    "risk": { "F": 5, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Scan for trip hazards, clear loose materials where possible, and mark off areas that cannot be made safe.",
+      "In deep snow, shovel the work area first, use careful footing, and stop work if hazards remain hidden or uncontrolled."
+    ]
+  },
+  {
+    "name": "Wind-Blown or Flying Dust and Debris",
+    "keywords": "wind,windy,dust,dusts,debris,flying,eye,eyes,eyewear,goggles,sealed glasses,silt,sand,particles,respiratory,visibility,wind-blown debris",
+    "risk": { "F": 5, "S": 1, "P": 5, "R": 5 },
+    "controls": [
+      "Wear approved safety eyewear, use goggles or sealed glasses for fine particles, and stop work if dust or debris makes conditions unsafe.",
+      "Position upwind when possible, protect eyes and face, and secure loose materials to reduce airborne debris and impact hazards."
+    ]
+  },
+  {
+    "name": "Darkness, Poor Visibility",
+    "keywords": "darkness,darks,visibility,visibilities,poor visibility,lighting,light plant,headlights,helmet light,reflective,high visibility,PPE,striping,vest,vests,work light,work lights",
+    "risk": { "F": 4, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Wear high-visibility PPE with reflective striping and use added lighting such as light plants, headlights, or helmet lights as needed.",
+      "Confirm adequate lighting for tasks, slow movements, and stop work if you cannot clearly see hazards, edges, or equipment."
+    ]
+  },
+  {
+    "name": "Lines of Fire",
+    "keywords": "line of fire,lines of fire,between vehicles,behind vehicles,suspended load,suspended loads,load,loads,cable,cables,bight,bights,hand placement,tools,tool,crush,crushes,struck by",
+    "risk": { "F": 5, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Stay out of lines of fire, do not stand behind or between vehicles, and never work under suspended or shifting loads.",
+      "Keep clear of cable bights, watch hand placement on tools and materials, and maintain safe positioning and escape routes."
+    ]
+  },
+  {
+    "name": "Tool Failure",
+    "keywords": "tool,tools,failure,failures,inspection,inspections,defect,defects,damaged,damage,maintenance,replace,replacement,lockout,tagout,lock-out,tag-out,quarterly inspection",
+    "risk": { "F": 5, "S": 1, "P": 2, "R": 5 },
+    "controls": [
+      "Inspect tools before use, remove damaged tools from service immediately, and report for maintenance or replacement.",
+      "Complete documented quarterly tool inspections, follow lock-out/tag-out where applicable, and only use tools as intended."
+    ]
+  },
+  {
+    "name": "Noise",
+    "keywords": "noise,noises,hearing,ear,ears,earplug,earplugs,earmuff,earmuffs,decibel,decibels,80 dB,100 dB,double protection,hearing protection,auditory,auditorys",
+    "risk": { "F": 5, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Wear hearing protection when noise exceeds 80 dB, and use double protection (plugs and muffs) at or above 100 dB.",
+      "Limit exposure time, increase distance from noise sources, and report high-noise tasks so controls and PPE are confirmed."
+    ]
+  },
+  {
+    "name": "Hazardous Contact with Hydrovac Operations",
+    "keywords": "hydrovac,hydrovacs,suction hose,suction hoses,aspiration,aspirations,noise,noises,eye,eyes,hearing,face shield,face shields,exclusion zone,exclusion zones,hydrovac operations",
+    "risk": { "F": 3, "S": 5, "P": 1, "R": 5 },
+    "controls": [
+      "Wear hearing and eye protection, stay clear of the suction hose, and use face shields when close to hydrovac operations.",
+      "Establish exclusion zones and communicate with the operator, never approach the nozzle without permission, and stop if control is lost."
+    ]
+  },
+  {
+    "name": "Fire and Heat Hazard Near Welding Operations",
+    "keywords": "fire,fires,heat,hot,welding,weld,welds,arc flash,slag,sparks,shield,shields,FR PPE,leather gloves,burn,burns,ignite,ignition,welding operations",
+    "risk": { "F": 3, "S": 3, "P": 1, "R": 5 },
+    "controls": [
+      "Use welding shields to block arc flash and slag, wear FR PPE near welding, and avoid looking at the arc.",
+      "Watch for sparks and hot materials, wear leather gloves when handling, and keep combustibles clear of the welding area."
+    ]
+  },
+  {
+    "name": "Injuries resulting from the improper use of a chainsaw.",
+    "keywords": "chainsaw,chainsaws,saw,saws,cut,cutting,kickback,kickbacks,PPE,authorization,authorized,spotter,spotters,communication,crew,crews,party chief,party chiefs,improper use chainsaw",
+    "risk": { "F": 2, "S": 4, "P": 2, "R": 5 },
+    "controls": [
+      "Only authorized personnel may operate chainsaws with supervisor approval, maintain communication, and ensure at least two workers are present.",
+      "Confirm PPE and training, maintain situational awareness of people and equipment, and stop work if conditions create unsafe cutting risks."
+    ]
+  },
+  {
+    "name": "Muscle strains, pulls, and repetitive motion injuries.",
+    "keywords": "muscle,muscles,strain,strains,pull,pulls,repetitive,repetition,overuse,injury,injuries,stretch,stretches,warm-up,warm-ups,break,breaks,ergonomic,ergonomics,physical limits",
+    "risk": { "F": 2, "S": 4, "P": 2, "R": 5 },
+    "controls": [
+      "Stretch and warm up before and during physical activity, take frequent breaks, and know your physical limits.",
+      "Rotate tasks where possible, use proper body mechanics, and stop and report early discomfort before it becomes an injury."
+    ]
+
+  },
+  {
+    "name": "Injuries or property damage from lack of PPE.",
+    "keywords": "PPE,ppes,lack,missing,glove,gloves,boot,boots,cutting pants,face shield,hardhat,hard hat,hearing protection,eye protection,injury,injuries,property damage,chainsaw PPE",
+    "risk": { "F": 1, "S": 3, "P": 1, "R": 5 },
+    "controls": [
+      "Wear required PPE for chainsaw work, cutting pants, gloves, cutting boots, hard hat with face shield, hearing and eye protection.",
+      "Inspect PPE before use, replace damaged items, and stop work if PPE is missing, unsuitable, or does not meet task requirements."
+    ]
+  },
+  {
+    "name": "Working around lines and facilities",
+    "keywords": "lines,line,facility,facilities,substation,substations,limits of approach,LOA,escort,escorts,conductive,conductives,extendable,vertical,utilities,utility,electrical,electric,energized,working around lines",
+    "risk": { "F": 3, "S": 5, "P": 2, "R": 4 },
+    "controls": [
+      "Stay alert, know limits of approach, never enter a substation without an escort, and avoid conductive or vertically extendable equipment.",
+      "Confirm utility locations and site rules, maintain required clearances, and stop work immediately if limits of approach may be breached."
+    ]
+  },
+  {
+    "name": "Spoil Pile Collapse",
+    "keywords": "spoil,spoil pile,spoil piles,collapse,collapses,excavation,excavations,trench,trenches,edge,edges,setback,setbacks,slope,slopes,45 degree,1.5 metres,soil,soils,fall in,fall-ins",
+    "risk": { "F": 3, "S": 5, "P": 2, "R": 4 },
+    "controls": [
+      "Keep spoil piles at least 1.5 m from trench edges, slope to 45 degrees or step back, and keep debris out of the excavation.",
+      "Inspect spoil placement regularly, control water and vibration sources, and stop work if soil stability or setbacks are not maintained."
+    ]
+  },
+  {
+    "name": "Trench Wall Collapse",
+    "keywords": "trench,trenches,wall,walls,collapse,collapses,cave-in,cave-ins,shoring,shore,slope,sloping,45 degree,1:1,ladder,ladders,competent person,inspection,excavation,excavations",
+    "risk": { "F": 3, "S": 5, "P": 2, "R": 4 },
+    "controls": [
+      "Inspect trench walls and base before entry, ensure stability, and for depths over 1.2 m use shoring or 1:1 sloping plus a ladder within 8 m.",
+      "Keep people out until controls are in place, manage water and spoil setbacks, and have a competent person reassess after any change."
+    ]
+  },
+  {
+    "name": "Drowning",
+    "keywords": "drown,drowning,water,waters,body of water,bodies of water,life jacket,life jackets,PFD,PFDs,spotter,spotters,shoreline,shorelines,fall in,falls in,rescue,rescues",
+    "risk": { "F": 2, "S": 5, "P": 1, "R": 5 },
+    "controls": [
+      "Keep a safe distance from water, wear a life jacket when drowning hazard exists, and never work near water without a spotter.",
+      "Plan access and rescue options, avoid unstable banks and ice, and stop work if conditions increase drowning risk."
+    ]
+  },
+  {
+    "name": "Wind Chill",
+    "keywords": "wind,winds,wind chill,cold,colds,exposure,exposures,break,breaks,warm,warming,shelter,shelters,chart,charts,layer,layers,rotation,rotations,wind chill",
+    "risk": { "F": 2, "S": 3, "P": 3, "R": 5 },
+    "controls": [
+      "Check wind chill chart, adjust duty times, take regular warm-up breaks, and seek shelter from wind when possible.",
+      "Dress in layers, keep extremities covered, monitor symptoms, and stop work if cold stress cannot be managed safely."
+    ]
+  },
+  {
+    "name": "Frostbite",
+    "keywords": "frostbite,frostbites,cold,colds,numb,numbness,tingle,tingling,pain,pains,discoloration,skin,skins,extremity,extremities,monitor,monitors,warm,warming,first aid",
+    "risk": { "F": 2, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Monitor for early frostbite signs (tingling, numbness, pain, discoloration), stop work, and warm up in shelter if signs appear.",
+      "Limit exposure, keep skin covered and dry, rotate tasks, and seek first aid or medical help if symptoms persist."
+    ]
+  },
+  {
+    "name": "Extreme Cold / Hypothermia",
+    "keywords": "cold,colds,extreme cold,hypothermia,hypothermias,layer,layers,shiver,shivering,exposed skin,shelter,breaks,overexertion,sweat,sweating,stop work,client HSE,temperature,temperatures",
+    "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
+    "controls": [
+      "Dress in layers, limit exposed skin, warm up in shelter regularly, and avoid overexertion that causes sweating in cold conditions.",
+      "Monitor for hypothermia symptoms, follow Client HSE stop-work triggers, and get help immediately if confusion or severe shivering occurs."
+    ]
+  },
+  {
+    "name": "Heat Stress",
+    "keywords": "heat,hot,heat stress,overheat,overheating,dehydration,dehydrate,sweat,sweating,dizzy,dizziness,nausea,disorientation,rest,shade,water,fluids,cool,cooling,medical assistance",
+    "risk": { "F": 2, "S": 5, "P": 2, "R": 5 },
+    "controls": [
+      "Watch for heat stress signs (dizziness, heavy sweating, nausea, disorientation), stop work, cool down, drink fluids, and rest.",
+      "Use shade and hydration breaks, pace work, and seek medical assistance if symptoms worsen or do not improve quickly."
+    ]
+  },
+  {
+    "name": "Sunburn",
+    "keywords": "sunburn,sunburns,UV,ultraviolet,sun,suns,exposure,exposures,sunscreen,sunscreens,cover,covering,clothing,hat,hats,skin,skins,burn,burns,SPF",
+    "risk": { "F": 2, "S": 2, "P": 2, "R": 5 },
+    "controls": [
+      "Cover exposed skin with light clothing and apply sunscreen to exposed areas before and during outdoor work.",
+      "Reapply sunscreen as needed, use hats and shade where possible, and schedule breaks to reduce peak UV exposure."
+    ]
+  },
+  {
+    "name": "Injury from Thunderstorms / Lightning",
+    "keywords": "thunderstorm,thunderstorms,lightning,storm,storms,flash bang ratio,flash,bang,open area,open areas,high ground,shelter,shelters,stop work,weather,weathers,injury,injuries",
+    "risk": { "F": 2, "S": 5, "P": 1, "R": 5 },
+    "controls": [
+      "Avoid open or high areas during thunderstorms and use the Flash/Bang Ratio to assess storm distance.",
+      "Stop work if Flash/Bang is 5 seconds or less or per Client HSE direction, and move to safe shelter immediately."
+    ]
+  },
+  {
+    "name": "Falling From Heights",
+    "keywords": "fall,falls,falling,height,heights,scaffold,scaffolds,tag,tags,guardrail,guardrails,handrail,handrails,tie-off,tieoffs,fall arrest,harness,harnesses,lanyard,lanyards,training",
+    "risk": { "F": 3, "S": 5, "P": 3, "R": 4 },
+    "controls": [
+      "Inspect scaffold tags before use, use only inspected scaffolds, and ensure handrails and guards are in place.",
+      "Use 100% tie-off at 1.8 m or higher when rails are missing, and ensure workers are trained in fall arrest equipment."
+    ]
+  },
+  {
+    "name": "Dropping Tools",
+    "keywords": "drop,drops,dropping,tool,tools,restraint,restraints,toe board,toe boards,scaffold,scaffolds,falling object,falling objects,struck by,below,barricade,barricades,lanyard,lanyards",
+    "risk": { "F": 3, "S": 3, "P": 2, "R": 5 },
+    "controls": [
+      "Restrain tools and equipment when working at height and ensure toe boards are installed before work begins.",
+      "Keep the area below clear or barricaded, use tool lanyards where required, and never store loose items near edges."
+    ]
+  },
+  {
+    "name": "Flying Debris",
+    "keywords": "flying,debris,chip,chips,shard,shards,eye,eyes,eyewear,face shield,face shields,impact,impacts,grinding,cutting,hammering,worksite,worksites,flying debris",
+    "risk": { "F": 5, "S": 3, "P": 3, "R": 4 },
+    "controls": [
+      "Wear approved safety eyewear and use a face shield when required to protect against flying debris.",
+      "Set up exclusion zones, control tool direction, and stop work if debris cannot be contained or people are exposed."
+    ]
+  },
+  {
+      name: "Injury due to fall from ladder",
+      keywords: "ladder,fall,three points of contact,inspection,setup,footing,training,swp,use of ladder",
+      risk: { F: 2, S: 4, P: 3, R: 5 },
+      controls: [
+        "Follow Vista Geomatics SWP \"Use of Ladder\", inspect ladder condition, set on firm footing, and maintain three points of contact.",
+        "Do not overreach, secure the ladder when needed, and stop use immediately if defects, instability, or unsafe access is identified."
+      ]
+    }
+    // Add the rest of your hazards here in the exact same structure.
+  ];
 
   function clipControl(text, max = 185) {
     const t = (text || "").replace(/\s+/g, " ").trim();
@@ -1074,7 +1596,11 @@
   }
 
   function normalize(text) {
-    return (text || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+    return (text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   function stemToken(tok) {
@@ -1102,25 +1628,33 @@
     return (h >>> 0);
   }
 
+  function getKeywordsArray(entry) {
+    if (!entry || entry.keywords == null) return [];
+    if (Array.isArray(entry.keywords)) return entry.keywords.map(s => String(s));
+    return String(entry.keywords)
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
   function scoreEntry(entry, hazardNorm, hazardTokens) {
     let score = 0;
     const hs = new Set(hazardTokens);
+    const kws = getKeywordsArray(entry);
 
-    // phrase match if keyword phrase appears
-    (entry.keywords || []).forEach(k => {
+    // Phrase match: if a multi-word keyword appears in hazard text
+    kws.forEach(k => {
       const kn = normalize(k);
       if (!kn) return;
       if (kn.includes(" ") && hazardNorm.includes(kn)) score += 18;
     });
 
-    // token overlap
-    (entry.keywords || []).forEach(k => {
-      tokens(k).forEach(t => {
-        if (hs.has(t)) score += 2;
-      });
+    // Token overlap between hazard tokens and keyword tokens
+    kws.forEach(k => {
+      tokens(k).forEach(t => { if (hs.has(t)) score += 2; });
     });
 
-    // small boost if hazard contains entry name tokens
+    // Small boost if hazard contains tokens from the hazard name
     tokens(entry.name).forEach(t => { if (hs.has(t)) score += 2; });
 
     return score;
@@ -1129,17 +1663,18 @@
   function bestEntryForHazard(hazardText) {
     const hazardNorm = normalize(hazardText);
     if (!hazardNorm) return null;
-    const htoks = tokens(hazardText);
 
+    const htoks = tokens(hazardText);
     let best = null;
     let bestScore = 0;
 
     for (const entry of HAZARD_LIBRARY) {
       const s = scoreEntry(entry, hazardNorm, htoks);
+
       if (s > bestScore) { bestScore = s; best = entry; }
     }
 
-    // minimum confidence to prevent wrong matches (e.g., "construction" -> generator)
+    // minimum confidence to prevent wrong matches
     if (!best || bestScore < 8) return null;
     return best;
   }
@@ -1163,7 +1698,6 @@
     const sField = document.querySelector(`input[name="s_${row}"]`);
     const pField = document.querySelector(`input[name="p_${row}"]`);
 
-    // choose one of two controls (stable per hazard+row)
     const idx = (hashString(`${row}|${hazardText}|${entry.name}`) % 2);
     const chosen = clipControl((entry.controls && entry.controls[idx]) || "");
 
@@ -1171,13 +1705,12 @@
       if (!controlField.value || controlField.value.trim().length < 15) controlField.value = chosen;
     }
 
-    // auto-fill F/S/P only if empty
-    if (entry.ratings) {
-      if (fField && !fField.value && entry.ratings.f) fField.value = String(entry.ratings.f);
-      if (sField && !sField.value && entry.ratings.s) sField.value = String(entry.ratings.s);
-      if (pField && !pField.value && entry.ratings.p) pField.value = String(entry.ratings.p);
+    const rt = entry.ratings || (entry.risk ? { f: entry.risk.F, s: entry.risk.S, p: entry.risk.P } : null);
+    if (rt) {
+      if (fField && !fField.value && rt.f) fField.value = String(rt.f);
+      if (sField && !sField.value && rt.s) sField.value = String(rt.s);
+      if (pField && !pField.value && rt.p) pField.value = String(rt.p);
     }
-
     updateRiskForRow(row);
   }
 
@@ -1197,14 +1730,12 @@
 
       input.addEventListener('input', e => {
         const value = (e.target.value || "").trim();
-
         const row = e.target.name.split('_')[1];
         if (!value) clearRow(row);
       });
     });
   }
 
-  // YES — KEEP THIS (it wires up the hazard fields)
   initHazardAutoSuggest();
 
   // ============================================================
@@ -1401,582 +1932,6 @@
       }
     });
   }
-
-  // ============================================================
-  // FULL HAZARD LIST (EMBEDDED)
-  // ============================================================
-  const HAZARD_LIBRARY = [
-  {
-    name: "Employees not fit for duty",
-    keywords: "duties,duty,employee,employees,employees not fit for duty,fit,fitness,not",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "All personnel must comply with Vista Geomatics Ltd. drug and alcohol policy and Fatigue Management Program.",
-      "Review hazards before starting, use required PPE and safe work practices, communicate with the crew, and stop work to reassess if conditions change."
-    ]
-  },
-  {
-    name: "Fatigue, time pressure & human factors",
-    keywords: "factor,factors,fatigue,fatigues,human,humans,pressure,pressures,time,times",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "All personnel must comply with Vista Geomatics Ltd. drug and alcohol policy and Fatigue Management Program.",
-      "Plan tasks with realistic timelines, avoid rushing or shortcuts, take short breaks to manage fatigue, and stop work to clarify instructions when unsure."
-    ]
-  },
-  {
-    name: "Inadequate training or competency",
-    keywords: "competencies,competency,inadequate,inadequates,skill,skills,training,trainings",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Ensure workers are trained and competent to complete assigned work. Ask questions, use mentorship, and stop work if you are unsure how to complete a task safely.",
-      "Confirm worker competency before tasks begin, provide supervision for new workers, review safe work practices, and stop work if conditions exceed training or ability."
-    ]
-  },
-  {
-    name: "Lone worker, check-in failure or poor communication",
-    keywords: "check,check in,check-ins,checkin,checkins,communication,communications,failure,failures,lone,lone worker,poors,worker,workers",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Use a defined working alone check-in schedule and confirm communication devices are charged and functional. Escalate missed check-ins per procedure.",
-      "Establish check-in times, confirm backup contacts, carry charged phone or radio, and stop lone work if communication coverage is unreliable."
-    ]
-  },
-  {
-    name: "Slips, trips, falls (uneven ground, ice, mud, debris)",
-    keywords: "debris,fall,falls,ground,grounds,ice,ices,mud,muds,slip,slips,slips trips falls (uneven ground, ice, mud, debris),trip,trips,uneven",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Walk the area first and avoid unstable, icy, or uneven ground. Keep walk paths clear of holes, debris, cords, and loose material.",
-      "Use slip-resistant footwear, slow down on ice or mud, maintain good housekeeping around setups, and relocate work if footing cannot be made safe."
-    ]
-  },
-  {
-    name: "Working near traffic (roads, highways, site traffic)",
-    keywords: "highway,highways,lane,lanes,road,roads,shoulder,shoulders,site,sites,traffic,vehicle,vehicles,working,working near traffic (roads, highways, site traffic)",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Wear high-visibility PPE, set up away from live lanes, use cones or signage as required, and maintain eye contact with drivers and operators.",
-      "Position crew and equipment clear of traffic paths, use a spotter for backing, follow traffic control plans, and stop work if conditions become unsafe."
-    ]
-  },
-  {
-    name: "Construction traffic (haul trucks, equipment movement)",
-    keywords: "backing,construction traffic (haul trucks, equipment movement),equipment,haul,highway,lane,loader,road,roads,shoulder,traffic,truck,trucks,vehicle,vehicles",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Set crews and equipment well clear of travel routes and swing radii. Wear hi-vis, make eye contact with operators, and use a spotter for backing or reversing vehicles.",
-      "Identify equipment travel routes during the tailgate, stay out of blind spots, communicate with operators, and stop work if traffic control is inadequate."
-    ]
-  },
-  {
-    name: "Working near heavy equipment (excavators, loaders, cranes)",
-    keywords: "boom,booms,crane,cranes,excavator,excavators,heavy,heavies,loader,loaders,working,working near heavy equipment (excavators, loaders, cranes)",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Stay out of swing radii, lifting zones, and blind spots. Confirm with site supervisor where equipment will travel and relocate setups if activity comes too close.",
-      "Maintain safe distance from operating equipment, use spotters where needed, wear hi-vis, and stop work if equipment movement creates uncontrolled risk."
-    ]
-  },
-  {
-    name: "Overhead hazards (falling objects, overhead work)",
-    keywords: "falling,object,objects,overhead,overheads,work,works",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Do not work under suspended loads or active overhead work. Wear hard hats where required and maintain exclusion zones around overhead hazards.",
-      "Identify overhead work areas, stay out of drop zones, communicate with site supervisor, and stop work if falling-object risks cannot be controlled."
-    ]
-  },
-  {
-    name: "Overhead power lines / electrical contact",
-    keywords: "cable,cables,electrical,electricals,electricity,line,lines,overhead,overheads,power,power line,power lines,wire,wires",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Maintain limits of approach to overhead lines, keep poles and tripods away from conductors, and look up before raising equipment.",
-      "Identify overhead utilities during tailgate, set up outside approach limits, use a spotter when moving long equipment, and stop work if clearance is uncertain."
-    ]
-  },
-  {
-    name: "Underground utilities (digging, probing, excavation)",
-    keywords: "dig,digging,excavation,excavations,manhole,manholes,pipeline,pipelines,probe,probes,probing,telecom,telecoms,trench,trenches,underground,underground utilities (digging, probing, excavation),utility,utilities",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Confirm and review utility locates before digging or probing. Hand-dig near marked lines and stop work if utilities are uncertain or unmarked.",
-      "Mark locates clearly, use non-conductive tools where applicable, maintain safe distances from marked lines, and contact the utility owner if conflicts are found."
-    ]
-  },
-  {
-    name: "Open excavations, trenches, holes",
-    keywords: "ditch,ditches,excavation,excavations,hole,holes,open,opens,open excavations, trenches, holes,trenches",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Keep a safe distance from edges, cross only at approved points, never jump trenches, and keep people and equipment back from unstable edges.",
-      "Identify open excavations during tailgate, use barriers where needed, watch footing near edges, and stop work if excavation stability is uncertain."
-    ]
-  },
-  {
-    name: "Confined spaces (manholes, vaults, pits)",
-    keywords: "confined,confines,manhole,manholes,pit,pits,space,spaces,tank,tanks,vault,vaults",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Do not enter confined spaces without a formal confined space procedure, testing, monitoring, rescue plan, and required training.",
-      "Treat manholes and vaults as confined spaces, do not enter without authorization and controls, and stop work if atmospheric hazards are possible."
-    ]
-  },
-  {
-    name: "Hazardous atmospheres (H2S, methane, low oxygen)",
-    keywords: "atmosphere,atmospheres,h2s,hazardous,hazardouses,methane,oxygen",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Use calibrated gas monitors where required, follow site procedures, leave the area if alarms activate, and do not enter affected spaces without controls.",
-      "Confirm training and monitoring requirements before work, wear required PPE, maintain ventilation where applicable, and stop work if gas hazards are suspected."
-    ]
-  },
-  {
-    name: "Extreme cold, frostbite, hypothermia",
-    keywords: "cold,colds,extreme,extremes,frostbite,hypothermia,winter,winters",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Dress in layers, cover exposed skin, take warm-up breaks, and monitor for signs of cold stress. Shorten tasks in extreme windchill.",
-      "Plan for cold exposure, rotate tasks, keep spare dry clothing available, and stop work if workers show signs of hypothermia or frostbite."
-    ]
-  },
-  {
-    name: "Heat stress, dehydration, sun exposure",
-    keywords: "dehydration,heat,heats,stress,stresses,sun,suns,uv",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Drink water regularly, take shade breaks, wear sun protection, and adjust pace or schedule heavy work to cooler times of day.",
-      "Watch for heat illness signs, use buddy checks, increase rest breaks in high heat, and stop work if workers feel unwell."
-    ]
-  },
-  {
-    name: "High winds, flying debris, unstable equipment",
-    keywords: "debris,debrises,equipment,equipments,flying,high,high winds, flying debris, unstable equipment,unstable,wind,winds,windy",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Step in tripods fully, use lower, wider setups, weigh down legs, secure loose materials, and stop work if winds make conditions unsafe.",
-      "Secure fencing and equipment, avoid working under overhead hazards in strong gusts, and relocate or pause work until wind conditions improve."
-    ]
-  },
-  {
-    name: "Reduced visibility (fog, smoke, dust, low light)",
-    keywords: "dust,dusts,fog,fogs,light,lights,low,low light,reduced,reduced visibility (fog, smoke, dust, low light),smoke,smokes,visibility",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Use extra lighting or high-visibility PPE, increase spacing from traffic and equipment, and delay work if visibility is too poor to work safely.",
-      "Adjust driving and walking speed, use clear communication, relocate to safer positions, and stop work if visibility prevents hazard recognition."
-    ]
-  },
-  {
-    name: "Rain, wet surfaces, slippery footing",
-    keywords: "footing,footings,rain,rains,slippery,slipperies,surface,surfaces,wet,wets",
-    risk: {
-      F: 1,
-      S: 3,
-      P: 1,
-      R: 3
-    },
-    controls: [
-      "Wear waterproof layers and slip-resistant footwear, slow down on wet surfaces, and avoid climbing on wet metal or steep surfaces where footing is poor.",
-      "Improve housekeeping in wet areas, mark slippery sections, use handrails where available, and stop work if surfaces cannot be made safe."
-    ]
-  },
-  {
-    name: "Driving hazards (winter driving, collisions, backing)",
-    keywords: "backing,collision,collisions,driving,drivings,hazard,hazards,winter,winter driving, collisions, backing",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Reduce speed, increase following distance, avoid distractions, and use a spotter when backing. Perform a walk-around before moving the vehicle.",
-      "Plan routes, drive to conditions, avoid backing when possible, and stop driving if road conditions or visibility become unsafe."
-    ]
-  },
-  {
-    name: "Vehicle walk-around not completed (struck-by risk)",
-    keywords: "around,completed,completes,not,not completed,struck,struck-by,vehicle,vehicles,walk,walk-around,walkaround",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Complete a full walk-around before moving any vehicle, check blind spots, and ensure pedestrians, children, and obstacles are clear.",
-      "Use a spotter in tight areas, back only when necessary, and stop the vehicle immediately if anyone enters the danger zone."
-    ]
-  },
-  {
-    name: "Manual handling, lifting strains, awkward loads",
-    keywords: "awkward,awkwards,handling,handlings,lift,lifting,loads,manual,manual handling, lifting strains, awkward loads,strain,strains",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Use proper lifting technique, keep loads close, avoid twisting, and use team lifts for heavy or awkward items. Take breaks to prevent overexertion.",
-      "Break loads into smaller carries, use carts where possible, and stop work if lifting requirements exceed safe capability."
-    ]
-  },
-  {
-    name: "Cuts, punctures, sharp objects (knives, glass, rebar)",
-    keywords: "cut,cuts,glass,glasses,knife,knives,puncture,punctures,rebar,sharp,sharps",
-    risk: {
-      F: 1,
-      S: 3,
-      P: 1,
-      R: 3
-    },
-    controls: [
-      "Wear appropriate gloves, control and store sharp tools safely, and avoid reaching into unseen areas. Dispose of sharps safely and report hazards.",
-      "Keep hands clear of cutting paths, use correct tools for the task, and stop work if sharp-object hazards cannot be controlled."
-    ]
-  },
-  {
-    name: "Needles, sharps, biohazards (urban alleys, encampments)",
-    keywords: "alley,alleys,biohazard,biohazards,encampment,encampments,needle,needles,sharps,urban,urbans,waste,wastes",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Avoid contact with needles or bodily fluids. Do not pick up sharps, relocate away from hazards, use gloves if needed, and report to supervisor.",
-      "Mark unsafe areas, maintain distance from encampments, secure equipment, and stop work if biohazard risks cannot be controlled."
-    ]
-  },
-  {
-    name: "Aggressive public, landowner conflict, harassment",
-    keywords: "aggressive,aggressives,conflict,conflicts,harassment,harassments,landowner,landowners,public,publics",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Remain calm and respectful, do not argue, leave the area if threats occur, and report to supervisor. Call police only if immediate danger exists.",
-      "Work in pairs where possible, keep exit routes clear, do not escalate confrontations, and stop work if the situation becomes unsafe."
-    ]
-  },
-  {
-    name: "Domestic dogs (aggressive or loose dogs)",
-    keywords: "aggressive dog,aggressive dogs,barking dog,barking dogs,dog,dogs,domestic,domestic dogs (aggressive or loose dogs),guard dog,guard dogs,loose dog,loose dogs",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Do not approach unknown dogs. Ask the owner to secure the dog, maintain distance, and leave the area if the dog shows aggressive behaviour.",
-      "Stop work if a dog is loose or threatening. Use barriers if available and notify the supervisor or homeowner before resuming work."
-    ]
-  },
-  {
-    name: "Wildlife (bears, moose, coyotes, etc.)",
-    keywords: "bear,bears,coyote,coyotes,cougar,cougars,deer,elk,moose,wildlife,wildlives,wolf,wolves",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Stay alert for wildlife sign, keep food secured, and avoid approaching animals. Back away calmly and leave the area if wildlife is nearby or acting unpredictably.",
-      "Carry deterrents where trained, work in pairs when possible, make noise in brushy areas, and stop work if wildlife poses a credible threat."
-    ]
-  },
-  {
-    name: "Insects and ticks (bites, stings, allergic reactions)",
-    keywords: "allergic,allergies,bee,bees,bite,bites,hornet,hornets,insect,insects,mosquito,mosquitoes,sting,stings,tick,ticks,wasp,wasps",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Use insect repellent, wear long sleeves in brush, check for ticks after work, and avoid nests. Carry allergy medication if prescribed.",
-      "Mark and avoid heavy insect areas, wear gloves as needed, and stop work if severe allergic reactions occur, seek medical attention immediately."
-    ]
-  },
-  {
-    name: "Water hazards (rivers, flood, drowning, thin ice)",
-    keywords: "current,currents,drown,drowning,flood,flooding,ice,ices,river,rivers,thin,thin ice,water,waters",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Keep a safe distance from water edges and undercut banks, avoid unknown or thin ice, and use safe crossings or alternate routes where required.",
-      "Stop work if water conditions are unsafe, do not attempt risky crossings, and ensure workers can call for help and reach safe ground quickly."
-    ]
-  },
-  {
-    name: "Working at heights (ladders, rooftops, fall risk)",
-    keywords: "fall,falls,height,heights,ladder,ladders,roof,roofs,rooftop,rooftops,work,working at heights (ladders, rooftops, fall risk)",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Use ladders on firm level ground at correct angle, maintain three-point contact, and stay back from edges. Use fall protection where required.",
-      "Inspect ladders before use, do not work near unprotected edges, and stop work if safe access or fall protection cannot be confirmed."
-    ]
-  },
-  {
-    name: "Pinch points, struck-by, caught-between (equipment, tools)",
-    keywords: "between,caught,caught-between,equipment,equipments,point,points,pinch,pinches,struck,struck-by,tool,tools",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Keep hands clear of pinch points, maintain safe spacing around moving equipment, and use proper handling when setting tripods, rods, and clamps.",
-      "Communicate movements, use spotters where needed, and stop work if the struck-by zone cannot be controlled or people enter unsafe areas."
-    ]
-  },
-  {
-    name: "Hand and power tools (injury, vibration, noise)",
-    keywords: "noise,noises,power,powers,tool,tools,vibration,vibrations",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Use the correct tool, inspect before use, wear eye and hearing protection as required, and keep stable footing. Take breaks to reduce vibration exposure.",
-      "Keep guards in place, maintain safe distances from cutting surfaces, and stop tool use if equipment is damaged or creates uncontrolled risk."
-    ]
-  },
-  {
-    name: "Jackhammering / concrete breaking",
-    keywords: "break,breaker,breakers,breaking,concrete,concretes,hammer,hammers,jack,jackhammer,jackhammers",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Wear hearing and eye protection, keep stable footing, control flying chips, and take breaks for vibration. Confirm no utilities are below before breaking.",
-      "Use both hands on the tool, keep bystanders clear, and stop work if dust, noise, or vibration hazards cannot be controlled."
-    ]
-  },
-  {
-    name: "Generators (carbon monoxide, fuel handling, cords)",
-    keywords: "carbon,cord,cords,fuel,fuels,generator,generators,monoxide",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Operate generators outdoors on level ground away from doors and intakes, route cords to prevent trips, and refuel only when the unit is off and cooled.",
-      "Keep fuel stored safely, do not run generators in enclosed spaces, and stop work if fumes, spills, or electrical hazards are present."
-    ]
-  },
-  {
-    name: "Electrical hazards (cords, damaged plugs, wet conditions)",
-    keywords: "cord,cords,damaged,electrical,electricals,plug,plugs,wet,wets",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Inspect cords and plugs before use, keep connections dry, use GFCI protection where required, and remove damaged equipment from service.",
-      "Route cords to avoid damage and trips, avoid using electrical tools in wet conditions unless rated, and stop work if electrical safety cannot be assured."
-    ]
-  },
-  {
-    name: "Chemical exposure (fuels, solvents, fumes, dust)",
-    keywords: "chemical,chemicals,dust,dusts,exposure,exposures,fuel,fuels,fume,fumes,solvent,solvents",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Use chemicals in well-ventilated areas, stand upwind of fumes or dust, follow SDS requirements, and wear PPE specified for the product.",
-      "Store and transport chemicals safely, clean spills promptly, and stop work if exposure controls or ventilation are not adequate."
-    ]
-  },
-  {
-    name: "Fire hazard (fire ban, ignition sources, flammables)",
-    keywords: "ban,bans,fire,fire ban,fire hazard (fire ban, ignition sources, flammables),flammable,flammables,ignition,source,sources",
-    risk: {
-      F: 1,
-      S: 5,
-      P: 1,
-      R: 5
-    },
-    controls: [
-      "Follow fire-ban restrictions, keep ignition sources away from dry vegetation and fuels, store fuels properly, and ensure a suitable extinguisher is available.",
-      "Do not park on tall grass, extinguish smoking materials fully, and stop work if fire conditions become extreme or controls cannot be maintained."
-    ]
-  },
-  {
-    name: "Noise exposure (equipment, traffic, tools)",
-    keywords: "equipment,equipments,exposure,exposures,noise,noises,tool,tools,traffic",
-    risk: {
-      F: 1,
-      S: 3,
-      P: 1,
-      R: 3
-    },
-    controls: [
-      "Limit exposure where possible, establish clear communication methods, and wear hearing protection as required. Stay alert to surroundings.",
-      "Increase distance from noisy sources, rotate tasks, and stop work if communication cannot be maintained safely in high-noise environments."
-    ]
-  },
-  {
-    name: "Dust exposure (silica, construction dust)",
-    keywords: "construction,construction dust,dust,dusts,exposure,exposures,silica",
-    risk: {
-      F: 1,
-      S: 4,
-      P: 1,
-      R: 4
-    },
-    controls: [
-      "Stand upwind where possible, reduce dust generation, and wear respiratory protection when required by site rules or SDS. Avoid dry sweeping in dusty areas.",
-      "Use water suppression or alternate methods if available, increase separation from dusty work, and stop work if dust levels cannot be controlled."
-    ]
-  },
-  {
-    name: "Working around construction fencing (panels, bases, gates)",
-    keywords: "base,bases,construction fence,construction fences,fence,fences,fencing,gate,gates,panels,temporary fence,temp fence",
-    risk: {
-      F: 1,
-      S: 3,
-      P: 1,
-      R: 3
-    },
-    controls: [
-      "Use designated gates and avoid climbing or leaning on fencing. Watch for fence bases that create trip hazards and keep clear when panels are moved.",
-      "Do not move fencing alone. Secure loose panels in wind and stop work if fencing is unstable or blocks safe access."
-    ]
-  },
-
-
-];
-
-
-    /*  IMPORTANT:
-        Your full embedded list continues here.
-        In your working file, you must paste the COMPLETE list.
-        If you want, tell me “paste the rest” and I will output the remaining entries in the same exact format.
-    */
-  ];
 </script>
 </body>
 </html>
