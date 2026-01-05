@@ -69,7 +69,11 @@
     }
 
     .header-left p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.9; }
-    .header-logo { height: 60px; filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35)); }
+
+    .header-logo {
+      height: 60px;
+      filter: drop-shadow(0 5px 14px rgba(0,0,0,0.35));
+    }
 
     .page-title-bar {
       position: relative;
@@ -108,7 +112,7 @@
       color: var(--text-main);
     }
 
-    /* INPUT/TEXT CLIPPING FIX */
+    /* ===== INPUT/TEXT CLIPPING FIX (Safari/iPad + general) ===== */
     input[type="text"],
     input[type="date"],
     input[type="time"],
@@ -136,7 +140,14 @@
       appearance: none;
     }
 
-    textarea { padding: 6px 8px; min-height: 56px; resize: vertical; }
+    input[type="date"],
+    input[type="time"] { background-clip: padding-box; }
+
+    textarea {
+      padding: 6px 8px;
+      min-height: 56px;
+      resize: vertical;
+    }
 
     input:focus,
     textarea:focus {
@@ -231,8 +242,14 @@
       vertical-align: top;
     }
 
-    th { background: #e8f0fb; font-weight: 600; color: var(--vista-blue-dark); }
+    th {
+      background: #e8f0fb;
+      font-weight: 600;
+      color: var(--vista-blue-dark);
+    }
+
     td { background: #f9fbff; }
+
     .center { text-align: center; }
 
     .signature-grid {
@@ -269,7 +286,9 @@
     }
 
     .signature-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
+
     .signature-actions button { padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.05em; }
+
     .signature-row { display: flex; gap: 6px; margin-top: 4px; }
     .signature-row > div { flex: 1; }
 
@@ -296,7 +315,12 @@
       box-shadow: 0 8px 20px rgba(5, 41, 66, 0.35);
     }
 
-    .btn-secondary { background: #f3f4f6; color: var(--text-main); border: 1px solid #d6d7dd; }
+    .btn-secondary {
+      background: #f3f4f6;
+      color: var(--text-main);
+      border: 1px solid #d6d7dd;
+    }
+
     button:hover { transform: translateY(-1px); box-shadow: 0 9px 22px rgba(15, 23, 42, 0.18); }
 
     .control-text {
@@ -317,50 +341,30 @@
       text-align: center;
     }
 
-    /* EXPORT: replace textarea with div so html2canvas captures content */
-    .print-textarea {
-      width: 100%;
-      min-height: 56px;
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: #f9fbff;
-      font-family: "Inter", sans-serif;
-      font-size: 0.74rem;
-      line-height: 1.25;
-      color: var(--text-main);
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    /* Hospital autocomplete (works on iPad + PC) */
-    .autocomplete-wrap { position: relative; }
-    .suggestions {
+    /* Emergency autocomplete dropdown (works on iPad + PC) */
+    .suggest-wrap { position: relative; }
+    .suggest-list {
       position: absolute;
+      z-index: 50;
+      top: calc(100% + 4px);
       left: 0;
       right: 0;
-      top: calc(100% + 4px);
-      z-index: 1000;
-      background: #fff;
-      border: 1px solid var(--border-soft);
-      border-radius: 10px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
       max-height: 220px;
       overflow: auto;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 12px 26px rgba(15,23,42,0.14);
       display: none;
     }
-    .suggestion-item {
+    .suggest-item {
       padding: 8px 10px;
       cursor: pointer;
-      font-size: 0.74rem;
-      line-height: 1.25;
-      border-bottom: 1px solid rgba(214,226,240,0.6);
+      font-size: 0.78rem;
+      line-height: 1.2;
     }
-    .suggestion-item:last-child { border-bottom: none; }
-    .suggestion-item:hover { background: #f2f7ff; }
-    .suggestion-top { font-weight: 600; color: var(--vista-blue-dark); }
-    .suggestion-sub { margin-top: 2px; color: var(--text-muted); font-size: 0.72rem; }
-    .hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+    .suggest-item:hover { background: #f4f8fd; }
+    .suggest-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
 
     @media (max-width: 700px) {
       .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -372,7 +376,6 @@
 <body>
 <div class="page-wrap">
   <form id="hazardForm">
-
     <!-- PAGE 1 -->
     <div class="container" id="page1">
       <div class="header-bar">
@@ -390,22 +393,44 @@
       </div>
 
       <div class="page-body">
-
         <!-- General information -->
         <div class="section-card">
-          <div class="section-header"><div class="section-title">General Information</div></div>
-          <div class="row">
-            <div><label for="developed_by">Developed By</label><input type="text" id="developed_by" name="developed_by"></div>
-            <div><label for="location">Location</label><input type="text" id="location" name="location"></div>
+          <div class="section-header">
+            <div class="section-title">General Information</div>
           </div>
           <div class="row">
-            <div><label for="date">Date</label><input type="date" id="date" name="date"></div>
-            <div><label for="start_time">Start Time</label><input type="time" id="start_time" name="start_time"></div>
-            <div><label for="completion_time">Form Completion Time</label><input type="time" id="completion_time" name="completion_time"></div>
+            <div>
+              <label for="developed_by">Developed By</label>
+              <input type="text" id="developed_by" name="developed_by">
+            </div>
+            <div>
+              <label for="location">Location</label>
+              <input type="text" id="location" name="location">
+            </div>
           </div>
           <div class="row">
-            <div><label for="job_number">Job Number</label><input type="text" id="job_number" name="job_number"></div>
-            <div><label for="description">Description of Work</label><input type="text" id="description" name="description"></div>
+            <div>
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date">
+            </div>
+            <div>
+              <label for="start_time">Start Time</label>
+              <input type="time" id="start_time" name="start_time">
+            </div>
+            <div>
+              <label for="completion_time">Form Completion Time</label>
+              <input type="time" id="completion_time" name="completion_time">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="job_number">Job Number</label>
+              <input type="text" id="job_number" name="job_number">
+            </div>
+            <div>
+              <label for="description">Description of Work</label>
+              <input type="text" id="description" name="description">
+            </div>
           </div>
         </div>
 
@@ -413,7 +438,9 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Tailgate Meeting Report</div>
-            <div class="section-note">Complete daily prior to starting work and when procedures change or new hazards are present.</div>
+            <div class="section-note">
+              Complete daily prior to starting work and when procedures change or new hazards are present.
+            </div>
           </div>
           <div style="margin-bottom:4px;">
             <label for="tailgate_minutes">Tailgate Minutes</label>
@@ -456,7 +483,9 @@
 
         <!-- Working Alone -->
         <div class="section-card">
-          <div class="section-header"><div class="section-title">Working Alone &amp; Check-in</div></div>
+          <div class="section-header">
+            <div class="section-title">Working Alone &amp; Check-in</div>
+          </div>
 
           <div class="row">
             <div style="flex:1 1 35%;">
@@ -492,7 +521,8 @@
           </div>
 
           <div class="small-text" style="margin-top:4px;">
-            <strong>Note:</strong> High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
+            <strong>Note:</strong> Check-in intervals are based on risk level –
+            High risk: hourly, Medium risk: every 2 hours, Low risk: start and end of shift.
           </div>
         </div>
 
@@ -500,71 +530,76 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Daily Equipment Inspection</div>
-            <div class="section-note">Check your vehicle, ATV, snowmobile, generator, trailer, and/or chainsaw and report deficiencies.</div>
+            <div class="section-note">Check your vehicle, ATV, snowmobile, generator, trailer, and/or chainsaw and report any deficiencies.</div>
           </div>
 
           <table>
-            <thead><tr><th>Equipment</th><th>Inspection Items</th></tr></thead>
+            <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Inspection Items</th>
+            </tr>
+            </thead>
             <tbody>
-              <tr>
-                <td>Vehicle</td>
-                <td>
-                  <div class="inline-checkbox-group">
-                    <label><input type="checkbox" name="veh_tires"> Tires</label>
-                    <label><input type="checkbox" name="veh_oil"> Oil</label>
-                    <label><input type="checkbox" name="veh_fuel"> Fuel</label>
-                    <label><input type="checkbox" name="veh_washer"> Washer fluid</label>
-                    <label><input type="checkbox" name="veh_lights"> Lights</label>
-                    <label><input type="checkbox" name="veh_tiedowns"> Tie-Down Straps</label>
-                    <label>Other: <input type="text" name="veh_other" style="width:120px;"></label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>ATV / Snowmobile</td>
-                <td>
-                  <div class="inline-checkbox-group">
-                    <label><input type="checkbox" name="atv_tires"> Tires/Track</label>
-                    <label><input type="checkbox" name="atv_oil_fuel"> Oil/Fuel</label>
-                    <label><input type="checkbox" name="atv_lights"> Lights</label>
-                    <label><input type="checkbox" name="atv_brakes"> Brakes</label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Generator</td>
-                <td>
-                  <div class="inline-checkbox-group">
-                    <label><input type="checkbox" name="gen_oil"> Oil</label>
-                    <label><input type="checkbox" name="gen_fuel"> Fuel</label>
-                    <label><input type="checkbox" name="gen_cord"> Extension Cord</label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Chainsaw (if used)</td>
-                <td>
-                  <div class="inline-checkbox-group">
-                    <label><input type="checkbox" name="saw_oil"> Oil</label>
-                    <label><input type="checkbox" name="saw_fuel"> Fuel</label>
-                    <label><input type="checkbox" name="saw_chain"> Chain</label>
-                    <label><input type="checkbox" name="saw_guard"> Guard</label>
-                    <label>Other: <input type="text" name="saw_other" style="width:120px;"></label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Trailer</td>
-                <td>
-                  <div class="inline-checkbox-group">
-                    <label><input type="checkbox" name="trl_tires"> Tires</label>
-                    <label><input type="checkbox" name="trl_lights"> Lights</label>
-                    <label><input type="checkbox" name="trl_chains"> Safety Chains</label>
-                    <label><input type="checkbox" name="trl_deck"> Deck</label>
-                    <label><input type="checkbox" name="trl_plate"> Licence Plate</label>
-                  </div>
-                </td>
-              </tr>
+            <tr>
+              <td>Vehicle</td>
+              <td>
+                <div class="inline-checkbox-group">
+                  <label><input type="checkbox" name="veh_tires"> Tires</label>
+                  <label><input type="checkbox" name="veh_oil"> Oil</label>
+                  <label><input type="checkbox" name="veh_fuel"> Fuel</label>
+                  <label><input type="checkbox" name="veh_washer"> Washer fluid</label>
+                  <label><input type="checkbox" name="veh_lights"> Lights</label>
+                  <label><input type="checkbox" name="veh_tiedowns"> Tie-Down Straps</label>
+                  <label>Other: <input type="text" name="veh_other" style="width:120px;"></label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>ATV / Snowmobile</td>
+              <td>
+                <div class="inline-checkbox-group">
+                  <label><input type="checkbox" name="atv_tires"> Tires/Track</label>
+                  <label><input type="checkbox" name="atv_oil_fuel"> Oil/Fuel</label>
+                  <label><input type="checkbox" name="atv_lights"> Lights</label>
+                  <label><input type="checkbox" name="atv_brakes"> Brakes</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Generator</td>
+              <td>
+                <div class="inline-checkbox-group">
+                  <label><input type="checkbox" name="gen_oil"> Oil</label>
+                  <label><input type="checkbox" name="gen_fuel"> Fuel</label>
+                  <label><input type="checkbox" name="gen_cord"> Extension Cord</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Chainsaw (if used)</td>
+              <td>
+                <div class="inline-checkbox-group">
+                  <label><input type="checkbox" name="saw_oil"> Oil</label>
+                  <label><input type="checkbox" name="saw_fuel"> Fuel</label>
+                  <label><input type="checkbox" name="saw_chain"> Chain</label>
+                  <label><input type="checkbox" name="saw_guard"> Guard</label>
+                  <label>Other: <input type="text" name="saw_other" style="width:120px;"></label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Trailer</td>
+              <td>
+                <div class="inline-checkbox-group">
+                  <label><input type="checkbox" name="trl_tires"> Tires</label>
+                  <label><input type="checkbox" name="trl_lights"> Lights</label>
+                  <label><input type="checkbox" name="trl_chains"> Safety Chains</label>
+                  <label><input type="checkbox" name="trl_deck"> Deck</label>
+                  <label><input type="checkbox" name="trl_plate"> Licence Plate</label>
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -593,7 +628,6 @@
             <label>Other: <input type="text" name="ppe_other" style="width:160px;"></label>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -601,122 +635,121 @@
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
-        <div class="page-title-sub">Controls and ratings auto-suggest. R auto-calculates from F × S × P.</div>
+        <div class="page-title-sub">Enter hazards to auto-suggest controls and auto-fill risk ratings (F, S, P). Clearing a hazard clears its controls and risk.</div>
         <div class="page-title-accent"></div>
       </div>
 
       <div class="page-body">
-
         <!-- Common Occurring Hazards -->
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Common Occurring Hazards</div>
-            <div class="section-note">Unchecked rows are removed from the PDF to eliminate blank space.</div>
+            <div class="section-note">Check all hazards that apply to today’s worksite. Unchecked rows will be removed from the PDF.</div>
           </div>
 
           <table id="commonHazardsTable">
             <thead>
-              <tr>
-                <th class="center">Applies</th>
-                <th>Hazard</th>
-                <th>Controls (from Worksite Hazard Assessment)</th>
-              </tr>
+            <tr>
+              <th class="center">Applies</th>
+              <th>Hazard</th>
+              <th>Controls (from Worksite Hazard Assessment)</th>
+            </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_buried_overhead"></td>
-                <td>Buried or Overhead Facilities</td>
-                <td>Use caution around utilities, maintain limits of approach, confirm locates before digging or probing, and report damage immediately.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_hunting"></td>
-                <td>Hunting Season</td>
-                <td>Know season dates, stay together, make noise, wear hi-vis, and avoid active hunting areas.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
-                <td>Site Housekeeping</td>
-                <td>Keep work areas clear of debris and obstructions. Maintain safe access/egress and remove trip hazards as you go.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_h2s"></td>
-                <td>H2S Concerns</td>
-                <td>Do not work in H2S areas without training and a working monitor. Follow emergency procedures and evacuate on alarm.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_open_excavation"></td>
-                <td>Open Excavation</td>
-                <td>Stay back from edges, use designated crossings, never jump trenches, and keep gear away from edges. PPE: hardhat, CSA boots.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_fences"></td>
-                <td>
-                  Construction Fences – Installed
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="fence_installed_yes"> Yes
-                  </label>
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="fence_installed_no"> No
-                  </label>
-                </td>
-                <td>Use gates/crossings, watch bases and trip hazards, and keep clear when panels move. Use caution in high winds.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
-                <td>Wild Animals</td>
-                <td>Stay alert, keep distance, store food/garbage, carry bear spray where required, and leave if wildlife is near.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_river"></td>
-                <td>River: High/Low Spring Flood</td>
-                <td>Keep back from banks and moving water, avoid undercut edges, use safe crossings, and stop work if unsafe.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_traffic"></td>
-                <td>On and Off Traffic or Construction</td>
-                <td>Wear hi-vis, keep setups out of travel paths, make eye contact with operators, and use cones/signs as needed.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_icy"></td>
-                <td>Icy Conditions</td>
-                <td>Use slip-resistant footwear, slow down, keep hands free, and avoid icy slopes and unstable edges.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_noise"></td>
-                <td>Excessive Noise Levels</td>
-                <td>Limit exposure, use hearing protection, establish clear communication, and stay alert to surroundings.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_wildfire"></td>
-                <td>
-                  Wild Fire Hazard – Fire Ban in Effect
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="fireban_yes"> Yes
-                  </label>
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="fireban_no"> No
-                  </label>
-                </td>
-                <td>Follow fire-ban rules, avoid ignition sources, keep extinguishers available, and report smoke or fire immediately.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_farming"></td>
-                <td>Farming Operations (cattle or other animals)</td>
-                <td>Make your presence known, give livestock space, and reroute if animals appear stressed or aggressive.</td>
-              </tr>
-              <tr>
-                <td class="center"><input type="checkbox" name="haz_landowner"></td>
-                <td>
-                  Land Owner / Home Owner – Made Contact
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="landowner_yes"> Yes
-                  </label>
-                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
-                    <input type="checkbox" name="landowner_no"> No
-                  </label>
-                </td>
-                <td>Stay calm and respectful. Do not argue. If conflict escalates, leave the area and report to supervisor and client contact.</td>
-              </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_buried_overhead"></td>
+              <td>Buried or Overhead Facilities</td>
+              <td>Confirm locates/limits and keep safe approach to overhead lines. Stop if unsure and report damage immediately.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_hunting"></td>
+              <td>Hunting Season</td>
+              <td>Know season/area, stay together, make noise, wear hi-vis, and speak with hunters if encountered.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_housekeeping"></td>
+              <td>Site Housekeeping</td>
+              <td>Keep work areas clear of obstructions, cords, and debris. Maintain clean walk paths and good footing.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_h2s"></td>
+              <td>H2S Concerns</td>
+              <td>Use a calibrated gas monitor, follow H2S training and site rules, and leave if alarms activate.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_open_excavation"></td>
+              <td>Open Excavation</td>
+              <td>Stay back from edges, use safe crossings only, and never jump trenches. Wear proper PPE and watch footing.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_fences"></td>
+              <td>
+                Construction Fences – Installed
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="fence_installed_yes"> Yes
+                </label>
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="fence_installed_no"> No
+                </label>
+              </td>
+              <td>Use gates/crossings, don’t lean or climb, watch bases/trip hazards, and keep clear while panels move or winds are high.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_wild_animals"></td>
+              <td>Wild Animals</td>
+              <td>Stay alert, never approach wildlife, secure food/garbage, carry deterrent where required, and leave if unsafe.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_river"></td>
+              <td>River: High/Low Spring Flood</td>
+              <td>Keep back from unstable banks and fast water. Use safe crossings or reroute; stop work if fall-in risk exists.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_traffic"></td>
+              <td>On and Off Traffic or Construction</td>
+              <td>Stay alert, wear hi-vis, keep clear of equipment paths, and make eye contact with operators before approaching.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_icy"></td>
+              <td>Icy Conditions</td>
+              <td>Slow down, use traction footwear, avoid hands in pockets, and reduce driving speed with extra following distance.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_noise"></td>
+              <td>Excessive Noise Levels</td>
+              <td>Limit exposure, use hearing protection, confirm communication method, and stay aware of surroundings.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_wildfire"></td>
+              <td>
+                Wild Fire Hazard – Fire Ban in Effect
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="fireban_yes"> Yes
+                </label>
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="fireban_no"> No
+                </label>
+              </td>
+              <td>Follow fire ban rules, avoid ignition sources, park off long grass, and confirm extinguisher is present and usable.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_farming"></td>
+              <td>Farming Operations (cattle or other animals)</td>
+              <td>Make presence known, keep distance from livestock, avoid flagging in pastures, and reroute if animals react.</td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" name="haz_landowner"></td>
+              <td>
+                Land Owner / Home Owner – Made Contact
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="landowner_yes"> Yes
+                </label>
+                <label style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-weight:500;">
+                  <input type="checkbox" name="landowner_no"> No
+                </label>
+              </td>
+              <td>Stay calm and respectful, don’t argue, explain the work, and leave/report if anyone becomes aggressive.</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -725,98 +758,160 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Job Specific Hazards</div>
-            <div class="section-note">If hazard is cleared, the control and ratings clear. Controls stay ≤ 185 characters.</div>
+            <div class="section-note">Controls + risk ratings auto-suggest when you leave the hazard cell.</div>
           </div>
 
           <table>
             <thead>
-              <tr>
-                <th>Job Tasks</th>
-                <th>Hazards</th>
-                <th class="center">F</th>
-                <th class="center">S</th>
-                <th class="center">P</th>
-                <th class="center">R</th>
-                <th>Control Plan / Barriers / Procedures</th>
-              </tr>
+            <tr>
+              <th>Job Tasks</th>
+              <th>Hazards</th>
+              <th class="center">F</th>
+              <th class="center">S</th>
+              <th class="center">P</th>
+              <th class="center">R</th>
+              <th>Control Plan / Barriers / Procedures</th>
+            </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><input type="text" name="task_1" /></td>
-                <td><input type="text" name="hazard_1" placeholder="e.g. construction traffic, construction fencing, generator, digging pins" /></td>
-                <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
-                <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
-              </tr>
-
-              <tr>
-                <td><input type="text" name="task_2" /></td>
-                <td><input type="text" name="hazard_2" /></td>
-                <td class="center"><input type="text" name="f_2" class="risk-input" data-row="2" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
-                <td><textarea name="control_2" class="control-text"></textarea></td>
-              </tr>
-
-              <tr>
-                <td><input type="text" name="task_3" /></td>
-                <td><input type="text" name="hazard_3" /></td>
-                <td class="center"><input type="text" name="f_3" class="risk-input" data-row="3" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
-                <td><textarea name="control_3" class="control-text"></textarea></td>
-              </tr>
-
-              <tr>
-                <td><input type="text" name="task_4" /></td>
-                <td><input type="text" name="hazard_4" /></td>
-                <td class="center"><input type="text" name="f_4" class="risk-input" data-row="4" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
-                <td><textarea name="control_4" class="control-text"></textarea></td>
-              </tr>
-
-              <tr>
-                <td><input type="text" name="task_5" /></td>
-                <td><input type="text" name="hazard_5" /></td>
-                <td class="center"><input type="text" name="f_5" class="risk-input" data-row="5" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
-                <td><textarea name="control_5" class="control-text"></textarea></td>
-              </tr>
-
-              <tr>
-                <td><input type="text" name="task_6" /></td>
-                <td><input type="text" name="hazard_6" /></td>
-                <td class="center"><input type="text" name="f_6" class="risk-input" data-row="6" style="width:32px;"></td>
-                <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
-                <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
-                <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
-                <td><textarea name="control_6" class="control-text"></textarea></td>
-              </tr>
+            <!-- 6 rows -->
+            <tr>
+              <td><input type="text" name="task_1" /></td>
+              <td><input type="text" name="hazard_1" placeholder="e.g. dogs, cold weather, rain, construction traffic, construction fencing, digging, jackhammer, generator" /></td>
+              <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
+              <td><textarea name="control_1" class="control-text" placeholder="Controls will auto-suggest when you leave the hazard cell."></textarea></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="task_2" /></td>
+              <td><input type="text" name="hazard_2" /></td>
+              <td class="center"><input type="text" name="f_2" class="risk-input" data-row="2" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
+              <td><textarea name="control_2" class="control-text"></textarea></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="task_3" /></td>
+              <td><input type="text" name="hazard_3" /></td>
+              <td class="center"><input type="text" name="f_3" class="risk-input" data-row="3" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
+              <td><textarea name="control_3" class="control-text"></textarea></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="task_4" /></td>
+              <td><input type="text" name="hazard_4" /></td>
+              <td class="center"><input type="text" name="f_4" class="risk-input" data-row="4" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
+              <td><textarea name="control_4" class="control-text"></textarea></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="task_5" /></td>
+              <td><input type="text" name="hazard_5" /></td>
+              <td class="center"><input type="text" name="f_5" class="risk-input" data-row="5" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
+              <td><textarea name="control_5" class="control-text"></textarea></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="task_6" /></td>
+              <td><input type="text" name="hazard_6" /></td>
+              <td class="center"><input type="text" name="f_6" class="risk-input" data-row="6" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
+              <td><textarea name="control_6" class="control-text"></textarea></td>
+            </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Risk Assessment Guide -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">Risk Assessment Guide</div>
+            <div class="section-note">Use these ratings when completing the Job Specific Hazards table.</div>
+          </div>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Factor</th>
+              <th class="center">1</th>
+              <th class="center">2</th>
+              <th class="center">3</th>
+              <th class="center">4</th>
+              <th class="center">5</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>Frequency (F)</strong></td>
+              <td>Never</td>
+              <td>Yearly</td>
+              <td>Monthly</td>
+              <td>Weekly</td>
+              <td>Daily</td>
+            </tr>
+            <tr>
+              <td><strong>Severity (S)</strong></td>
+              <td>No injury</td>
+              <td>Minor injury</td>
+              <td>Serious / Medical aid</td>
+              <td>Lost time</td>
+              <td>Fatality</td>
+            </tr>
+            <tr>
+              <td><strong>Probability (P)</strong></td>
+              <td>Very unlikely</td>
+              <td>Unlikely</td>
+              <td>Possible</td>
+              <td>Significant</td>
+              <td>Certainty</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <table style="margin-top:6px;">
+            <thead>
+            <tr>
+              <th>Risk (Multiply Factors)</th>
+              <th>Risk Level</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>0 – 25</td><td>Low risk</td></tr>
+            <tr><td>26 – 50</td><td>Moderate risk</td></tr>
+            <tr><td>51 – 75</td><td>Moderate / High risk</td></tr>
+            <tr><td>76 – 100</td><td>High risk</td></tr>
+            <tr><td>101 – 125</td><td>Severe risk</td></tr>
+            </tbody>
+          </table>
+
+          <div class="small-text" style="margin-top:4px;">
+            <strong>Note:</strong> If any task has a <strong>High</strong> or <strong>Severe</strong> risk rating, workers have the duty to refuse unsafe work and contact their supervisor or safety representative before proceeding.
+          </div>
         </div>
 
         <!-- Emergency Response -->
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Emergency Response Plan</div>
-            <div class="section-note">Start typing a facility name or acronym (example: FMC). Select a match to auto-fill 911 and procedures.</div>
+            <div class="section-note">Start typing a facility name or acronym (e.g., FMC, PLC, RGH). Select one to auto-fill phone and procedures.</div>
           </div>
 
           <div class="row">
-            <div class="autocomplete-wrap">
+            <div class="suggest-wrap">
               <label for="nearest_hospital">Nearest first aid facility or hospital</label>
-              <input type="text" id="nearest_hospital" name="nearest_hospital" autocomplete="off" placeholder="Type facility name or acronym">
-              <div id="hospitalSuggestions" class="suggestions"></div>
-              <div class="hint">Tip: You can enter the acronym, then tap the suggestion.</div>
+              <input type="text" id="nearest_hospital" name="nearest_hospital" autocomplete="off" placeholder="Type name or acronym (e.g., FMC)">
+              <div id="facilitySuggest" class="suggest-list"></div>
             </div>
             <div>
               <label for="hospital_phone">Phone #</label>
@@ -840,41 +935,72 @@
 
         <!-- Signatures -->
         <div class="section-card">
-          <div class="section-header"><div class="section-title">Acknowledgement &amp; Sign-off</div></div>
+          <div class="section-header">
+            <div class="section-title">Acknowledgement &amp; Sign-off</div>
+            <div class="section-note">PDF filename defaults to Job #, Developed By, and today’s date. You can edit it.</div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="pdf_filename">PDF File Name (optional)</label>
+              <input type="text" id="pdf_filename" name="pdf_filename" placeholder="Auto-filled">
+            </div>
+          </div>
 
           <div class="signature-grid">
-
             <div class="signature-box">
               <div class="signature-label">Party Chief – Signature</div>
               <canvas id="pcSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearPcSig">Clear</button></div>
+              <div class="signature-actions">
+                <button type="button" class="btn-secondary" id="clearPcSig">Clear</button>
+              </div>
               <div class="signature-row">
-                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="pc_name"></div>
-                <div><div class="signature-label">Date</div><input type="date" class="small-input" name="pc_date"></div>
+                <div>
+                  <div class="signature-label">Name</div>
+                  <input type="text" class="small-input" name="pc_name">
+                </div>
+                <div>
+                  <div class="signature-label">Date</div>
+                  <input type="date" class="small-input" name="pc_date">
+                </div>
               </div>
             </div>
 
             <div class="signature-box">
               <div class="signature-label">Rodman – Signature</div>
-
               <canvas id="saSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearSaSig">Clear</button></div>
+              <div class="signature-actions">
+                <button type="button" class="btn-secondary" id="clearSaSig">Clear</button>
+              </div>
               <div class="signature-row">
-                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="sa_name"></div>
-                <div><div class="signature-label">Date</div><input type="date" class="small-input" name="sa_date"></div>
+                <div>
+                  <div class="signature-label">Name</div>
+                  <input type="text" class="small-input" name="sa_name">
+                </div>
+                <div>
+                  <div class="signature-label">Date</div>
+                  <input type="date" class="small-input" name="sa_date">
+                </div>
               </div>
             </div>
 
             <div class="signature-box">
               <div class="signature-label">Client Representative / Safety Coordinator / Additional Rodman – Signature</div>
               <canvas id="clientSignature" class="signature-canvas"></canvas>
-              <div class="signature-actions"><button type="button" class="btn-secondary" id="clearClientSig">Clear</button></div>
+              <div class="signature-actions">
+                <button type="button" class="btn-secondary" id="clearClientSig">Clear</button>
+              </div>
               <div class="signature-row">
-                <div><div class="signature-label">Name</div><input type="text" class="small-input" name="client_name"></div>
-                <div><div class="signature-label">Date</div><input type="date" class="small-input" name="client_date"></div>
+                <div>
+                  <div class="signature-label">Name</div>
+                  <input type="text" class="small-input" name="client_name">
+                </div>
+                <div>
+                  <div class="signature-label">Date</div>
+                  <input type="date" class="small-input" name="client_date">
+                </div>
               </div>
             </div>
-
           </div>
 
           <div style="margin-top:6px;">
@@ -887,13 +1013,9 @@
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
           </div>
-
-          <div class="small-text" style="margin-top:6px;text-align:right;">Version 3.5</div>
         </div>
-
       </div>
     </div>
-
   </form>
 </div>
 
@@ -905,124 +1027,130 @@
   const shareBtn    = document.getElementById('shareBtn');
   const buttonRow   = document.getElementById('buttonRow');
 
-  /* ===================== FILE NAME (iPad + PC) ===================== */
-  function sanitizeFileName(name) {
-    const cleaned = String(name || "")
+  // =========================
+  //  HELPERS
+  // =========================
+  function safeFilePart(s) {
+    return (s || "")
+      .toString()
       .trim()
-      .replace(/[\\/:*?"<>|]+/g, "_")
+      .replace(/[\\/:*?"<>|]+/g, "")
       .replace(/\s+/g, " ")
-      .slice(0, 80);
-    return cleaned || "WorksiteHazardAssessment";
+      .substring(0, 80);
   }
 
-  function defaultFileNameBase() {
-    const job = (document.querySelector('input[name="job_number"]')?.value || "").trim();
-    const loc = (document.querySelector('input[name="location"]')?.value || "").trim();
-    const date = (document.querySelector('input[name="date"]')?.value || "").trim();
-    const parts = ["WorksiteHazardAssessment"];
-    if (job) parts.push("Job " + job);
-    if (loc) parts.push(loc);
-    if (date) parts.push(date);
-    return sanitizeFileName(parts.join(", "));
+  function formatLocalYYYYMMDD(d) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
-  function askForFileName() {
-    const suggested = defaultFileNameBase();
-    const input = window.prompt("File name for the PDF:", suggested);
-    return sanitizeFileName(input || suggested) + ".pdf";
+  function defaultPdfFileName() {
+    const job = safeFilePart(document.getElementById("job_number")?.value);
+    const dev = safeFilePart(document.getElementById("developed_by")?.value);
+    const dateInput = document.getElementById("date")?.value; // YYYY-MM-DD
+    const dateStr = safeFilePart(dateInput || formatLocalYYYYMMDD(new Date()));
+
+    const parts = [];
+    if (job) parts.push(job);
+    if (dev) parts.push(dev);
+    if (dateStr) parts.push(dateStr);
+
+    const base = parts.join(" - ") || `WorksiteHazardAssessment - ${dateStr}`;
+    return `${base}.pdf`;
   }
 
-  /* ===================== RISK CALC ===================== */
-  function updateRiskForRow(row) {
-    const fInput = document.querySelector('input[name="f_' + row + '"]');
-    const sInput = document.querySelector('input[name="s_' + row + '"]');
-    const pInput = document.querySelector('input[name="p_' + row + '"]');
-    const rInput = document.querySelector('input[name="r_' + row + '"]');
-    if (!fInput || !sInput || !pInput || !rInput) return;
+  function updatePdfFilenameField() {
+    const field = document.getElementById("pdf_filename");
+    if (!field) return;
 
-    const f = parseInt(fInput.value, 10);
-    const s = parseInt(sInput.value, 10);
-    const p = parseInt(pInput.value, 10);
-
-    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) rInput.value = f * s * p;
-    else rInput.value = "";
+    // Only auto-fill if empty or still matches prior default style
+    if (!field.value || field.dataset.autofilled === "true") {
+      field.value = defaultPdfFileName().replace(/\.pdf$/i, "");
+      field.dataset.autofilled = "true";
+    }
   }
 
-  function clearRowControlsAndRatings(row) {
-    const c = document.querySelector(`textarea[name="control_${row}"]`);
-    const f = document.querySelector(`input[name="f_${row}"]`);
-    const s = document.querySelector(`input[name="s_${row}"]`);
-    const p = document.querySelector(`input[name="p_${row}"]`);
-    const r = document.querySelector(`input[name="r_${row}"]`);
-    if (c) c.value = "";
-    if (f) f.value = "";
-    if (s) s.value = "";
-    if (p) p.value = "";
-    if (r) r.value = "";
-  }
-
-  document.querySelectorAll('.risk-input').forEach(input => {
-    input.addEventListener('input', () => {
-      const row = input.getAttribute('data-row');
-      if (row) updateRiskForRow(row);
-    });
+  ["job_number","developed_by","date"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", updatePdfFilenameField);
+    if (el) el.addEventListener("change", updatePdfFilenameField);
   });
 
-  /* ===================== EXPORT HELPERS ===================== */
-  function syncLiveValuesToClone(originalForm, cloneForm) {
-    const getKey = (el) => el.name || el.id;
+  // Initial
+  updatePdfFilenameField();
 
-    const origEls = Array.from(originalForm.querySelectorAll("input, textarea, select"));
-    const cloneMap = new Map();
-    Array.from(cloneForm.querySelectorAll("input, textarea, select")).forEach(el => {
-      const key = getKey(el);
-      if (key) cloneMap.set(key, el);
-    });
+  // =========================
+  //  PDF GENERATION
+  //  - Copies live values into clone (fixes: tasks/hazards/FSP/R/controls missing)
+  //  - Removes unchecked common hazards (no blank space)
+  //  - Ensures textarea heights expand (prevents bottom cut-off)
+  // =========================
 
-    origEls.forEach(orig => {
-      const key = getKey(orig);
-      if (!key) return;
-      const cloneEl = cloneMap.get(key);
+  function copyLiveValuesIntoClone(originalRoot, cloneRoot) {
+    const origFields = originalRoot.querySelectorAll("input, textarea, select");
+    origFields.forEach(origEl => {
+      const name = origEl.getAttribute("name");
+      const id = origEl.getAttribute("id");
+
+      let selector = null;
+      if (name) selector = `[name="${CSS.escape(name)}"]`;
+      else if (id) selector = `#${CSS.escape(id)}`;
+      else return;
+
+      const cloneEl = cloneRoot.querySelector(selector);
       if (!cloneEl) return;
 
-      if (orig.type === "checkbox" || orig.type === "radio") {
-        cloneEl.checked = orig.checked;
-        if (orig.checked) cloneEl.setAttribute("checked", "checked");
+      const tag = (origEl.tagName || "").toLowerCase();
+      const type = (origEl.getAttribute("type") || "").toLowerCase();
+
+      if (tag === "textarea") {
+        cloneEl.value = origEl.value;
+        cloneEl.textContent = origEl.value;
+      } else if (tag === "select") {
+        cloneEl.value = origEl.value;
+      } else if (tag === "input" && (type === "checkbox" || type === "radio")) {
+        cloneEl.checked = origEl.checked;
+        if (origEl.checked) cloneEl.setAttribute("checked", "checked");
         else cloneEl.removeAttribute("checked");
-      } else {
-        cloneEl.value = orig.value;
-        cloneEl.setAttribute("value", orig.value);
-        if (cloneEl.tagName.toLowerCase() === "textarea") cloneEl.textContent = orig.value;
+      } else if (tag === "input") {
+        cloneEl.value = origEl.value;
+        cloneEl.setAttribute("value", origEl.value);
       }
+    });
+
+    // Copy signature canvases as images into clone (so signatures export)
+    const sigIds = ["pcSignature","saSignature","clientSignature"];
+    sigIds.forEach(cid => {
+      const origCanvas = document.getElementById(cid);
+      const cloneCanvas = cloneRoot.querySelector(`#${CSS.escape(cid)}`);
+      if (!origCanvas || !cloneCanvas) return;
+
+      // Replace clone canvas with an <img> snapshot to guarantee export
+      const img = document.createElement("img");
+      img.alt = "Signature";
+      img.style.width = "100%";
+      img.style.height = "80px";
+      img.style.objectFit = "contain";
+      img.style.display = "block";
+      img.style.background = "#fff";
+      img.style.borderRadius = "8px";
+      img.style.border = "1px solid var(--border-soft)";
+
+      try { img.src = origCanvas.toDataURL("image/png"); } catch(e) { img.src = ""; }
+      cloneCanvas.replaceWith(img);
     });
   }
 
-  function copyCanvasToCloneImage(originalCanvasId, cloneRoot) {
-    const origCanvas = document.getElementById(originalCanvasId);
-    const clonedCanvas = cloneRoot.querySelector('#' + originalCanvasId);
-    if (!origCanvas || !clonedCanvas) return;
-
-    try {
-      const img = document.createElement('img');
-      img.src = origCanvas.toDataURL('image/png');
-      img.alt = "signature";
-      img.style.width = "100%";
-      img.style.height = "80px";
-      img.style.borderRadius = "8px";
-      img.style.border = "1px solid var(--border-soft)";
-      img.style.background = "#fff";
-      img.style.display = "block";
-      clonedCanvas.replaceWith(img);
-    } catch (e) {}
-  }
-
-  function replaceTextareasForPrint(cloneRoot) {
-    const textareas = Array.from(cloneRoot.querySelectorAll("textarea"));
-    textareas.forEach(ta => {
-      const div = document.createElement("div");
-      div.className = "print-textarea";
-      div.textContent = ta.value || ta.textContent || "";
-      ta.replaceWith(div);
+  function expandAllTextareas(root) {
+    root.querySelectorAll("textarea").forEach(t => {
+      t.style.height = "auto";
+      t.style.minHeight = "0";
+      t.style.maxHeight = "none";
+      t.style.overflow = "visible";
+      // Use scrollHeight after value is set
+      t.style.height = (t.scrollHeight + 6) + "px";
     });
   }
 
@@ -1030,29 +1158,27 @@
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
 
-    // critical: copy live values into clone so export includes tasks/hazards/ratings/controls
-    syncLiveValuesToClone(form, clone);
+    // 1) Copy values FIRST (fix: job tasks/hazards/FSP/R/controls missing)
+    copyLiveValuesIntoClone(form, clone);
 
-    // signatures -> images
-    copyCanvasToCloneImage('pcSignature', clone);
-    copyCanvasToCloneImage('saSignature', clone);
-    copyCanvasToCloneImage('clientSignature', clone);
-
-    // remove unchecked common hazard rows
+    // 2) Remove unchecked "Common Occurring Hazards" rows
     const commonTableBody = clone.querySelector('#commonHazardsTable tbody');
     if (commonTableBody) {
       Array.from(commonTableBody.rows).forEach(row => {
         const appliesCheckbox = row.querySelector('td:first-child input[type="checkbox"]');
-        if (appliesCheckbox && !appliesCheckbox.checked) commonTableBody.removeChild(row);
+        if (appliesCheckbox && !appliesCheckbox.checked) row.remove();
       });
     }
 
-    // hide buttons
+    // 3) Expand textareas so content isn't cut off in export
+    expandAllTextareas(clone);
+
+    // 4) Hide buttons in export
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
-    // force textarea content to appear in export
-    replaceTextareasForPrint(clone);
+    // 5) Hide the filename helper row if you want (keep it visible in export if preferred)
+    // (Leaving it visible is usually fine.)
 
     return clone;
   }
@@ -1068,6 +1194,7 @@
     tempContainer.style.left = '-9999px';
     tempContainer.style.top = '0';
     tempContainer.style.width = '1050px';
+    tempContainer.style.background = 'transparent';
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
@@ -1078,10 +1205,14 @@
       if (!div) return;
       if (addNew) pdf.addPage();
 
+      // Ensure fonts/layout settle
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
       const canvas = await html2canvas(div, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        windowWidth: 1050
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1099,6 +1230,7 @@
 
       const x = (pageWidth - imgW) / 2;
       const y = margin;
+
       pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
     }
 
@@ -1109,76 +1241,130 @@
     return pdf;
   }
 
-  downloadBtn.addEventListener('click', async () => {
-    const filename = askForFileName();
-    try {
-      if (buttonRow) buttonRow.style.display = 'none';
-      const pdf = await generatePdf();
-      pdf.save(filename);
-    } finally {
-      if (buttonRow) buttonRow.style.display = 'flex';
-    }
-  });
+  function finalPdfFileName() {
+    const userName = document.getElementById("pdf_filename")?.value;
+    const base = safeFilePart(userName) || safeFilePart(defaultPdfFileName().replace(/\.pdf$/i,""));
+    return (base ? base : "WorksiteHazardAssessment") + ".pdf";
+  }
 
-  shareBtn.addEventListener('click', async () => {
-    const filename = askForFileName();
-    try {
-      if (buttonRow) buttonRow.style.display = 'none';
-      const pdf = await generatePdf();
-      const blob = pdf.output('blob');
-      const file = new File([blob], filename, { type: 'application/pdf' });
-
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'Worksite Hazard Assessment',
-          text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
-        });
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', async () => {
+      try {
+        if (buttonRow) buttonRow.style.display = 'none';
+        const pdf = await generatePdf();
+        pdf.save(finalPdfFileName());
+      } finally {
+        if (buttonRow) buttonRow.style.display = 'flex';
       }
-    } catch (e) {
-      console.error('Share failed:', e);
-    } finally {
-      if (buttonRow) buttonRow.style.display = 'flex';
-    }
+    });
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      try {
+        if (buttonRow) buttonRow.style.display = 'none';
+        const pdf = await generatePdf();
+        const blob = pdf.output('blob');
+        const file = new File([blob], finalPdfFileName(), { type: 'application/pdf' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Worksite Hazard Assessment',
+            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
+          });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = finalPdfFileName();
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }
+      } catch (e) {
+        console.error('Share failed:', e);
+      } finally {
+        if (buttonRow) buttonRow.style.display = 'flex';
+      }
+    });
+  }
+
+  // =========================
+  //  RISK CALC (R = F × S × P)
+  // =========================
+  function updateRiskForRow(row) {
+    const fInput = document.querySelector('input[name="f_' + row + '"]');
+    const sInput = document.querySelector('input[name="s_' + row + '"]');
+    const pInput = document.querySelector('input[name="p_' + row + '"]');
+    const rInput = document.querySelector('input[name="r_' + row + '"]');
+    if (!fInput || !sInput || !pInput || !rInput) return;
+
+    const f = parseInt(fInput.value, 10);
+    const s = parseInt(sInput.value, 10);
+    const p = parseInt(pInput.value, 10);
+
+    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) rInput.value = f * s * p;
+    else rInput.value = "";
+  }
+
+  function clearRowRiskAndControl(row) {
+    const f = document.querySelector(`input[name="f_${row}"]`);
+    const s = document.querySelector(`input[name="s_${row}"]`);
+    const p = document.querySelector(`input[name="p_${row}"]`);
+    const r = document.querySelector(`input[name="r_${row}"]`);
+    const c = document.querySelector(`textarea[name="control_${row}"]`);
+    if (f) f.value = "";
+    if (s) s.value = "";
+    if (p) p.value = "";
+    if (r) r.value = "";
+    if (c) c.value = "";
+  }
+
+  document.querySelectorAll('.risk-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const row = input.getAttribute('data-row');
+      if (row) updateRiskForRow(row);
+    });
   });
 
-  /* ===================== SIGNATURES ===================== */
+  // =========================
+  //  SIGNATURE PADS
+  // =========================
   function initSignaturePad(canvasId, clearButtonId) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    let drawing = false, lastX = 0, lastY = 0;
+    let drawing = false;
+    let lastX = 0, lastY = 0;
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-      canvas.style.width = rect.width + "px";
-      canvas.style.height = rect.height + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const old = document.createElement("canvas");
+      old.width = canvas.width; old.height = canvas.height;
+      const oldCtx = old.getContext("2d");
+
+      try { oldCtx.drawImage(canvas, 0, 0); } catch(e) {}
+
+      canvas.width = rect.width;
+      canvas.height = rect.height;
 
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#111827';
-      ctx.clearRect(0, 0, rect.width, rect.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Redraw old content scaled
+      try { ctx.drawImage(old, 0, 0, canvas.width, canvas.height); } catch(e) {}
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    function startDraw(x, y){ drawing = true; lastX = x; lastY = y; }
-    function drawLine(x, y){
+    function startDraw(x, y) { drawing = true; lastX = x; lastY = y; }
+    function drawLine(x, y) {
       if (!drawing) return;
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
@@ -1186,7 +1372,7 @@
       ctx.stroke();
       lastX = x; lastY = y;
     }
-    function endDraw(){ drawing = false; }
+    function endDraw() { drawing = false; }
 
     canvas.addEventListener('mousedown', e => {
       const rect = canvas.getBoundingClientRect();
@@ -1202,352 +1388,380 @@
     canvas.addEventListener('touchstart', e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
-      const t = e.touches[0];
-      startDraw(t.clientX - rect.left, t.clientY - rect.top);
-    }, { passive:false });
+      const touch = e.touches[0];
+      startDraw(touch.clientX - rect.left, touch.clientY - rect.top);
+    }, { passive: false });
 
     canvas.addEventListener('touchmove', e => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
-      const t = e.touches[0];
-      drawLine(t.clientX - rect.left, t.clientY - rect.top);
-    }, { passive:false });
+      const touch = e.touches[0];
+      drawLine(touch.clientX - rect.left, touch.clientY - rect.top);
+    }, { passive: false });
 
-    canvas.addEventListener('touchend', e => { e.preventDefault(); endDraw(); }, { passive:false });
+    canvas.addEventListener('touchend', e => { e.preventDefault(); endDraw(); }, { passive: false });
 
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        const rect = canvas.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-      });
-    }
+    if (clearBtn) clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
   }
 
   initSignaturePad('pcSignature', 'clearPcSig');
   initSignaturePad('saSignature', 'clearSaSig');
   initSignaturePad('clientSignature', 'clearClientSig');
 
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    ['pcSignature','saSignature','clientSignature'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-      }
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      ['pcSignature','saSignature','clientSignature'].forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      });
+      document.querySelectorAll('.risk-output').forEach(o => o.value = "");
+      updatePdfFilenameField();
     });
-    document.querySelectorAll('.risk-output').forEach(o => o.value = "");
-  });
+  }
 
-  /* ===================== HAZARD RULE ENGINE (plural-aware) ===================== */
-  const ALLOW_SHORT = new Set(["h2s","uv","sds","pfd","gps","gnss","scba","sabe","co"]);
+  // =========================
+  //  OFFLINE HAZARD RULE ENGINE
+  //  - Better matching (fixes: "construction" picking wrong control)
+  //  - Plural handling via keyword sets (dog/dogs, fence/fences, etc.)
+  //  - Auto-fill F/S/P defaults per hazard
+  //  - Controls are capped < 185 chars
+  // =========================
+
+  function cap185(s) {
+    const str = (s || "").toString().trim();
+    return str.length <= 185 ? str : (str.substring(0, 182).trimEnd() + "…");
+  }
+
+  const DEFAULT_RULES = [
+    {
+      id: "construction_traffic",
+      priority: 100,
+      name: "Construction traffic",
+      keywords: "construction traffic, haul truck, dump truck, delivery truck, concrete truck, backing truck, reversing truck, spotter, equipment path, live traffic, site traffic",
+      control: cap185("Stay out of travel paths and blind spots, wear hi-vis, use a spotter for backing, and make eye contact with operators. Relocate setups if traffic gets too close."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      id: "traffic",
+      priority: 60,
+      name: "Traffic & vehicles",
+      keywords: "traffic, vehicle, vehicles, car, cars, truck, trucks, bus, buses, van, vans, road, roads, highway, lane, lanes, shoulder, intersection, crosswalk, speeding, backing, reversing, blind corner",
+      control: cap185("Work well clear of live lanes and blind spots. Use cones/signs if needed, wear hi-vis, use a spotter for backing, and make eye contact before entering vehicle paths."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      id: "construction_fencing",
+      priority: 90,
+      name: "Construction fencing",
+      keywords: "construction fence, construction fencing, temp fence, temporary fence, fence, fences, fence base, fence bases, fence panel, fence panels, fence gate, site perimeter",
+      control: cap185("Use designated gates/crossings, don’t lean or climb, watch bases for trips, and keep clear while panels move. In wind, keep distance and stop if unstable."),
+      f: 3, s: 2, p: 3
+    },
+    {
+      id: "winter_driving",
+      priority: 70,
+      name: "Winter driving & road conditions",
+      keywords: "icy road, icy roads, snow covered roads, slush, black ice, poor road conditions, winter storm, whiteout, low visibility driving, fog on road",
+      control: cap185("Reduce speed, increase following distance, and avoid sudden moves. Delay travel or reroute if traction or visibility is too poor to drive safely."),
+      f: 4, s: 4, p: 3
+    },
+    {
+      id: "slips_trips",
+      priority: 50,
+      name: "Slips / trips / falls",
+      keywords: "uneven ground, uneven, slope, ditch, ditches, embankment, hole, holes, rut, ruts, mud, muddy, loose gravel, wet grass, snow, ice, icy, slippery, trip hazard, slip hazard, sidewalk, curb, stairs, step, steps",
+      control: cap185("Walk the area first and avoid unstable, icy, or uneven ground. Set tripods on firm footing and keep walk paths clear of holes, debris, cords, and loose material."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      id: "water",
+      priority: 55,
+      name: "Water / ice / drowning",
+      keywords: "river, creek, stream, canal, pond, lake, reservoir, culvert, storm pond, open water, deep water, fast moving water, current, flooding, flood, thin ice, river ice, lake ice, drowning",
+      control: cap185("Keep back from edges, undercut banks, and thin/unknown ice. Use safe crossings or reroute, and stop work if there’s a real fall-in risk."),
+      f: 3, s: 4, p: 2
+    },
+    {
+      id: "cold",
+      priority: 40,
+      name: "Cold weather",
+      keywords: "cold, freezing, frost, frostbite, hypothermia, winter, windchill, blizzard, snowstorm, below zero, minus",
+      control: cap185("Dress in layers, cover skin, and take warm-up breaks. Shorten tasks in extreme cold and monitor each other for early cold-stress signs."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      id: "heat",
+      priority: 40,
+      name: "Heat / sun",
+      keywords: "heat, hot, heat stress, heat exhaustion, heat stroke, sun, uv, sunburn, high temperature",
+      control: cap185("Take frequent water and shade breaks, wear sun protection, and slow down in heat. Stop and cool down if anyone shows heat-stress symptoms."),
+      f: 4, s: 3, p: 3
+    },
+    {
+      id: "rain",
+      priority: 35,
+      name: "Rain / wet surfaces",
+      keywords: "rain, raining, wet, drizzle, showers, downpour, puddles, slick, slippery when wet, wet stairs, wet ladder",
+      control: cap185("Use waterproof layers and slip-resistant footwear and move slowly on wet surfaces, stairs, and ladders. Avoid climbing on wet metal where footing is poor."),
+      f: 3, s: 3, p: 3
+    },
+    {
+      id: "wind",
+      priority: 45,
+      name: "Wind / poor visibility",
+      keywords: "wind, winds, windy, gust, gusts, high winds, blowing snow, dust, fog, foggy, smoke, wildfire smoke, low visibility, poor visibility",
+      control: cap185("Step in tripods and secure loose items in wind. Avoid overhead hazards in strong gusts and delay work if visibility or air quality becomes unsafe."),
+      f: 3, s: 3, p: 3
+    },
+    {
+      id: "dogs",
+      priority: 65,
+      name: "Domestic dogs",
+      keywords: "dog, dogs, barking dog, barking dogs, aggressive dog, aggressive dogs, guard dog, guard dogs, loose dog, loose dogs, pet",
+      control: cap185("Do not approach unknown dogs. Ask the owner to secure the dog and avoid entering the area until it is under control."),
+      f: 3, s: 3, p: 3
+    },
+    {
+      id: "livestock",
+      priority: 55,
+      name: "Livestock",
+      keywords: "cattle, cow, cows, bull, livestock, herd, horse, horses, sheep, goats, farm animal, farm animals",
+      control: cap185("Give livestock space and avoid walking between animals and fences. Reroute if animals appear stressed, protective, or aggressive."),
+      f: 3, s: 3, p: 2
+    },
+    {
+      id: "wildlife",
+      priority: 55,
+      name: "Wildlife",
+      keywords: "wildlife, bear, bears, cougar, moose, deer, elk, coyote, coyotes, wolf, wolves, goose, geese",
+      control: cap185("Stay alert for wildlife and keep distance. Back away calmly, secure food/garbage, and relocate or leave if wildlife is nearby or unpredictable."),
+      f: 2, s: 4, p: 2
+    },
+    {
+      id: "utilities",
+      priority: 80,
+      name: "Utilities (overhead/underground)",
+      keywords: "power line, power lines, overhead line, hydro, electrical, electric, gas line, pipeline, water line, sewer, storm sewer, fibre, fiber, telecom, utility, utilities, manhole, vault, transformer",
+      control: cap185("Confirm locates and mark utilities before work. Keep metal poles/rods outside limits of approach and do not probe/dig without confirmation."),
+      f: 3, s: 4, p: 3
+    },
+    {
+      id: "digging",
+      priority: 75,
+      name: "Digging / excavation / digging pins",
+      keywords: "digging, dig, excavation, excavations, trench, trenches, trenching, post hole, auger, digging pin, digging pins, dig pin, dig pins",
+      control: cap185("Confirm utilities and hand-dig carefully near marks. Keep people/spoil back from edges, use correct tools for pins, and stop if locates/ground conditions are uncertain."),
+      f: 3, s: 4, p: 3
+    },
+    {
+      id: "jackhammer",
+      priority: 70,
+      name: "Jackhammer / breaking tools",
+      keywords: "jackhammer, jack hammer, breaker, demo hammer, demolition hammer, concrete breaking, pavement breaker, chipping hammer",
+      control: cap185("Wear eye/hearing/hand PPE, keep stable footing and both hands on the tool, control flying chips, take vibration breaks, and confirm no utilities below."),
+      f: 3, s: 3, p: 3
+    },
+    {
+      id: "generator",
+      priority: 60,
+      name: "Portable generators",
+      keywords: "generator, generators, genny, portable generator, gen set, genset",
+      control: cap185("Run generators outdoors on level ground away from doors/intakes, route cords to prevent trips, and refuel only when off, cooled, and ventilated."),
+      f: 2, s: 4, p: 2
+    },
+    {
+      id: "manual_handling",
+      priority: 40,
+      name: "Tools / manual handling",
+      keywords: "tripod, tripods, rod, prism, total station, gnss, gps, pole, battery, batteries, heavy, lift, lifting, carry, carrying, strain, back, shoulder, extension cord, cords, cable, cables",
+      control: cap185("Use safe lifting and split heavy loads. Check clamps/straps before use and manage cords and sharp tools to prevent trips and cuts."),
+      f: 4, s: 2, p: 3
+    }
+  ];
+
+  const hazardRules = DEFAULT_RULES;
 
   function normalize(text) {
-    return (text || '')
+    return (text || "")
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, ' ')
-      .replace(/\s+/g, ' ')
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
       .trim();
-  }
-
-  function clamp185(s) {
-    const str = String(s || "").trim();
-    if (str.length <= 185) return str;
-    return str.slice(0, 182).trimEnd() + "...";
-  }
-
-  // Simple plural/singular variants (fast + offline)
-  function wordVariants(w) {
-    w = (w || "").trim();
-    if (!w) return [];
-    const out = new Set([w]);
-
-    if (w.endsWith("ies") && w.length > 4) out.add(w.slice(0, -3) + "y");
-    if (w.endsWith("es") && w.length > 3) out.add(w.slice(0, -2));
-    if (w.endsWith("s") && !w.endsWith("ss") && w.length > 2) out.add(w.slice(0, -1));
-
-    if (w.endsWith("y") && w.length > 2) out.add(w.slice(0, -1) + "ies");
-    out.add(w + "s");
-    out.add(w + "es");
-    return Array.from(out);
   }
 
   function tokenize(text) {
     const t = normalize(text);
     if (!t) return [];
-    const base = t.split(' ').filter(Boolean);
-    const expanded = new Set();
-    base.forEach(tok => wordVariants(tok).forEach(v => expanded.add(v)));
-    return Array.from(expanded);
+    return t.split(" ").filter(Boolean);
   }
 
-  const hazardRules = [
-    { name:"Construction Traffic", keywords:"construction traffic,site traffic,haul truck,haul trucks,dump truck,dump trucks,delivery truck,delivery trucks,flagger,flagging,traffic control,backing,reversing,blind spot,swing radius,work zone", control:"Stay out of travel paths and swing radii. Wear hi-vis, use cones or signs if needed, use a spotter for backing, and make eye contact with operators.", f:3,s:4,p:3 },
-    { name:"Construction Fencing", keywords:"construction fencing,construction fence,temp fence,temporary fence,fence panel,fence panels,fence base,fence bases,site perimeter,gate,gates,barricade,barricades", control:"Use gates and crossings, watch bases and trip hazards, and keep clear when panels move. In wind, keep distance and do not lean on fencing.", f:2,s:3,p:3 },
-    { name:"Portable Generators", keywords:"generator,generators,portable generator,genset,genny,exhaust,carbon monoxide,extension cord,extension cords,cord,cords,fueling,refuel,gas can", control:"Run outdoors away from openings. Route cords to prevent trips. Refuel only when off and cooled, and store fuel safely.", f:2,s:5,p:2 },
-    { name:"Traffic & Vehicles", keywords:"traffic,road,roads,highway,lane,lanes,shoulder,intersection,crosswalk,parking lot,alley,backing,reversing,vehicle,vehicles,truck,trucks,bus,buses", control:"Work clear of live lanes and vehicle routes. Wear hi-vis, face traffic, use cones or signs if needed, and use a spotter for backing.", f:3,s:4,p:3 },
-    { name:"Slips, Trips, Falls", keywords:"slip,slips,trip,trips,fall,falls,uneven ground,slippery,ice,icy,snow,mud,ditch,ditches,embankment,hole,holes,rut,ruts,loose gravel,wet grass,stairs,curb,sidewalk", control:"Walk the area first and avoid unstable footing. Use slip-resistant footwear, keep hands free, set tripods on firm ground, and keep paths clear.", f:3,s:3,p:3 },
-    { name:"Cold Weather", keywords:"cold,cold weather,freezing,winter,windchill,frostbite,hypothermia,blizzard,snowstorm,below zero", control:"Dress in layers, cover exposed skin, and take warm-up breaks. Monitor for cold stress and shorten tasks in extreme cold or windchill.", f:3,s:4,p:2 },
-    { name:"Rain, Wet Conditions", keywords:"rain,raining,wet,drizzle,downpour,puddles,slippery when wet,wet ladder,wet stairs", control:"Wear waterproof layers and slip-resistant footwear. Slow down on wet surfaces and avoid steep or unstable areas with poor footing.", f:3,s:3,p:3 },
-    { name:"Wind, Low Visibility", keywords:"wind,windy,gust,gusts,blowing snow,dust,dust storm,fog,foggy,smoke,wildfire smoke,low visibility", control:"Secure tripods and loose items and use lower, wider setups. Delay work if wind, smoke, or visibility makes conditions unsafe.", f:3,s:3,p:3 },
-    { name:"Utilities", keywords:"utilities,utility,overhead,underground,locate,locates,power line,powerlines,gas line,pipeline,telecom,fibre,fiber,manhole,vault,transformer", control:"Confirm locates and mark-outs before work. Maintain limits of approach and do not dig, stake, or probe without verified clearance.", f:2,s:5,p:2 },
-    { name:"Digging, Pins", keywords:"digging,dig,excavation,excavations,trench,trenches,auger,post hole,digging pin,digging pins,pin,pins", control:"Confirm locates before digging or using pins. Hand dig near marks, keep people back from edges, and stop if utility locations are uncertain.", f:2,s:5,p:2 },
-    { name:"Jackhammer", keywords:"jackhammer,breaker,demolition hammer,concrete,pavement,chipping,vibration,noise", control:"Wear eye and hearing protection and use stable footing. Control flying debris, confirm utilities below, and take breaks to reduce vibration exposure.", f:2,s:4,p:2 },
-    { name:"Dogs", keywords:"dog,dogs,aggressive dog,aggressive dogs,loose dog,loose dogs,barking dog,barking dogs,guard dog,guard dogs", control:"Do not approach unknown or aggressive dogs. Ask the owner to secure the dog and do not enter until the area is clearly safe.", f:2,s:3,p:3 },
-    { name:"Wildlife", keywords:"wildlife,bear,bears,moose,coyote,coyotes,cougar,cougars,wolf,wolves,elk,deer,goose,geese", control:"Stay alert, keep distance, secure food and garbage, carry bear spray where required, and leave if wildlife is near or unpredictable.", f:2,s:5,p:2 },
-    { name:"H2S, Gas", keywords:"h2s,hydrogen sulfide,hydrogen sulphide,methane,toxic gas,gas monitor,alarm,oxygen deficiency,confined space", control:"Do not work in H2S or hazardous atmospheres without training and a working monitor. Follow emergency procedures and evacuate on alarm.", f:2,s:5,p:2 },
-    { name:"Housekeeping", keywords:"housekeeping,access,egress,material storage,stored,stacked,blocking,walkway,walkways,aisle,aisles,debris", control:"Keep access and egress clear. Store materials safely and maintain housekeeping. Remove trip hazards and improve lighting if needed.", f:3,s:3,p:3 }
-  ].map(r => ({ ...r, control: clamp185(r.control) }));
-
-  function scoreRule(rule, text, tokens) {
-    const kList = (rule.keywords || "")
-      .split(',')
-      .map(k => normalize(k.trim()))
-      .filter(Boolean);
-
-    let score = 0;
-    const tokenSet = new Set(tokens);
-
-    for (const kw of kList) {
-      if (!kw) continue;
-      if (kw.length <= 2) continue;
-      if (kw.length === 3 && !ALLOW_SHORT.has(kw)) continue;
-
-      if (kw.includes(' ')) {
-        if (text.includes(kw)) { score += 12; continue; }
-
-        const parts = kw.split(' ').filter(Boolean);
-        let allParts = true;
-
-        for (const p of parts) {
-          const pv = wordVariants(p);
-          const hasAny = pv.some(v => tokenSet.has(v));
-          if (!hasAny) { allParts = false; break; }
-        }
-
-        if (allParts) score += 7;
-        continue;
-      }
-
-      const kwVars = wordVariants(kw);
-      if (kwVars.some(v => tokenSet.has(v))) { score += 6; continue; }
-      if (kw.length >= 5 && text.includes(kw)) score += 2;
-    }
-
-    return score;
+  function phraseScore(hText, phrase) {
+    // Prefer exact phrase hits, then word hits
+    const h = normalize(hText);
+    const p = normalize(phrase);
+    if (!p) return 0;
+    if (h.includes(p)) return 12; // strong phrase match
+    // otherwise partial word match
+    const parts = p.split(" ").filter(Boolean);
+    let sc = 0;
+    parts.forEach(w => { if (w.length > 2 && h.includes(w)) sc += 2; });
+    return sc;
   }
 
-  function bestRuleMatch(hazardText) {
+  function getBestRule(hazardText) {
     const text = normalize(hazardText);
     if (!text) return null;
-    const tokens = tokenize(text);
 
     let best = null;
-    let bestScore = 0;
+    let bestScore = -1;
 
     for (const rule of hazardRules) {
-      const s = scoreRule(rule, text, tokens);
-      if (s > bestScore) { bestScore = s; best = rule; }
+      const kws = (rule.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
+      let score = 0;
+
+      // priority baseline so "construction fencing" wins over generic "traffic"
+      score += (rule.priority || 0) * 0.25;
+
+      for (const kw of kws) score += phraseScore(text, kw);
+
+      // tie-breaker: longer keyword phrases favored
+      const lenBoost = Math.min(8, Math.floor(text.length / 8));
+      score += lenBoost * 0.2;
+
+      if (score > bestScore) { bestScore = score; best = rule; }
     }
 
-    return bestScore > 0 ? best : null;
+    // Require a minimum score so random text doesn't pick a rule
+    if (bestScore < 6) return null;
+    return best;
   }
 
-  function autofillRiskIfBlank(row, rule) {
+  function autoFillFSP(row, rule) {
+    const fInput = document.querySelector(`input[name="f_${row}"]`);
+    const sInput = document.querySelector(`input[name="s_${row}"]`);
+    const pInput = document.querySelector(`input[name="p_${row}"]`);
+
     if (!rule) return;
 
-    const fEl = document.querySelector(`input[name="f_${row}"]`);
-    const sEl = document.querySelector(`input[name="s_${row}"]`);
-    const pEl = document.querySelector(`input[name="p_${row}"]`);
-    if (!fEl || !sEl || !pEl) return;
-
-    const isBlank = (el) => !String(el.value || "").trim();
-
-    if (isBlank(fEl) && Number.isFinite(rule.f)) fEl.value = rule.f;
-    if (isBlank(sEl) && Number.isFinite(rule.s)) sEl.value = rule.s;
-    if (isBlank(pEl) && Number.isFinite(rule.p)) pEl.value = rule.p;
+    // only fill if blank (so users can override)
+    if (fInput && !fInput.value) fInput.value = String(rule.f || "");
+    if (sInput && !sInput.value) sInput.value = String(rule.s || "");
+    if (pInput && !pInput.value) pInput.value = String(rule.p || "");
 
     updateRiskForRow(row);
   }
 
   function initHazardAutoSuggest() {
     document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
-
-      input.addEventListener('input', e => {
-        const value = e.target.value.trim();
-        const row = e.target.name.split('_')[1];
-        if (!value) clearRowControlsAndRatings(row);
-      });
-
       input.addEventListener('blur', e => {
         const hazardText = e.target.value.trim();
-        const row = e.target.name.split('_')[1];
+        const parts = e.target.name.split('_');
+        const row = parts[1];
         const controlField = document.querySelector(`textarea[name="control_${row}"]`);
         if (!controlField) return;
 
-        if (!hazardText) { clearRowControlsAndRatings(row); return; }
-
-        const rule = bestRuleMatch(hazardText);
-
-        if (!(controlField.value && controlField.value.trim().length > 40)) {
-          if (rule && rule.control) controlField.value = clamp185(rule.control);
+        // If hazard cleared -> clear control + risk
+        if (!hazardText) {
+          clearRowRiskAndControl(row);
+          return;
         }
 
-        autofillRiskIfBlank(row, rule);
+        const rule = getBestRule(hazardText);
+        if (rule) {
+          // Only overwrite controls if user hasn't written much
+          if (!controlField.value || controlField.value.trim().length < 40) controlField.value = rule.control || "";
+          autoFillFSP(row, rule);
+        }
+      });
+
+      input.addEventListener('input', e => {
+        const value = e.target.value.trim();
+        const parts = e.target.name.split('_');
+        const row = parts[1];
+        const controlField = document.querySelector(`textarea[name="control_${row}"]`);
+
+        // Clear when hazard is deleted
+        if (!value) clearRowRiskAndControl(row);
+
+        // Optional: live update risk when user edits hazard text after auto-fill
+        if (controlField && !value) controlField.value = "";
       });
     });
   }
+
   initHazardAutoSuggest();
 
-  /* ===================== EMERGENCY RESPONSE AUTO-FILL (SELF-CONTAINED) ===================== */
-  const MEDICAL_FACILITIES = [{"name":"Foothills Medical Centre","abbr":"FMC","type":"Hospital","address":"1403 29 St NW","city":"Calgary","postal":"T2N 2T9"},{"name":"Alberta Children's Hospital","abbr":"ACH","type":"Hospital","address":"28 Oki Dr NW","city":"Calgary","postal":"T3B 6A8"},{"name":"Peter Lougheed Centre","abbr":"PLC","type":"Hospital","address":"3500 26 Ave NE","city":"Calgary","postal":"T1Y 6J4"},{"name":"Rockyview General Hospital","abbr":"RGH","type":"Hospital","address":"7007 14 St SW","city":"Calgary","postal":"T2V 1P9"},{"name":"South Health Campus","abbr":"SHC","type":"Hospital","address":"4448 Front St SE","city":"Calgary","postal":"T3M 1M4"},{"name":"Sheldon M. Chumir Health Centre","abbr":"SMCHC","type":"Community Health Centre","address":"1213 4 St SW","city":"Calgary","postal":"T2R 0X7"},{"name":"Sunridge Professional Building, Urgent Care","abbr":"SPB","type":"Urgent Care","address":"2685 36 St NE","city":"Calgary","postal":"T1Y 6T2"},{"name":"Airdrie Urgent Care Centre","abbr":"AUCC","type":"Urgent Care","address":"604 Main St S","city":"Airdrie","postal":"T4B 2L2"},{"name":"Okotoks Health and Wellness Centre","abbr":"OHWC","type":"Urgent Care","address":"100 Campus Dr","city":"Okotoks","postal":"T1S 0C2"},{"name":"Cochrane Urgent Care","abbr":"CUC","type":"Urgent Care","address":"15 Westside Dr","city":"Cochrane","postal":"T4C 1M1"},{"name":"Banff Mineral Springs Hospital","abbr":"BMSH","type":"Hospital","address":"305 Lynx St","city":"Banff","postal":"T1L 1H1"},{"name":"Canmore General Hospital","abbr":"CGH","type":"Hospital","address":"1100 Hospital Pl","city":"Canmore","postal":"T1W 1N2"},{"name":"High River General Hospital","abbr":"HRGH","type":"Hospital","address":"560 9 Ave W","city":"High River","postal":"T1V 1B3"},{"name":"Didsbury District Health Services","abbr":"DDHS","type":"Hospital","address":"20 6 Ave NE","city":"Didsbury","postal":"T0M 0W0"},{"name":"Olds Hospital and Care Centre","abbr":"OHCC","type":"Hospital","address":"3901 57 Ave","city":"Olds","postal":"T4H 1T9"},{"name":"Claresholm General Hospital","abbr":"CLGH","type":"Hospital","address":"501 18 Ave W","city":"Claresholm","postal":"T0L 0T0"},{"name":"Nanton Community Health Centre","abbr":"NCHC","type":"Community Health Centre","address":"5019 48 St","city":"Nanton","postal":"T0L 1R0"},{"name":"Strathmore District Health Services","abbr":"SDHS","type":"Hospital","address":"200 Brent Blvd","city":"Strathmore","postal":"T1P 1J9"},{"name":"Chestermere Health Centre","abbr":"CHC","type":"Community Health Centre","address":"100 West Creek Blvd","city":"Chestermere","postal":"T1X 1S1"},{"name":"Black Diamond Health Centre","abbr":"BDHC","type":"Community Health Centre","address":"214 Centre Ave W","city":"Black Diamond","postal":"T0L 0H0"},{"name":"Turner Valley Medical Clinic","abbr":"TVMC","type":"Community Health Centre","address":"410 Main St NW","city":"Turner Valley","postal":"T0L 2A0"},{"name":"Siksika Health Services","abbr":"SHS","type":"Community Health Centre","address":"Siksika Nation","city":"Siksika Nation","postal":""},{"name":"Brooks Health Centre","abbr":"BHC","type":"Hospital","address":"440 3 St E","city":"Brooks","postal":"T1R 0G7"},{"name":"Medicine Hat Regional Hospital","abbr":"MHRH","type":"Hospital","address":"666 5 St SW","city":"Medicine Hat","postal":"T1A 4H6"},{"name":"Lethbridge Regional Hospital","abbr":"LRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Vulcan Community Health Centre","abbr":"VCHC","type":"Community Health Centre","address":"221 1 Ave S","city":"Vulcan","postal":"T0L 2B0"},{"name":"Drumheller Health Centre","abbr":"DHC","type":"Hospital","address":"351 9 St NW","city":"Drumheller","postal":"T0J 0Y1"},{"name":"Three Hills Health Centre","abbr":"THHC","type":"Hospital","address":"1010 1 St N","city":"Three Hills","postal":"T0M 2A0"},{"name":"Hanna Health Centre","abbr":"HHC","type":"Hospital","address":"517 6 Ave W","city":"Hanna","postal":"T0J 1P0"}];
+  // =========================
+  //  EMERGENCY RESPONSE AUTOCOMPLETE (self-contained list)
+  //  - Select facility -> fills: phone=911, procedures template with selected facility + address
+  //  - Works on iPad + PC (custom dropdown, not datalist)
+  // =========================
 
-  const nearestHospitalInput = document.getElementById("nearest_hospital");
-  const hospitalPhoneInput = document.getElementById("hospital_phone");
-  const emergencyProceduresInput = document.getElementById("emergency_procedures");
-  const hospitalSuggestions = document.getElementById("hospitalSuggestions");
+  const MEDICAL_FACILITIES = [{"name":"Foothills Medical Centre","abbr":"FMC","type":"Hospital","address":"1403 29 St NW","city":"Calgary","postal":"T2N 2T9"},{"name":"Alberta Children's Hospital","abbr":"ACH","type":"Hospital","address":"28 Oki Dr NW","city":"Calgary","postal":"T3B 6A8"},{"name":"Peter Lougheed Centre","abbr":"PLC","type":"Hospital","address":"3500 26 Ave NE","city":"Calgary","postal":"T1Y 6J4"},{"name":"Rockyview General Hospital","abbr":"RGH","type":"Hospital","address":"7007 14 St SW","city":"Calgary","postal":"T2V 1P9"},{"name":"South Health Campus","abbr":"SHC","type":"Hospital","address":"4448 Front St SE","city":"Calgary","postal":"T3M 1M4"},{"name":"Sheldon M. Chumir Health Centre","abbr":"SMCHC","type":"Urgent Care / Community Health","address":"1213 4 St SW","city":"Calgary","postal":"T2R 0X7"},{"name":"Richmond Road Diagnostic and Treatment Centre","abbr":"RRDTC","type":"Urgent Care / Community Health","address":"1820 Richmond Rd SW","city":"Calgary","postal":"T2T 5C7"},{"name":"Airdrie Urgent Care","abbr":"AUC","type":"Urgent Care / Community Health","address":"604 Main St S","city":"Airdrie","postal":"T4B 3E2"},{"name":"Okotoks Health and Wellness Centre","abbr":"OHWC","type":"Urgent Care / Community Health","address":"11 Cimarron Common","city":"Okotoks","postal":"T1S 2E5"},{"name":"High River Hospital","abbr":"HRH","type":"Hospital","address":"560 9 Ave W","city":"High River","postal":"T1V 1B3"},{"name":"Didsbury District Health Services","abbr":"DDHS","type":"Hospital","address":"2221 20 Ave","city":"Didsbury","postal":"T0M 0W0"},{"name":"Canmore General Hospital","abbr":"CGH","type":"Hospital","address":"2000 Hospital Pl","city":"Canmore","postal":"T1W 1N2"},{"name":"Banff Mineral Springs Hospital","abbr":"BMSH","type":"Hospital","address":"305 Lynx St","city":"Banff","postal":"T1L 1C1"},{"name":"Strathmore Hospital","abbr":"STH","type":"Hospital","address":"200 Brent Blvd","city":"Strathmore","postal":"T1P 1J9"},{"name":"Claresholm General Hospital","abbr":"CLGH","type":"Hospital","address":"431 S Railway Ave","city":"Claresholm","postal":"T0L 0T0"},{"name":"Nanton Community Health Centre","abbr":"NCHC","type":"Urgent Care / Community Health","address":"430 Centre St","city":"Nanton","postal":"T0L 1R0"},{"name":"Cochrane Community Health Centre","abbr":"CCHC","type":"Urgent Care / Community Health","address":"117 2 Ave W","city":"Cochrane","postal":"T4C 1A3"},{"name":"Siksika Health Services","abbr":"SHS","type":"Urgent Care / Community Health","address":"Siksika Nation, Hwy 1","city":"Siksika Nation","postal":"T0J 3W0"},{"name":"Chestermere Health Centre","abbr":"CHC","type":"Urgent Care / Community Health","address":"300 Merganser Dr W","city":"Chestermere","postal":"T1X 0L4"},{"name":"Dunmore Health Centre","abbr":"DHC","type":"Urgent Care / Community Health","address":"100 Dunmore Rd SE","city":"Medicine Hat","postal":"T1B 2S4"},{"name":"Medicine Hat Regional Hospital","abbr":"MHRH","type":"Hospital","address":"666 5 St SW","city":"Medicine Hat","postal":"T1A 4H6"},{"name":"Lethbridge Regional Hospital","abbr":"LRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Chinook Regional Hospital","abbr":"CRH","type":"Hospital","address":"960 19 St S","city":"Lethbridge","postal":"T1J 1W5"},{"name":"Taber Health Centre","abbr":"THC","type":"Urgent Care / Community Health","address":"4326 50 Ave","city":"Taber","postal":"T1G 1N9"},{"name":"Brooks Health Centre","abbr":"BHC","type":"Hospital","address":"440 3 St E","city":"Brooks","postal":"T1R 0J3"},{"name":"Vulcan Community Health Centre","abbr":"VCHC","type":"Urgent Care / Community Health","address":"318 Centre St S","city":"Vulcan","postal":"T0L 2B0"},{"name":"Three Hills Health Centre","abbr":"THHC","type":"Urgent Care / Community Health","address":"1020 2 St N","city":"Three Hills","postal":"T0M 2A0"},{"name":"Olds Hospital and Care Centre","abbr":"OHCC","type":"Hospital","address":"3901 57 Ave","city":"Olds","postal":"T4H 1S9"},{"name":"Rocky Mountain House Health Centre","abbr":"RMHHC","type":"Urgent Care / Community Health","address":"5000 50 St","city":"Rocky Mountain House","postal":"T4T 1A5"},{"name":"Sundre Hospital and Care Centre","abbr":"SHCC","type":"Hospital","address":"101 1 Ave NW","city":"Sundre","postal":"T0M 1X0"}];
 
-  function formatFacilityLine(f) {
-    const parts = [];
-    const head = f.abbr ? `${f.name} (${f.abbr})` : f.name;
-    parts.push(head);
-    const addrBits = [f.address, f.city, f.postal].filter(Boolean).join(", ");
-    if (addrBits) parts.push(addrBits);
-    return parts.join(", ");
+  const facilityInput = document.getElementById("nearest_hospital");
+  const facilitySuggest = document.getElementById("facilitySuggest");
+  const phoneInput = document.getElementById("hospital_phone");
+  const procTextarea = document.getElementById("emergency_procedures");
+
+  function facilityLabel(f) {
+    const ab = f.abbr ? ` (${f.abbr})` : "";
+    const addr = [f.address, f.city, f.postal].filter(Boolean).join(", ");
+    return { title: `${f.name}${ab}`, meta: `${f.type || "Facility"} • ${addr}`.trim(), addr };
   }
 
-  function buildERPText(f) {
-    const facilityLine = formatFacilityLine(f);
-    return `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${facilityLine} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
-  }
+  function renderFacilitySuggestions(list) {
+    facilitySuggest.innerHTML = "";
+    if (!list.length) { facilitySuggest.style.display = "none"; return; }
 
-  function matchFacilities(query) {
-    const q = normalize(query);
-    if (!q) return [];
-    const qNoSpaces = q.replace(/\s+/g, "");
-
-    const starts = [];
-    const contains = [];
-
-    MEDICAL_FACILITIES.forEach(f => {
-      const name = normalize(f.name);
-      const abbr = normalize(f.abbr).replace(/\s+/g, "");
-      const type = normalize(f.type);
-      const city = normalize(f.city);
-
-      const abbrHit = abbr && (abbr === qNoSpaces || abbr.startsWith(qNoSpaces));
-      const nameStarts = name.startsWith(q);
-      const nameContains = name.includes(q);
-      const typeHit = type.includes(q);
-      const cityHit = city.includes(q);
-
-      if (abbrHit || nameStarts) starts.push(f);
-      else if (nameContains || typeHit || cityHit) contains.push(f);
-    });
-
-    return starts.concat(contains).slice(0, 8);
-  }
-
-  function showSuggestions(list) {
-    hospitalSuggestions.innerHTML = "";
-    if (!list.length) {
-      hospitalSuggestions.style.display = "none";
-      return;
-    }
-
-    list.forEach(f => {
+    list.slice(0, 12).forEach(f => {
       const item = document.createElement("div");
-      item.className = "suggestion-item";
-
-      const top = document.createElement("div");
-      top.className = "suggestion-top";
-      top.textContent = f.abbr ? `${f.name} (${f.abbr})` : f.name;
-
-      const sub = document.createElement("div");
-      sub.className = "suggestion-sub";
-      const addrBits = [f.type, f.address, f.city, f.postal].filter(Boolean).join(", ");
-      sub.textContent = addrBits;
-
-      item.appendChild(top);
-      item.appendChild(sub);
-
+      item.className = "suggest-item";
+      const lab = facilityLabel(f);
+      item.innerHTML = `<div><strong>${lab.title}</strong></div><div class="suggest-meta">${lab.meta}</div>`;
       item.addEventListener("mousedown", (e) => { e.preventDefault(); selectFacility(f); });
-      item.addEventListener("touchstart", (e) => { e.preventDefault(); selectFacility(f); }, { passive:false });
-
-      hospitalSuggestions.appendChild(item);
+      item.addEventListener("click", () => selectFacility(f));
+      facilitySuggest.appendChild(item);
     });
 
-    hospitalSuggestions.style.display = "block";
+    facilitySuggest.style.display = "block";
+  }
+
+  function searchFacilities(q) {
+    const n = normalize(q);
+    if (!n) return MEDICAL_FACILITIES.slice(); // show all on empty (so full list is available)
+    return MEDICAL_FACILITIES.filter(f => {
+      const hay = normalize(`${f.name} ${f.abbr} ${f.type} ${f.address} ${f.city} ${f.postal}`);
+      return hay.includes(n);
+    });
   }
 
   function selectFacility(f) {
-    nearestHospitalInput.value = f.abbr ? `${f.name} (${f.abbr})` : f.name;
-    nearestHospitalInput.dataset.selectedFacility = formatFacilityLine(f);
+    const lab = facilityLabel(f);
+    facilityInput.value = lab.title;
+    facilitySuggest.style.display = "none";
 
-    hospitalPhoneInput.value = "911";
-    emergencyProceduresInput.value = buildERPText(f);
+    // Auto-fill phone + procedures
+    if (phoneInput) phoneInput.value = "911";
 
-    hospitalSuggestions.style.display = "none";
+    const addrFull = [f.name, f.address, f.city, f.postal].filter(Boolean).join(", ");
+    const template =
+      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${addrFull} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+
+    if (procTextarea) procTextarea.value = template;
   }
 
-  function tryAutoSelectExact(query) {
-    const q = normalize(query);
-    if (!q) return null;
-    const qNoSpaces = q.replace(/\s+/g, "");
-
-    // Exact acronym match first
-    const byAbbr = MEDICAL_FACILITIES.find(f => normalize(f.abbr).replace(/\s+/g, "") === qNoSpaces);
-    if (byAbbr) return byAbbr;
-
-    // Exact name match
-    const byName = MEDICAL_FACILITIES.find(f => normalize(f.name) === q);
-    if (byName) return byName;
-
-    return null;
-  }
-
-  function clearERPIfAuto() {
-    // Only clear if it looks like our auto-filled content to avoid erasing custom text.
-    const autoLooks = (emergencyProceduresInput.value || "").includes("Ensure your safety and move to a secure area.");
-    if (autoLooks) emergencyProceduresInput.value = "";
-    if ((hospitalPhoneInput.value || "").trim() === "911") hospitalPhoneInput.value = "";
-    delete nearestHospitalInput.dataset.selectedFacility;
-  }
-
-  if (nearestHospitalInput) {
-    nearestHospitalInput.addEventListener("input", () => {
-      const val = nearestHospitalInput.value || "";
-      if (!val.trim()) {
-        hospitalSuggestions.style.display = "none";
-        clearERPIfAuto();
-        return;
-      }
-      const matches = matchFacilities(val);
-      showSuggestions(matches);
-    });
-
-    nearestHospitalInput.addEventListener("blur", () => {
-      // allow click/tap to register before hiding
-      setTimeout(() => { hospitalSuggestions.style.display = "none"; }, 150);
-
-      const val = (nearestHospitalInput.value || "").trim();
-      if (!val) return;
-
-      const exact = tryAutoSelectExact(val);
-      if (exact) selectFacility(exact);
-      else {
-        // If user typed something and did not select a facility, do not force overwrite.
-        // But if they previously selected then changed it, clear auto ERP if selection no longer matches.
-        const selected = nearestHospitalInput.dataset.selectedFacility || "";
-        if (selected && !normalize(selected).includes(normalize(val))) clearERPIfAuto();
-      }
-    });
-
+  if (facilityInput) {
+    facilityInput.addEventListener("focus", () => renderFacilitySuggestions(searchFacilities(facilityInput.value)));
+    facilityInput.addEventListener("input", () => renderFacilitySuggestions(searchFacilities(facilityInput.value)));
+    facilityInput.addEventListener("blur", () => setTimeout(() => { facilitySuggest.style.display = "none"; }, 140));
     document.addEventListener("click", (e) => {
-      if (!nearestHospitalInput.contains(e.target) && !hospitalSuggestions.contains(e.target)) {
-        hospitalSuggestions.style.display = "none";
-      }
-    }, true);
+      if (!facilitySuggest.contains(e.target) && e.target !== facilityInput) facilitySuggest.style.display = "none";
+    });
   }
 </script>
 </body>
