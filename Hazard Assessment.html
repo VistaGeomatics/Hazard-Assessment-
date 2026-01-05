@@ -784,7 +784,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.5</div>
+<div class="version-stamp" id="versionStamp">v3.6</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -1489,27 +1489,25 @@
     ]
   },
   {
-    "name": "Oilfield/industrial sites (H2S potential, industrial traffic, restricted areas)",
-    "keywords": "H48_H2S_potential,H48_lease_road_traffic,H48_industrial_gate_access,H48_muster_point_known,H48_site_orientation_required,H48_PPE_site_rules,H48_restricted_area_entry,H48_stop_work_if_alarm",
-    "risk": { "F": 2, "S": 5, "P": 2, "R": 20 },
-    "controls": [
-      "Complete site sign in and orientation, follow PPE and access rules and know alarms and muster points. Do not enter restricted areas without approval.",
-      "Drive slowly on lease roads and expect industrial traffic. Stop work and leave if alarms sound, unsafe conditions develop or H2S controls are required."
-	]
-  },
-		{
-  "name": "Construction fencing and temporary panels (unstable panels, heavy lifts, wind)",
-  "keywords": "H49_temp_fence_panels,H49_unstable_fence_section,H49_windblown_fencing,H49_panel_tip_over,H49_fence_setup_area,H49_zip_tie_securement,H49_no_parking_near_fence,H49_panel_carry_lift",
-  "risk": { "F": 3, "S": 4, "P": 3, "R": 36 },
-  "controls": [
-    "Treat temp fencing as unstable, especially in wind. Do not set up equipment or park beside leaning or unsecured panels, keep a safe buffer zone.",
-    "If access requires moving panels, use team lifts and control the panel at all times. Carry zip ties and re secure panels before leaving the area."
-  ]
-    ]
-    }
-    // Add the rest of your hazards here in the exact same structure.
-  ];
+    name: "Oilfield/industrial sites (H2S potential, industrial traffic, restricted areas)",
+      keywords: "H48_H2S_potential,H48_lease_road_traffic,H48_industrial_gate_access,H48_muster_point_known,H48_site_orientation_required,H48_PPE_site_rules,H48_restricted_area_entry,H48_stop_work_if_alarm",
+      risk: { F: 2, S: 5, P: 2, R: 20 },
+      controls: [
+        "Complete site sign in and orientation, follow PPE and access rules and know alarms and muster points. Do not enter restricted areas without approval.",
+        "Drive slowly on lease roads and expect industrial traffic. Stop work and leave if alarms sound, unsafe conditions develop or H2S controls are required."
+      ]
+    },
 
+    {
+      name: "Construction fencing and temporary panels (unstable panels, heavy lifts, wind)",
+      keywords: "H49_temp_fence_panels,H49_unstable_fence_section,H49_windblown_fencing,H49_panel_tip_over,H49_fence_setup_area,H49_zip_tie_securement,H49_no_parking_near_fence,H49_panel_carry_lift",
+      risk: { F: 3, S: 4, P: 3, R: 36 },
+      controls: [
+        "Treat temp fencing as unstable, especially in wind. Do not set up equipment or park beside leaning or unsecured panels, keep a safe buffer zone.",
+        "If access requires moving panels, use team lifts and control the panel at all times. Carry zip ties and re secure panels before leaving the area."
+      ]
+    }
+  ];
   function clipControl(text, max = 185) {
     const t = (text || "").replace(/\s+/g, " ").trim();
     if (t.length <= max) return t;
