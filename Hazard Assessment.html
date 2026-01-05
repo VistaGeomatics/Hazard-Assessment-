@@ -1019,188 +1019,44 @@
   // =======================
   //  MEDICAL FACILITY LIST (SELF-CONTAINED)
   // =======================
-  const MEDICAL_FACILITIES = [
-  {
-    "name": "Foothills Medical Centre",
-    "abbr": "FMC",
-    "type": "Hospital",
-    "address": "1403 29 St NW, Calgary, AB, T2N 2T9"
-  },
-  {
-    "name": "Alberta Children's Hospital",
-    "abbr": "ACH",
-    "type": "Hospital",
-    "address": "28 Oki Dr NW, Calgary, AB, T3B 6A8"
-  },
-  {
-    "name": "Peter Lougheed Centre",
-    "abbr": "PLC",
-    "type": "Hospital",
-    "address": "3500 26 Ave NE, Calgary, AB, T1Y 6J4"
-  },
-  {
-    "name": "Rockyview General Hospital",
-    "abbr": "RGH",
-    "type": "Hospital",
-    "address": "7007 14 St SW, Calgary, AB, T2V 1P9"
-  },
-  {
-    "name": "South Health Campus",
-    "abbr": "SHC",
-    "type": "Hospital",
-    "address": "4448 Front St SE, Calgary, AB, T3M 1M4"
-  },
-  {
-    "name": "Sheldon M. Chumir Health Centre",
-    "abbr": "SMCHC",
-    "type": "Community Health",
-    "address": "1213 4 St SW, Calgary, AB, T2R 0X7"
-  },
-  {
-    "name": "Airdrie Community Health Centre",
-    "abbr": "ACHC",
-    "type": "Community Health",
-    "address": "604 Main St S, Airdrie, AB, T4B 3K7"
-  },
-  {
-    "name": "Okotoks Health and Wellness Centre",
-    "abbr": "OHWC",
-    "type": "Community Health",
-    "address": "11 Cimarron Common, Okotoks, AB, T1S 2E6"
-  },
-  {
-    "name": "Cochrane Community Health Centre",
-    "abbr": "CCHC",
-    "type": "Community Health",
-    "address": "60 Grande Blvd, Cochrane, AB, T4C 1P8"
-  },
-  {
-    "name": "Cochrane Urgent Care",
-    "abbr": "CUC",
-    "type": "Urgent Care",
-    "address": "100, 371 1 St W, Cochrane, AB, T4C 2E7"
-  },
-  {
-    "name": "Canmore General Hospital",
-    "abbr": "CGH",
-    "type": "Hospital",
-    "address": "1100 Hospital Pl, Canmore, AB, T1W 1N2"
-  },
-  {
-    "name": "Banff Mineral Springs Hospital",
-    "abbr": "BMSH",
-    "type": "Hospital",
-    "address": "305 Lynx St, Banff, AB, T1L 1E4"
-  },
-  {
-    "name": "High River General Hospital",
-    "abbr": "HRGH",
-    "type": "Hospital",
-    "address": "560 9 Ave W, High River, AB, T1V 1B3"
-  },
-  {
-    "name": "Didsbury District Health Services",
-    "abbr": "DDHS",
-    "type": "Hospital",
-    "address": "2014 15 Ave, Didsbury, AB, T0M 0W0"
-  },
-  {
-    "name": "Strathmore District Health Services",
-    "abbr": "SDHS",
-    "type": "Hospital",
-    "address": "200 Brent Blvd, Strathmore, AB, T1P 1J9"
-  },
-  {
-    "name": "Black Diamond Health Centre",
-    "abbr": "BDHC",
-    "type": "Community Health",
-    "address": "326 Center Ave W, Black Diamond, AB, T0L 0H0"
-  },
-  {
-    "name": "Chestermere Community Health Centre",
-    "abbr": "CMECHC",
-    "type": "Community Health",
-    "address": "100 Marina Dr, Chestermere, AB, T1X 0B9"
-  },
-  {
-    "name": "Siksika Health Services",
-    "abbr": "SHS",
-    "type": "Community Health",
-    "address": "Siksika Nation, Siksika, AB"
-  },
-  {
-    "name": "Claresholm General Hospital",
-    "abbr": "CLGH",
-    "type": "Hospital",
-    "address": "360 9 Ave W, Claresholm, AB, T0L 0T0"
-  },
-  {
-    "name": "Nanton Community Health Centre",
-    "abbr": "NCHC",
-    "type": "Community Health",
-    "address": "5719 19 St, Nanton, AB, T0L 1R0"
-  },
-  {
-    "name": "Vulcan Community Health Centre",
-    "abbr": "VCHC",
-    "type": "Community Health",
-    "address": "404 3 Ave S, Vulcan, AB, T0L 2B0"
-  },
-  {
-    "name": "Oilfields General Hospital",
-    "abbr": "OGH",
-    "type": "Hospital",
-    "address": "302 Third St W, Black Diamond, AB, T0L 0H0"
-  },
-  {
-    "name": "Turner Valley Medical Clinic",
-    "abbr": "TVMC",
-    "type": "Community Health",
-    "address": "4901 50 Ave, Turner Valley, AB, T0L 2A0"
-  },
-  {
-    "name": "Drumheller Health Centre",
-    "abbr": "DHC",
-    "type": "Hospital",
-    "address": "351 9 St NW, Drumheller, AB, T0J 0Y1"
-  },
-  {
-    "name": "Three Hills Health Centre",
-    "abbr": "THHC",
-    "type": "Hospital",
-    "address": "1012 2 Ave N, Three Hills, AB, T0M 2A0"
-  },
-  {
-    "name": "Olds Hospital and Care Centre",
-    "abbr": "OHCC",
-    "type": "Hospital",
-    "address": "3901 57 Ave, Olds, AB, T4H 1T4"
-  },
-  {
-    "name": "Innisfail Health Centre",
-    "abbr": "IHC",
-    "type": "Community Health",
-    "address": "5023 52 St, Innisfail, AB, T4G 1S6"
-  },
-  {
-    "name": "Sundre Hospital and Care Centre",
-    "abbr": "SHCC",
-    "type": "Hospital",
-    "address": "102 Centre St N, Sundre, AB, T0M 1X0"
-  },
-  {
-    "name": "Rocky Mountain House Health Centre",
-    "abbr": "RMHHC",
-    "type": "Hospital",
-    "address": "5010 39 St, Rocky Mountain House, AB, T4T 1A7"
-  },
-  {
-    "name": "Rimbey Hospital and Care Centre",
-    "abbr": "RHCC",
-    "type": "Hospital",
-    "address": "5225 50 Ave, Rimbey, AB, T0C 2J0"
-  }
+ const MEDICAL_FACILITIES = [
+  { name:"Foothills Medical Centre", abbr:"FMC", type:"Hospital", address:"1403 29 St NW, Calgary, AB, T2N 2T9" },
+  { name:"Alberta Children's Hospital", abbr:"ACH", type:"Hospital", address:"28 Oki Dr NW, Calgary, AB, T3B 6A8" },
+  { name:"Peter Lougheed Centre", abbr:"PLC", type:"Hospital", address:"3500 26 Ave NE, Calgary, AB, T1Y 6J4" },
+  { name:"Rockyview General Hospital", abbr:"RGH", type:"Hospital", address:"7007 14 St SW, Calgary, AB, T2V 1P9" },
+  { name:"South Health Campus", abbr:"SHC", type:"Hospital", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
+
+  { name:"Royal Alexandra Hospital", abbr:"RAH", type:"Hospital", address:"10240 Kingsway NW, Edmonton, AB, T5H 3V9" },
+  { name:"University of Alberta Hospital", abbr:"UAH", type:"Hospital", address:"8440 112 St NW, Edmonton, AB, T6G 2B7" },
+  { name:"Misericordia Community Hospital", abbr:"MCH", type:"Hospital", address:"16940 87 Ave NW, Edmonton, AB, T5R 4H5" },
+  { name:"Grey Nuns Community Hospital", abbr:"GNH", type:"Hospital", address:"1100 Youville Dr W, Edmonton, AB, T6L 5X8" },
+
+  { name:"Red Deer Regional Hospital Centre", abbr:"RDRHC", type:"Hospital", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
+  { name:"Chinook Regional Hospital", abbr:"CRH", type:"Hospital", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
+  { name:"Medicine Hat Regional Hospital", abbr:"MHRH", type:"Hospital", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
+  { name:"Northern Lights Regional Health Centre", abbr:"NLRHC", type:"Hospital", address:"7 Hospital St, Fort McMurray, AB, T9H 1P2" },
+  { name:"Grande Prairie Regional Hospital", abbr:"GPRH", type:"Hospital", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
+
+  { name:"Airdrie Community Health Centre", abbr:"ACHC", type:"Community Health Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
+  { name:"Drumheller Health Centre", abbr:"DHC", type:"Community Health Centre", address:"351 9 St NW, Drumheller, AB, T0J 0Y1" },
+  { name:"Brooks Health Centre", abbr:"BHC", type:"Community Health Centre", address:"440 3 St E, Brooks, AB, T1R 0G8" },
+  { name:"Strathmore District Health Services", abbr:"SDHS", type:"Community Health Centre", address:"200 Brent Blvd, Strathmore, AB, T1P 1J9" },
+
+  { name:"Banff Mineral Springs Hospital", abbr:"BMSH", type:"Hospital", address:"305 Lynx St, Banff, AB, T1L 1C1" },
+  { name:"Canmore General Hospital", abbr:"CGH", type:"Hospital", address:"1100 Hospital Pl, Canmore, AB, T1W 1N2" },
+
+  { name:"Airdrie Urgent Care Centre", abbr:"AUCC", type:"Urgent Care Centre", address:"604 Main St S, Airdrie, AB, T4B 3K7" },
+  { name:"South Calgary Urgent Care Centre", abbr:"SCUC", type:"Urgent Care Centre", address:"4448 Front St SE, Calgary, AB, T3M 1M4" },
+  { name:"North Edmonton Urgent Care Centre", abbr:"NEDUCC", type:"Urgent Care Centre", address:"13403 97 St NW, Edmonton, AB, T5E 4L8" },
+  { name:"West Edmonton Urgent Care Centre", abbr:"WEUCC", type:"Urgent Care Centre", address:"1815 102 St NW, Edmonton, AB, T6J 4S5" },
+  { name:"Northeast Edmonton Urgent Care Centre", abbr:"NEEUCC", type:"Urgent Care Centre", address:"7911 137 Ave NW, Edmonton, AB, T5C 0K9" },
+  { name:"Red Deer Urgent Care Centre", abbr:"RDUCC", type:"Urgent Care Centre", address:"3942 50A Ave, Red Deer, AB, T4N 4E7" },
+  { name:"Medicine Hat Urgent Care Centre", abbr:"MHUCC", type:"Urgent Care Centre", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
+  { name:"Grande Prairie Urgent Care Centre", abbr:"GPUCC", type:"Urgent Care Centre", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
+  { name:"Lethbridge Urgent Care Centre", abbr:"LHUCC", type:"Urgent Care Centre", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
+  { name:"Cochrane Urgent Care Centre", abbr:"CUCC", type:"Urgent Care Centre", address:"60 Grande Blvd, Cochrane, AB, T4C 0S4" }
 ];
+
 
   function norm(s) {
     return (s || "")
