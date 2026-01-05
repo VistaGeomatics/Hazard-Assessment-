@@ -784,7 +784,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.8</div>
+<div class="version-stamp" id="versionStamp">v3.9</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -808,6 +808,50 @@
   const buttonRow   = document.getElementById('buttonRow');
 
   let userChosenFileName = "";
+	
+	// ============================================================
+  // PDF LIB LOADER (LOCAL FIRST, CDN FALLBACK)
+  // ============================================================
+  function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    // only skip if the library is actually present
+    if (src.includes("jspdf") && (typeof (window.jspdf?.jsPDF || window.jsPDF) === "function")) return resolve();
+    if (src.includes("html2canvas") && (typeof window.html2canvas === "function")) return resolve();
+
+    const s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error("Failed to load: " + src));
+    document.head.appendChild(s);
+  });
+  }
+
+  async function ensurePdfLibsLoaded() {
+    const hasJsPDF = (typeof (window.jspdf?.jsPDF || window.jsPDF) === "function");
+    const hasH2C = (typeof window.html2canvas === "function");
+    if (hasJsPDF && hasH2C) return;
+
+    // try local
+    try { if (!hasJsPDF) await loadScriptOnce("./jspdf.umd.min.js"); } catch (e) {}
+    try { if (!hasH2C)  await loadScriptOnce("./html2canvas.min.js"); } catch (e) {}
+
+    const hasJsPDFAfterLocal = (typeof (window.jspdf?.jsPDF || window.jsPDF) === "function");
+    const hasH2CAfterLocal = (typeof window.html2canvas === "function");
+    if (hasJsPDFAfterLocal && hasH2CAfterLocal) return;
+
+    // fallback CDN
+    if (!hasJsPDFAfterLocal) {
+      await loadScriptOnce("https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js");
+    }
+    if (!hasH2CAfterLocal) {
+      await loadScriptOnce("https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js");
+    }
+
+    const okJsPDF = (typeof (window.jspdf?.jsPDF || window.jsPDF) === "function");
+    const okH2C = (typeof window.html2canvas === "function");
+    if (!okJsPDF || !okH2C) throw new Error("PDF libraries still missing after fallback load.");
+  }
 
   function safeFilePart(s) {
     return (s || "")
@@ -1769,6 +1813,8 @@ function bestEntryForHazard(hazardText) {
   }
 
  async function generatePdf() {
+await ensurePdfLibsLoaded();
+
   // jsPDF can be exposed as window.jspdf.jsPDF (UMD) OR window.jsPDF (some builds)
   const jsPDFCtor = window.jspdf?.jsPDF || window.jsPDF;
   const h2c = window.html2canvas;
