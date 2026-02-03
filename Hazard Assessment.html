@@ -180,6 +180,38 @@
     td { background: #f9fbff; }
     .center { text-align: center; }
 
+    /* Risk legend */
+    .legend-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .legend-block{
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      background: #f9fbff;
+      padding: 8px;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+    .legend-heading{
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--vista-blue-dark);
+      margin-bottom: 6px;
+    }
+    .legend-table{ margin-top: 0; font-size: 0.74rem; }
+    .legend-table td{ background:#ffffff; }
+    .legend-num{
+      width: 34px;
+      font-weight: 700;
+      color: var(--vista-blue-dark);
+      background: #e8f0fb !important;
+      border-radius: 6px;
+    }
+
     .signature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 4px; }
     .signature-box { border-radius: 10px; border: 1px solid var(--border-soft); background: #f9fbff; padding: 6px; font-size: 0.78rem; }
     .signature-label { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); margin-bottom: 2px; }
@@ -698,6 +730,67 @@
           </table>
         </div>
 
+        <div class="section-card" id="riskLegendCard">
+          <div class="section-header">
+            <div class="section-title">Risk Rating Legend</div>
+            <div class="section-note">R = F × S × P (lower number indicates higher risk category).</div>
+          </div>
+
+          <div class="legend-grid">
+            <div class="legend-block">
+              <div class="legend-heading">Frequency (F)</div>
+              <table class="legend-table">
+                <tbody>
+                  <tr><td class="center legend-num">1</td><td>Never</td></tr>
+                  <tr><td class="center legend-num">2</td><td>Yearly</td></tr>
+                  <tr><td class="center legend-num">3</td><td>Monthly</td></tr>
+                  <tr><td class="center legend-num">4</td><td>Weekly</td></tr>
+                  <tr><td class="center legend-num">5</td><td>Daily</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="legend-block">
+              <div class="legend-heading">Severity (S)</div>
+              <table class="legend-table">
+                <tbody>
+                  <tr><td class="center legend-num">1</td><td>No injury</td></tr>
+                  <tr><td class="center legend-num">2</td><td>Minor injury</td></tr>
+                  <tr><td class="center legend-num">3</td><td>Serious, medical aid</td></tr>
+                  <tr><td class="center legend-num">4</td><td>Lost time</td></tr>
+                  <tr><td class="center legend-num">5</td><td>Fatality</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="legend-block">
+              <div class="legend-heading">Probability (P)</div>
+              <table class="legend-table">
+                <tbody>
+                  <tr><td class="center legend-num">1</td><td>Very unlikely</td></tr>
+                  <tr><td class="center legend-num">2</td><td>Unlikely</td></tr>
+                  <tr><td class="center legend-num">3</td><td>Possible</td></tr>
+                  <tr><td class="center legend-num">4</td><td>Significantly likely</td></tr>
+                  <tr><td class="center legend-num">5</td><td>Certainty</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="legend-block">
+              <div class="legend-heading">Risk Category (from R)</div>
+              <table class="legend-table">
+                <tbody>
+                  <tr><td class="center legend-num">5</td><td>0–25, Low</td></tr>
+                  <tr><td class="center legend-num">4</td><td>26–50, Moderate</td></tr>
+                  <tr><td class="center legend-num">3</td><td>51–75, Moderate, High</td></tr>
+                  <tr><td class="center legend-num">2</td><td>76–100, High</td></tr>
+                  <tr><td class="center legend-num">1</td><td>100–125, Severe</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">Emergency Response Plan</div>
@@ -784,7 +877,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v4.2</div>
+<div class="version-stamp" id="versionStamp">v3.3</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -1025,7 +1118,10 @@
     { name:"Medicine Hat Urgent Care Centre", abbr:"MHUCC", type:"Urgent Care Centre", address:"666 5 St SW, Medicine Hat, AB, T1A 4H6" },
     { name:"Grande Prairie Urgent Care Centre", abbr:"GPUCC", type:"Urgent Care Centre", address:"11205 110 St, Grande Prairie, AB, T8V 4B1" },
     { name:"Lethbridge Urgent Care Centre", abbr:"LHUCC", type:"Urgent Care Centre", address:"960 19 St S, Lethbridge, AB, T1J 1W5" },
-    { name:"Cochrane Urgent Care Centre", abbr:"CUCC", type:"Urgent Care Centre", address:"60 Grande Blvd, Cochrane, AB, T4C 0S4" }
+    { name:"Cochrane Urgent Care Centre", abbr:"CUCC", type:"Urgent Care Centre", address:"60 Grande Blvd, Cochrane, AB, T4C 0S4" },
+{ name:"Rocky Mountain House Health Centre", abbr:"RMHHC", type:"Hospital", address:"5016 52 Ave, Rocky Mountain House, AB, T4T 1T2" },
+    { name:"Edson Healthcare Centre", abbr:"EHC", type:"Hospital", address:"3837 6 Ave, Edson, AB, T7E 0C5" }
+
   ];
 
   const facilityInput = document.getElementById("nearest_hospital");
@@ -1139,6 +1235,15 @@
     ]
   },
   {
+    "name": "Uneven terrain / rough ground (slopes, ruts, hidden obstacles)",
+    "keywords": "uneven,terrain,rough,ground,ruts,slope,slopes,hole,holes,hidden,obstacle,obstacles,offroad,off-road,ditch,ditches,mud,muddy,snow,snowy,ice,icy,gravel,rocks,rocky,H02_uneven_ground,H02_rough_terrain",
+    "risk": { "F": 1, "S": 4, "P": 1, "R": 4 },
+    "controls": [
+      "Walk the route first, choose the safest path, slow down on slopes, and keep hands free to maintain balance around setups.",
+      "Use traction aids when needed, mark or avoid holes and drop offs, and stop work if footing cannot be made safe."
+    ]
+  },
+  {
     "name": "Heat exposure (warm weather, dehydration, heat exhaustion, heat stroke)",
     "keywords": "H04_warm_weather_load,H04_hot_temp_workplan,H04_heat_exhaustion_signs,H04_heat_stroke_emergency,H04_dehydration_risk,H04_electrolyte_replacement,H04_shade_break_cycle,H04_cooling_strategy",
     "risk": { "F": 3, "S": 4, "P": 3, "R": 36 },
@@ -1231,12 +1336,21 @@
     ]
   },
   {
-    "name": "Noise (construction zones, traffic, equipment)",
-    "keywords": "H12_backup_alarm_noise,H12_traffic_roar_exposure,H12_jackhammer_proximity,H12_compactor_vibration_sound,H12_hearing_damage_risk,H12_tinnitus_prevention,H12_noise_zone_posting,H12_hearing_protection_use",
-    "risk": { "F": 4, "S": 2, "P": 3, "R": 24 },
+    "name": "Working near traffic (roads, site traffic)",
+    "keywords": "traffic,road,roads,highway,highways,vehicles,vehicle,lane,lanes,intersection,intersections,shoulder,shoulders,flagging,cones,signage,spotter,backing,work zone,workzone,H07_working_near_traffic,H07_site_traffic_flow",
+    "risk": { "F": 1, "S": 5, "P": 1, "R": 5 },
     "controls": [
-      "Use hearing protection when exposed to loud equipment or traffic, and limit time in high noise areas by rotating tasks and increasing distance.",
-      "Coordinate with the site to avoid the loudest operations when possible, and choose setup locations that reduce continuous noise exposure."
+      "Wear high visibility PPE, position setups off the travel path, keep a safe buffer, and maintain eye contact with drivers and operators.",
+      "Use spotters for backing and tight areas, follow the traffic control plan or site rules, and stop work if traffic control is inadequate."
+    ]
+  },
+  {
+    "name": "Noise (equipment, construction)",
+    "keywords": "noise,hearing,earplug,earplugs,earmuff,earmuffs,decibel,db,backup alarm,jackhammer,compactor,grinding,H12_backup_alarm_noise,H12_jackhammer_proximity,H12_compactor_vibration_sound,H12_hearing_damage_risk",
+    "risk": { "F": 1, "S": 3, "P": 1, "R": 3 },
+    "controls": [
+      "Wear hearing protection when noise is high (plugs or muffs), follow site rules, and use clear hand signals or radios for communication.",
+      "Increase distance from the noise source, limit exposure time by rotating tasks, and stop work if communication or awareness is compromised."
     ]
   },
   {
@@ -1574,8 +1688,17 @@
         "Treat temp fencing as unstable, especially in wind. Do not set up equipment or park beside leaning or unsecured panels, keep a safe buffer zone.",
         "If access requires moving panels, use team lifts and control the panel at all times. Carry zip ties and re secure panels before leaving the area."
       ]
-    }
-  ];
+    },
+{
+    name: "Barbwire fences",
+    keywords: "barbwire,barb wire,barbedwire,barbed wire",
+    risk: { F: 2, S: 3, P: 2, R: 12 },
+    controls: [
+      "Identify barbwire fences during the walk-through, plan safe access points, and avoid climbing, stepping over, or pushing through wires.",
+      "Wear gloves and long sleeves if close contact is possible, keep gear and clothing clear of snags, and stop work to find an alternate route if safe passage is not available."
+    ]
+  }
+];
   function clipControl(text, max = 185) {
     const t = (text || "").replace(/\s+/g, " ").trim();
     if (t.length <= max) return t;
@@ -1666,7 +1789,23 @@
   if (matchedTokens >= 2) score += 4;
   if (matchedTokens >= 3) score += 6;
 
-  return score;
+  
+    // context boosts/penalties to reduce false matches (e.g., traffic -> noise)
+    const hsArr = Array.from(hs);
+    const hazardHasTraffic = hs.has("traffic") || hs.has("road") || hs.has("lane") || hs.has("vehicle") || hs.has("highway");
+    const hazardHasNoise   = hs.has("noise") || hs.has("hearing") || hs.has("earplug") || hs.has("earmuff") || hs.has("decibel") || hs.has("db");
+
+    // approximate entry context by tokenizing name + keywords
+    const entryTok = new Set(tokens(entry.name + " " + kws.join(" ")));
+    const entryHasTraffic = entryTok.has("traffic") || entryTok.has("road") || entryTok.has("lane") || entryTok.has("vehicle") || entryTok.has("highway");
+    const entryHasNoise   = entryTok.has("noise") || entryTok.has("hearing") || entryTok.has("earplug") || entryTok.has("earmuff") || entryTok.has("decibel") || entryTok.has("db");
+
+    if (hazardHasTraffic && entryHasTraffic) score += 8;
+    if (hazardHasNoise && entryHasNoise) score += 8;
+
+    if (hazardHasTraffic && entryHasNoise && !hazardHasNoise) score -= 14;
+    if (hazardHasNoise && entryHasTraffic && !hazardHasTraffic) score -= 10;
+return score;
 }
 
 function bestEntryForHazard(hazardText) {
