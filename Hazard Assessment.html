@@ -16,6 +16,10 @@
       --border-soft: #d6e2f0;
       --text-main: #101827;
       --text-muted: #6b7280;
+      --risk-green: #15803d;
+      --risk-yellow: #b45309;
+      --risk-red: #b91c1c;
+      --risk-severe: #7f1d1d;
     }
 
     * { box-sizing: border-box; }
@@ -276,6 +280,21 @@
 
       font-size: 0.74rem !important;
       text-align: center;
+
+    .risk-output { font-weight: 700; }
+
+    .severe-warning{
+      display:none;
+      margin-top: 6px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(185,28,28,0.08);
+      border: 1px solid rgba(185,28,28,0.35);
+      color: var(--risk-severe);
+      font-size: 0.72rem;
+      line-height: 1.3;
+    }
+
     }
 
     .version-stamp{
@@ -672,62 +691,53 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+<tr>
               <td><input type="text" name="task_1" /></td>
               <td><input type="text" name="hazard_1" placeholder="e.g. dog, traffic, construction fencing, digging, generator" /></td>
               <td class="center"><input type="text" name="f_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_1" class="risk-input" data-row="1" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_1" class="risk-output" data-row="1" style="width:40px;" readonly></td>
-              <td><textarea name="control_1" class="control-text" placeholder="Controls auto-suggest when you leave the hazard cell."></textarea></td>
+              <td><textarea name="control_1" class="control-text" placeholder="Controls auto-suggest when you leave the hazard cell."></textarea>
+                <div class="severe-warning" id="severe_warn_1" style="display:none">Severe hazard warning, hazards must be controlled or eliminated prior to continuing to work. Under Alberta OHS, workers have a duty to refuse unsafe work.</div></td>
             </tr>
-            <tr>
+<tr>
               <td><input type="text" name="task_2" /></td>
               <td><input type="text" name="hazard_2" /></td>
               <td class="center"><input type="text" name="f_2" class="risk-input" data-row="2" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_2" class="risk-input" data-row="2" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_2" class="risk-input" data-row="2" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_2" class="risk-output" data-row="2" style="width:40px;" readonly></td>
-              <td><textarea name="control_2" class="control-text"></textarea></td>
+              <td><textarea name="control_2" class="control-text"></textarea>
+                <div class="severe-warning" id="severe_warn_2" style="display:none">Severe hazard warning, hazards must be controlled or eliminated prior to continuing to work. Under Alberta OHS, workers have a duty to refuse unsafe work.</div></td>
             </tr>
-            <tr>
+<tr>
               <td><input type="text" name="task_3" /></td>
               <td><input type="text" name="hazard_3" /></td>
               <td class="center"><input type="text" name="f_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_3" class="risk-input" data-row="3" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_3" class="risk-output" data-row="3" style="width:40px;" readonly></td>
-              <td><textarea name="control_3" class="control-text"></textarea></td>
+              <td><textarea name="control_3" class="control-text"></textarea>
+                <div class="severe-warning" id="severe_warn_3" style="display:none">Severe hazard warning, hazards must be controlled or eliminated prior to continuing to work. Under Alberta OHS, workers have a duty to refuse unsafe work.</div></td>
             </tr>
-            <tr>
+<tr>
               <td><input type="text" name="task_4" /></td>
               <td><input type="text" name="hazard_4" /></td>
               <td class="center"><input type="text" name="f_4" class="risk-input" data-row="4" style="width:32px;"></td>
               <td class="center"><input type="text" name="s_4" class="risk-input" data-row="4" style="width:32px;"></td>
               <td class="center"><input type="text" name="p_4" class="risk-input" data-row="4" style="width:32px;"></td>
               <td class="center"><input type="text" name="r_4" class="risk-output" data-row="4" style="width:40px;" readonly></td>
-              <td><textarea name="control_4" class="control-text"></textarea></td>
+              <td><textarea name="control_4" class="control-text"></textarea>
+                <div class="severe-warning" id="severe_warn_4" style="display:none">Severe hazard warning, hazards must be controlled or eliminated prior to continuing to work. Under Alberta OHS, workers have a duty to refuse unsafe work.</div></td>
             </tr>
-            <tr>
-              <td><input type="text" name="task_5" /></td>
-              <td><input type="text" name="hazard_5" /></td>
-              <td class="center"><input type="text" name="f_5" class="risk-input" data-row="5" style="width:32px;"></td>
-              <td class="center"><input type="text" name="s_5" class="risk-input" data-row="5" style="width:32px;"></td>
-              <td class="center"><input type="text" name="p_5" class="risk-input" data-row="5" style="width:32px;"></td>
-              <td class="center"><input type="text" name="r_5" class="risk-output" data-row="5" style="width:40px;" readonly></td>
-              <td><textarea name="control_5" class="control-text"></textarea></td>
-            </tr>
-            <tr>
-              <td><input type="text" name="task_6" /></td>
-              <td><input type="text" name="hazard_6" /></td>
-              <td class="center"><input type="text" name="f_6" class="risk-input" data-row="6" style="width:32px;"></td>
-              <td class="center"><input type="text" name="s_6" class="risk-input" data-row="6" style="width:32px;"></td>
-              <td class="center"><input type="text" name="p_6" class="risk-input" data-row="6" style="width:32px;"></td>
-              <td class="center"><input type="text" name="r_6" class="risk-output" data-row="6" style="width:40px;" readonly></td>
-              <td><textarea name="control_6" class="control-text"></textarea></td>
-            </tr>
-            </tbody>
+</tbody>
           </table>
+          <div class="row" style="margin-top:6px; justify-content:flex-end;">
+            <div style="flex:0 0 auto; min-width:unset;">
+              <button type="button" class="btn-secondary" id="addJobHazardRow">Add Row</button>
+            </div>
+          </div>
         </div>
 
         <div class="section-card" id="riskLegendCard">
@@ -895,6 +905,18 @@
   // ============================================================
   // BASIC UTIL
   // ============================================================
+  // Minimal CSS.escape polyfill (older browsers)
+  if (!window.CSS) window.CSS = {};
+  if (typeof window.CSS.escape !== 'function') {
+    window.CSS.escape = function (value) {
+      return String(value)
+        .replace(/\0/g, "\uFFFD")
+        .replace(/[^a-zA-Z0-9_\-]/g, function (ch) {
+          const hex = ch.charCodeAt(0).toString(16).toUpperCase();
+          return "\\" + hex + " ";
+        });
+    };
+  }
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn    = document.getElementById('shareBtn');
   const nameBtn     = document.getElementById('nameBtn');
@@ -991,6 +1013,43 @@
   // ============================================================
   // RISK CALC (R = F × S × P)
   // ============================================================
+  
+  function getMaxJobHazardRow() {
+    const nums = Array.from(document.querySelectorAll('input[name^="hazard_"]'))
+      .map(i => parseInt((i.name.split('_')[1] || '').trim(), 10))
+      .filter(n => Number.isFinite(n));
+    return nums.length ? Math.max(...nums) : 0;
+  }
+
+  function setRiskVisuals(row, rValue) {
+    const rInput = document.querySelector('input[name="r_' + row + '"]');
+    if (!rInput) return;
+
+    const v = Number(rValue);
+    let color = '';
+    if (!Number.isFinite(v)) color = '';
+    else if (v <= 50) color = 'var(--risk-green)';
+    else if (v <= 75) color = 'var(--risk-yellow)';
+    else if (v <= 100) color = 'var(--risk-red)';
+    else color = 'var(--risk-severe)';
+
+    rInput.style.color = color;
+
+    const warn = document.getElementById('severe_warn_' + row);
+    const control = document.querySelector('textarea[name="control_' + row + '"]');
+    const isSevere = Number.isFinite(v) && v >= 100 && v <= 125;
+
+    if (warn) warn.style.display = isSevere ? 'block' : 'none';
+    if (control) {
+      control.style.borderColor = isSevere ? 'rgba(185,28,28,0.55)' : '';
+      control.style.boxShadow = isSevere ? '0 0 0 2px rgba(185,28,28,0.10)' : '';
+    }
+  }
+
+  // ============================================================
+  // RISK CALC (R = F × S × P)
+  // + Risk color + severe warning
+  // ============================================================
   function updateRiskForRow(row) {
     const fInput = document.querySelector('input[name="f_' + row + '"]');
     const sInput = document.querySelector('input[name="s_' + row + '"]');
@@ -1002,21 +1061,84 @@
     const s = parseInt(sInput.value, 10);
     const p = parseInt(pInput.value, 10);
 
-    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) rInput.value = f * s * p;
-    else rInput.value = "";
+    if (Number.isInteger(f) && Number.isInteger(s) && Number.isInteger(p)) {
+      const r = f * s * p;
+      rInput.value = r;
+      setRiskVisuals(row, r);
+    } else {
+      rInput.value = "";
+      setRiskVisuals(row, NaN);
+    }
   }
 
-  document.querySelectorAll('.risk-input').forEach(input => {
-    input.addEventListener('input', () => {
-      const row = input.getAttribute('data-row');
-      if (row) updateRiskForRow(row);
+  function bindRiskInputs(scope = document) {
+    scope.querySelectorAll('.risk-input').forEach(input => {
+      if (input.__vistaBoundRisk) return;
+      input.__vistaBoundRisk = true;
+      input.addEventListener('input', () => {
+        const row = input.getAttribute('data-row');
+        if (row) updateRiskForRow(row);
+      });
     });
-  });
+  }
+
+  bindRiskInputs();
+
+  // ============================================================
+  // JOB HAZARD ROWS (DEFAULT 4, USER CAN ADD MORE)
+  // ============================================================
+  function buildJobHazardRow(rowNum) {
+    return `
+            <tr data-jobhaz-row="${rowNum}">
+              <td><input type="text" name="task_${rowNum}" /></td>
+              <td><input type="text" name="hazard_${rowNum}" /></td>
+              <td class="center"><input type="text" name="f_${rowNum}" class="risk-input" data-row="${rowNum}" style="width:32px;"></td>
+              <td class="center"><input type="text" name="s_${rowNum}" class="risk-input" data-row="${rowNum}" style="width:32px;"></td>
+              <td class="center"><input type="text" name="p_${rowNum}" class="risk-input" data-row="${rowNum}" style="width:32px;"></td>
+              <td class="center"><input type="text" name="r_${rowNum}" class="risk-output" data-row="${rowNum}" style="width:40px;" readonly></td>
+              <td>
+                <textarea name="control_${rowNum}" class="control-text"></textarea>
+                <div class="severe-warning" id="severe_warn_${rowNum}" style="display:none">Severe hazard warning, hazards must be controlled or eliminated prior to continuing to work. Under Alberta OHS, workers have a duty to refuse unsafe work.</div>
+              </td>
+            </tr>
+    `.trim();
+  }
+
+  function ensureJobHazardRows(targetCount) {
+    const card = Array.from(document.querySelectorAll('.section-card'))
+      .find(c => (c.querySelector('.section-title')?.textContent || '').trim() === 'Job Specific Hazards');
+    if (!card) return 0;
+
+    const tbody = card.querySelector('table tbody');
+    if (!tbody) return 0;
+
+    let currentMax = getMaxJobHazardRow();
+    while (currentMax < targetCount) {
+      const next = currentMax + 1;
+      tbody.insertAdjacentHTML('beforeend', '\n' + buildJobHazardRow(next) + '\n');
+      currentMax = next;
+    }
+
+    bindRiskInputs(card);
+    initHazardAutoSuggest(); // safe: has per-input guard
+    return currentMax;
+  }
+
+  const addRowBtn = document.getElementById('addJobHazardRow');
+  if (addRowBtn) {
+    addRowBtn.addEventListener('click', () => {
+      const next = getMaxJobHazardRow() + 1;
+      ensureJobHazardRows(next);
+      const haz = document.querySelector('input[name="hazard_' + next + '"]');
+      if (haz) haz.focus();
+      if (window.__vistaAutosaveSave) window.__vistaAutosaveSave();
+    });
+  }
 
   // ============================================================
   // SIGNATURE PADS
   // ============================================================
-  function initSignaturePad(canvasId, clearButtonId) {
+  function initSignaturePad(canvasId, clearButtonId, onChange) {
     const canvas = document.getElementById(canvasId);
     const clearBtn = document.getElementById(clearButtonId);
     if (!canvas) return;
@@ -1054,7 +1176,10 @@
       ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
       lastX = p.x; lastY = p.y;
     }
-    function endDraw() { drawing = false; }
+    function endDraw() {
+      drawing = false;
+      try { if (typeof onChange === 'function') onChange(); } catch (_) {}
+    }
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', drawLine);
@@ -1065,12 +1190,19 @@
     canvas.addEventListener('touchmove',  e => { e.preventDefault(); drawLine(e); }, { passive: false });
     canvas.addEventListener('touchend',   e => { e.preventDefault(); endDraw(); }, { passive: false });
 
-    if (clearBtn) clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        try { if (typeof onChange === 'function') onChange(); } catch (_) {}
+      });
+    }
   }
 
-  initSignaturePad('pcSignature', 'clearPcSig');
-  initSignaturePad('saSignature', 'clearSaSig');
-  initSignaturePad('clientSignature', 'clearClientSig');
+  // autosave hook is wired later (see initAutosave())
+  const __sigAutosaveHook = () => { try { window.__vistaAutosaveSave && window.__vistaAutosaveSave(); } catch (_) {} };
+  initSignaturePad('pcSignature', 'clearPcSig', __sigAutosaveHook);
+  initSignaturePad('saSignature', 'clearSaSig', __sigAutosaveHook);
+  initSignaturePad('clientSignature', 'clearClientSig', __sigAutosaveHook);
 
   const resetBtn = document.getElementById('resetBtn');
   if (resetBtn) {
@@ -1079,9 +1211,20 @@
         const canvas = document.getElementById(id);
         if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
       });
-      document.querySelectorAll('.risk-output').forEach(o => o.value = "");
+      document.querySelectorAll('.risk-output').forEach(o => { o.value = ""; o.style.color = ""; });
+      // remove any added Job Specific Hazard rows beyond the default 4
+      try {
+        const card = Array.from(document.querySelectorAll('.section-card'))
+          .find(c => (c.querySelector('.section-title')?.textContent || '').trim() === 'Job Specific Hazards');
+        const tbody = card?.querySelector('table tbody');
+        if (tbody) {
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          rows.forEach((tr, idx) => { if (idx >= 4) tr.remove(); });
+        }
+      } catch (_) {}
       userChosenFileName = "";
       clearEmergencyAutofill();
+      try { window.__vistaAutosaveClear && window.__vistaAutosaveClear(); } catch (_) {}
     });
   }
 
@@ -1861,7 +2004,9 @@ function bestEntryForHazard(hazardText) {
   }
 
   function initHazardAutoSuggest() {
-    document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+        document.querySelectorAll('input[name^="hazard_"]').forEach(input => {
+      if (input.__vistaBoundHazard) return;
+      input.__vistaBoundHazard = true;
       input.addEventListener('blur', e => {
         const hazardText = (e.target.value || "").trim();
         const row = e.target.name.split('_')[1];
@@ -2167,6 +2312,181 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
       }
     });
   }
+
+  // ============================================================
+  // AUTOSAVE (LOCAL DEVICE) – PERSIST FORM ON SAME DEVICE
+  // - Saves to localStorage on input/change
+  // - Restores on page load
+  // ============================================================
+  (function initAutosave() {
+    const form = document.getElementById('hazardForm');
+    const versionText = (document.getElementById('versionStamp')?.textContent || '').trim();
+    const FORM_STORAGE_KEY = `vista_hazard_assessment_autosave_${versionText || 'v'}`;
+    const SAVE_DEBOUNCE_MS = 350;
+
+    if (!form || !window.localStorage) return;
+
+    function getFieldKey(el) {
+      return el.name || el.id || null;
+    }
+
+    function canvasHasInk(canvas) {
+      try {
+        const ctx = canvas.getContext('2d');
+        const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = img.data;
+        for (let i = 3; i < d.length; i += 4) {
+          if (d[i] !== 0) return true; // alpha
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    function signatureToDataUrl(id) {
+      const c = document.getElementById(id);
+      if (!c) return '';
+      if (!canvasHasInk(c)) return '';
+      try { return c.toDataURL('image/png'); } catch (_) { return ''; }
+    }
+
+    function drawSignatureFromDataUrl(id, dataUrl) {
+      const canvas = document.getElementById(id);
+      if (!canvas || !dataUrl) return;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.onload = () => {
+        // draw into the visible canvas size (ctx is already scaled by initSignaturePad)
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      };
+      img.src = dataUrl;
+    }
+
+    function collectState() {
+      const state = { _meta: { savedAt: Date.now(), version: versionText || '' }, fields: {}, signatures: {} };
+
+      const elements = form.querySelectorAll('input, textarea, select');
+      elements.forEach(el => {
+        const key = getFieldKey(el);
+        if (!key) return;
+
+        const type = (el.type || '').toLowerCase();
+        if (type === 'button' || type === 'submit' || type === 'reset' || type === 'file') return;
+
+        if (type === 'checkbox') state.fields[key] = !!el.checked;
+        else if (type === 'radio') {
+          if (el.checked) state.fields[key] = el.value;
+        } else {
+          state.fields[key] = el.value;
+        }
+      });
+
+      // signatures
+      state.signatures.pcSignature = signatureToDataUrl('pcSignature');
+      state.signatures.saSignature = signatureToDataUrl('saSignature');
+      state.signatures.clientSignature = signatureToDataUrl('clientSignature');
+
+      // job hazard rows count (so we can rebuild dynamic rows on restore)
+      state.jobHazardRowCount = getMaxJobHazardRow();
+
+      // file name prompt choice
+      state.userChosenFileName = (userChosenFileName || '');
+
+      return state;
+    }
+
+    function applyState(state) {
+      if (!state || typeof state !== 'object') return;
+      const fields = state.fields || {};
+
+      try {
+        const n = parseInt(state.jobHazardRowCount, 10);
+        if (Number.isFinite(n) && n > 0) ensureJobHazardRows(n);
+      } catch (_) {}
+
+      Object.keys(fields).forEach(key => {
+        const el = form.querySelector(`[name="${CSS.escape(key)}"]`) || document.getElementById(key);
+        if (!el) return;
+        const type = (el.type || '').toLowerCase();
+
+        if (type === 'checkbox') el.checked = !!fields[key];
+        else if (type === 'radio') {
+          // set the matching radio in the group
+          const val = fields[key];
+          const radio = form.querySelector(`input[type="radio"][name="${CSS.escape(key)}"][value="${CSS.escape(val)}"]`);
+          if (radio) radio.checked = true;
+        } else {
+          el.value = fields[key];
+        }
+      });
+
+      // recalc risk rows (if F/S/P were restored)
+            for (let r = 1; r <= getMaxJobHazardRow(); r++) updateRiskForRow(r);
+
+      // restore file name choice
+      if (typeof state.userChosenFileName === 'string') userChosenFileName = state.userChosenFileName;
+
+      // restore emergency autofill (if applicable)
+      try {
+        if (facilityInput && facilityInput.value.trim()) {
+          const match = findFacility(facilityInput.value);
+          if (match) setEmergencyAutofill(match);
+        }
+      } catch (_) {}
+
+      // signatures
+      try {
+        const sigs = state.signatures || {};
+        drawSignatureFromDataUrl('pcSignature', sigs.pcSignature);
+        drawSignatureFromDataUrl('saSignature', sigs.saSignature);
+        drawSignatureFromDataUrl('clientSignature', sigs.clientSignature);
+      } catch (_) {}
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(FORM_STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        applyState(parsed);
+      } catch (e) {
+        console.warn('Autosave restore failed:', e);
+      }
+    }
+
+    let saveTimer = null;
+    function saveStateDebounced() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try {
+          const state = collectState();
+          localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          console.warn('Autosave save failed:', e);
+        }
+      }, SAVE_DEBOUNCE_MS);
+    }
+
+    function clearSavedState() {
+      try { localStorage.removeItem(FORM_STORAGE_KEY); } catch (_) {}
+    }
+
+    // Expose tiny hooks for other parts of the page (signatures, reset)
+    window.__vistaAutosaveSave = saveStateDebounced;
+    window.__vistaAutosaveClear = clearSavedState;
+
+    // Wire events
+    form.addEventListener('input', saveStateDebounced, true);
+    form.addEventListener('change', saveStateDebounced, true);
+
+    // restore once everything is in place
+    window.addEventListener('load', () => {
+      loadState();
+      // capture any defaults that might have been added after load
+      saveStateDebounced();
+    }, { once: true });
+  })();
 </script>
 </body>
 </html>
