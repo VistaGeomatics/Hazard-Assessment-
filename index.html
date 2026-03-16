@@ -927,7 +927,7 @@
             <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
-            <button type="button" class="btn-jayman" id="jaymanShareBtn" style="display:none;">Share with Jayman &#x2197;</button>
+            <button type="button" class="btn-jayman" id="jaymanShareBtn" style="display:none;">Save PDF &amp; Open Jayman &#x2197;</button>
           </div>
         </div>
       </div>
@@ -935,7 +935,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.7</div>
+<div class="version-stamp" id="versionStamp">v3.8</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -3261,7 +3261,7 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
       if (!e.target.closest('#clientWrap')) closeDropdown();
     });
 
-    // ---- Jayman button: save PDF then open submission URL ----
+    // ---- Jayman button: download PDF then open submission URL in new tab ----
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
 
     if (jaymanBtn) {
@@ -3269,32 +3269,30 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
         var buttonRow = document.getElementById('buttonRow');
         try {
           if (buttonRow) buttonRow.style.display = 'none';
-          var pdf  = await generatePdf();
-          var blob = pdf.output('blob');
+
+          // Generate PDF
+          var pdf      = await generatePdf();
+          var blob     = pdf.output('blob');
           var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
-          var file = new File([blob], fileName, { type: 'application/pdf' });
 
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              files: [file],
-              title: 'Hazard Assessment – Jayman',
-              text: 'Save this PDF, then complete the Jayman submission form.'
-            });
-          } else {
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url; a.download = fileName;
-            document.body.appendChild(a); a.click(); a.remove();
-            URL.revokeObjectURL(url);
-          }
+          // Step 1: Always save the PDF to the device so the user can upload it to Jayman
+          var dlUrl = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = dlUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          // Revoke after a short delay to ensure download starts
+          setTimeout(function(){ URL.revokeObjectURL(dlUrl); }, 2000);
 
-          setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 700);
+          // Step 2: Open the Jayman submission form in a new tab
+          // Small delay so the download dialog isn't competing with the new tab
+          setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 500);
 
         } catch(err) {
-          if (err.name !== 'AbortError') {
-            console.error('Jayman share failed:', err);
-            alert('Could not generate PDF. Please try again.');
-          }
+          console.error('Jayman share failed:', err);
+          alert('Could not generate PDF. Please try again.');
         } finally {
           if (buttonRow) buttonRow.style.display = 'flex';
         }
