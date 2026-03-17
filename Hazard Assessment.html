@@ -935,7 +935,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.8</div>
+<div class="version-stamp" id="versionStamp">v3.9</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -2803,14 +2803,25 @@ function replaceTextareasWithDivsForExport(cloneRoot) {
 }
 
 // Replace text/date/time inputs with plain divs so iOS Safari renders their
-// values correctly — Safari does not paint input .value into the html2canvas snapshot.
-function replaceInputsWithDivsForExport(cloneRoot) {
-  cloneRoot.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]').forEach(inp => {
+// values correctly. Accepts the original live form to read actual JS .value
+// properties — cloned inputs lose JS-set values (e.g. autocomplete fields).
+function replaceInputsWithDivsForExport(cloneRoot, originalForm) {
+  const cloneInputs    = Array.from(cloneRoot.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]'));
+  const originalInputs = originalForm
+    ? Array.from(originalForm.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]'))
+    : [];
+
+  cloneInputs.forEach((inp, i) => {
     const div = document.createElement("div");
     if (inp.name) div.setAttribute("data-name", inp.name);
     if (inp.id)   div.setAttribute("data-id",   inp.id);
 
-    const text = (inp.value != null ? inp.value : inp.getAttribute("value")) || "";
+    // Always prefer the live original's .value — JS-set values (autocomplete,
+    // programmatic assignment) are NOT preserved by cloneNode.
+    const liveValue = (originalInputs[i] ? originalInputs[i].value : null);
+    const text = liveValue != null ? liveValue
+               : (inp.value || inp.getAttribute("value") || "");
+
     div.textContent = text;
 
     div.style.width        = "100%";
@@ -2861,7 +2872,7 @@ function replaceInputsWithDivsForExport(cloneRoot) {
     if (stamp) clone.appendChild(stamp.cloneNode(true));
 
    replaceTextareasWithDivsForExport(clone);
-   replaceInputsWithDivsForExport(clone);
+   replaceInputsWithDivsForExport(clone, form);
 return clone;
   }
 
@@ -2991,8 +3002,17 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
     downloadBtn.addEventListener('click', async () => {
       try {
         if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        pdf.save(getFinalFileName());
+        const pdf      = await generatePdf();
+        const blob     = pdf.output('blob');
+        const fileName = getFinalFileName();
+        const dlUrl    = URL.createObjectURL(blob);
+        const a        = document.createElement('a');
+        a.href         = dlUrl;
+        a.download     = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(dlUrl), 2000);
       } finally {
         if (buttonRow) buttonRow.style.display = 'flex';
       }
