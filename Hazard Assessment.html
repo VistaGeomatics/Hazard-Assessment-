@@ -621,7 +621,7 @@
       </div>
     </div>
 
-    <!-- PAGE 2 -->
+    <!-- PAGE 2a — Hazard tables (PDF page 2, top half) -->
     <div class="container" id="page2">
       <div class="page-title-bar">
         <div class="page-title-main">Job Tasks, Hazards &amp; Controls</div>
@@ -787,6 +787,13 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- PAGE 2b — Legend, Emergency Response, Signatures (PDF page 2, bottom half) -->
+    <div class="container" id="page2b">
+      <div class="page-body">
+
         <div class="section-card" id="riskLegendCard">
           <div class="section-header">
             <div class="section-title">Risk Rating Legend</div>
@@ -935,7 +942,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v3.9</div>
+<div class="version-stamp" id="versionStamp">v4.2</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -2926,72 +2933,70 @@ await ensurePdfLibsLoaded();
     if (clone.__signaturesReady) await clone.__signaturesReady;
     await new Promise(r => setTimeout(r, 300));
 
-    const clonePage1 = clone.querySelector('#page1');
-    const clonePage2 = clone.querySelector('#page2');
+    const clonePage1  = clone.querySelector('#page1');
+    const clonePage2  = clone.querySelector('#page2');
+    const clonePage2b = clone.querySelector('#page2b');
 
-    async function addDivPaged(div, useCurrentPage) {
-  if (!div) return;
-
-  const canvas = await h2c(div, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: "#ffffff",
-    windowWidth: 1050
-  });
-
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const margin = 8;
-
-  const usableW = pageWidth - margin * 2;
-  const usableH = pageHeight - margin * 2;
-
-  // mm per px when canvas width is scaled to usableW
-  const mmPerPx = usableW / canvas.width;
-
-  // canvas pixels that fit vertically on one PDF page
-  const sliceHeightPx = Math.floor(usableH / mmPerPx);
-
-  let yPx = 0;
-  let first = true;
-
-  while (yPx < canvas.height) {
-    const thisSlicePx = Math.min(sliceHeightPx, canvas.height - yPx);
-
-    const slice = document.createElement("canvas");
-    slice.width = canvas.width;
-    slice.height = thisSlicePx;
-
-    const sctx = slice.getContext("2d");
-    sctx.drawImage(
-      canvas,
-      0, yPx, canvas.width, thisSlicePx,
-      0, 0, canvas.width, thisSlicePx
-    );
-
-    const imgData = slice.toDataURL("image/jpeg", 0.95);
-    const imgH = thisSlicePx * mmPerPx;
-
-    // page handling
-    if (first) {
-      if (!useCurrentPage) pdf.addPage();
-    } else {
-      pdf.addPage();
+    // Renders a DOM element to a canvas at 2× resolution
+    async function captureDiv(div) {
+      return h2c(div, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: 1050
+      });
     }
 
-    pdf.addImage(imgData, "JPEG", margin, margin, usableW, imgH);
+    // Place a single canvas image onto the current PDF page, scaled to fit usable width.
+    // Returns the mm height consumed so the caller can position the next image below it.
+    function placeCanvas(canvas, yMm, usableW, usableH) {
+      const scaleByWidth = usableW / canvas.width;
+      const renderedH    = canvas.height * scaleByWidth;
+      const fitScale     = renderedH > usableH ? (usableH / renderedH) : 1;
+      const finalW       = usableW  * fitScale;
+      const finalH       = renderedH * fitScale;
+      const xOffset      = margin + (usableW - finalW) / 2;
+      const imgData      = canvas.toDataURL("image/jpeg", 0.92);
+      pdf.addImage(imgData, "JPEG", xOffset, yMm, finalW, finalH);
+      return finalH;
+    }
 
-    first = false;
-    yPx += thisSlicePx;
+    const pageWidth  = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const usableW = pageWidth  - margin * 2;
+    const usableH = pageHeight - margin * 2;
 
-    // after first slice, always new pages
-    useCurrentPage = false;
-  }
-}
+    // ── PDF PAGE 1: capture #page1, scale to fit ──
+    const canvas1 = await captureDiv(clonePage1);
+    placeCanvas(canvas1, margin, usableW, usableH);
 
+    // ── PDF PAGE 2: capture #page2 (hazard tables) and #page2b (legend/emergency/sigs)
+    // Both are scaled proportionally so they share the one page without overflow.
+    pdf.addPage();
 
-    await addDivPaged(clonePage1, true);   // use first PDF page
-await addDivPaged(clonePage2, false);  // start a new page for page 2 (and continue if needed)
+    const canvas2  = await captureDiv(clonePage2);
+    const canvas2b = clonePage2b ? await captureDiv(clonePage2b) : null;
+
+    if (!canvas2b) {
+      // Only one section — fit it to the full page
+      placeCanvas(canvas2, margin, usableW, usableH);
+    } else {
+      // Two sections — allocate vertical space proportionally so they share the page
+      const totalPx   = canvas2.height + canvas2b.height;
+      const scaleW    = usableW / canvas2.width;      // both canvases same width
+      const totalMm   = totalPx * scaleW;
+      // If combined height fits, use natural scale; otherwise shrink to fit
+      const fitScale  = totalMm > usableH ? (usableH / totalMm) : 1;
+
+      const h2mm  = canvas2.height  * scaleW * fitScale;
+      const h2bmm = canvas2b.height * scaleW * fitScale;
+      const w2mm  = usableW * fitScale;
+      const xOff  = margin + (usableW - w2mm) / 2;
+
+      pdf.addImage(canvas2.toDataURL("image/jpeg", 0.92),  "JPEG", xOff, margin,          w2mm, h2mm);
+      pdf.addImage(canvas2b.toDataURL("image/jpeg", 0.92), "JPEG", xOff, margin + h2mm,   w2mm, h2bmm);
+    }
 
 
     document.body.removeChild(tempContainer);
@@ -3005,14 +3010,34 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
         const pdf      = await generatePdf();
         const blob     = pdf.output('blob');
         const fileName = getFinalFileName();
-        const dlUrl    = URL.createObjectURL(blob);
-        const a        = document.createElement('a');
-        a.href         = dlUrl;
-        a.download     = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(dlUrl), 2000);
+        const file     = new File([blob], fileName, { type: 'application/pdf' });
+
+        // On iOS/iPadOS use the native share sheet — this lets the user choose
+        // where to save (Files, cloud drive, AirDrop, etc.) and also correctly
+        // renders all form fields. Direct <a download> on iOS saves silently to
+        // Downloads with no location choice and can strip JS-set field values.
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Worksite Hazard Assessment',
+            text: 'VistaGeomatics – Worksite Hazard Assessment'
+          });
+        } else {
+          // PC / non-iOS: direct download as before
+          const dlUrl = URL.createObjectURL(blob);
+          const a     = document.createElement('a');
+          a.href      = dlUrl;
+          a.download  = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(dlUrl), 2000);
+        }
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          console.error('Download failed:', e);
+          alert('Could not save PDF. Please try again.');
+        }
       } finally {
         if (buttonRow) buttonRow.style.display = 'flex';
       }
@@ -3330,7 +3355,7 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
       if (!e.target.closest('#clientWrap')) closeDropdown();
     });
 
-    // ---- Jayman button: open submission URL + download PDF ----
+    // ---- Jayman button: open submission URL + save PDF ----
     // iOS Safari blocks window.open() after any await, so the tab must be
     // opened synchronously in the same call stack as the tap — before generatePdf().
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
@@ -3343,26 +3368,39 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
         // Must happen before any await or iOS/Safari will block it as a popup.
         window.open(JAYMAN_URL, '_blank');
 
-        // ── Step 2: generate and download the PDF ──
+        // ── Step 2: generate and save the PDF ──
         try {
           if (buttonRow) buttonRow.style.display = 'none';
 
           var pdf      = await generatePdf();
           var blob     = pdf.output('blob');
           var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
+          var file     = new File([blob], fileName, { type: 'application/pdf' });
 
-          var dlUrl = URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href     = dlUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 2000);
+          // On iOS use the share sheet so the user can choose where to save
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Hazard Assessment – Jayman',
+              text: 'Save this PDF then upload it on the Jayman submission form.'
+            });
+          } else {
+            // PC: direct download
+            var dlUrl = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href     = dlUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 2000);
+          }
 
         } catch(err) {
-          console.error('Jayman PDF failed:', err);
-          alert('Could not generate PDF. Please try again.');
+          if (err.name !== 'AbortError') {
+            console.error('Jayman PDF failed:', err);
+            alert('Could not generate PDF. Please try again.');
+          }
         } finally {
           if (buttonRow) buttonRow.style.display = 'flex';
         }
