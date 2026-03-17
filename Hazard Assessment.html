@@ -2726,22 +2726,39 @@ function bestEntryForHazard(hazardText) {
       }
     });
 
-    ["pcSignature","saSignature","clientSignature"].forEach(cid => {
-      const origCanvas = document.getElementById(cid);
-      const cloneCanvas = clone.querySelector(`#${CSS.escape(cid)}`);
-      if (!origCanvas || !cloneCanvas) return;
+    // Signatures: return a Promise that resolves once all canvases are drawn
+    // so the caller can await completion before html2canvas captures the clone.
+    const sigPromises = ["pcSignature","saSignature","clientSignature"].map(cid => {
+      return new Promise(resolve => {
+        const origCanvas  = document.getElementById(cid);
+        const cloneCanvas = clone.querySelector(`#${CSS.escape(cid)}`);
+        if (!origCanvas || !cloneCanvas) return resolve();
 
-      const rect = cloneCanvas.getBoundingClientRect();
-      cloneCanvas.width = Math.floor((rect.width || 300));
-      cloneCanvas.height = Math.floor((rect.height || 80));
-      const cctx = cloneCanvas.getContext("2d");
-      const img = new Image();
-      img.onload = () => {
-        cctx.clearRect(0,0,cloneCanvas.width, cloneCanvas.height);
-        cctx.drawImage(img, 0, 0, cloneCanvas.width, cloneCanvas.height);
-      };
-      img.src = origCanvas.toDataURL("image/png");
+        // Size the clone canvas to match the original's rendered size
+        const rect = origCanvas.getBoundingClientRect();
+        const w = Math.floor(rect.width  || origCanvas.width  || 300);
+        const h = Math.floor(rect.height || origCanvas.height || 80);
+        cloneCanvas.width  = w;
+        cloneCanvas.height = h;
+
+        const dataUrl = origCanvas.toDataURL("image/png");
+        // If the original canvas is blank, resolve immediately
+        if (dataUrl === "data:,") return resolve();
+
+        const img = new Image();
+        img.onload = () => {
+          const cctx = cloneCanvas.getContext("2d");
+          cctx.clearRect(0, 0, w, h);
+          cctx.drawImage(img, 0, 0, w, h);
+          resolve();
+        };
+        img.onerror = () => resolve(); // don't hang if image fails
+        img.src = dataUrl;
+      });
     });
+
+    // Attach the promise array to the clone so createFilteredFormClone can await it
+    clone.__signaturesReady = Promise.all(sigPromises);
   }
 
   function expandTextareasForExport(cloneRoot) {
@@ -2788,6 +2805,37 @@ function replaceTextareasWithDivsForExport(cloneRoot) {
   });
 }
 
+// Replace text/date/time inputs with plain divs so iOS Safari renders their
+// values correctly — Safari does not paint input .value into the html2canvas snapshot.
+function replaceInputsWithDivsForExport(cloneRoot) {
+  cloneRoot.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]').forEach(inp => {
+    const div = document.createElement("div");
+    if (inp.name) div.setAttribute("data-name", inp.name);
+    if (inp.id)   div.setAttribute("data-id",   inp.id);
+
+    const text = (inp.value != null ? inp.value : inp.getAttribute("value")) || "";
+    div.textContent = text;
+
+    div.style.width      = "100%";
+    div.style.height     = "34px";
+    div.style.display    = "flex";
+    div.style.alignItems = "center";
+    div.style.fontFamily = '"Inter", sans-serif';
+    div.style.fontSize   = "0.74rem";
+    div.style.lineHeight = "1.25";
+    div.style.color      = text ? "var(--text-main)" : "transparent";
+    div.style.background = "#f9fbff";
+    div.style.border     = "1px solid var(--border-soft)";
+    div.style.borderRadius = "8px";
+    div.style.padding    = "6px 8px";
+    div.style.boxSizing  = "border-box";
+    div.style.overflow   = "hidden";
+    div.style.whiteSpace = "nowrap";
+
+    inp.parentNode.replaceChild(div, inp);
+  });
+}
+
   function createFilteredFormClone() {
     const form = document.getElementById('hazardForm');
     const clone = form.cloneNode(true);
@@ -2815,8 +2863,12 @@ function replaceTextareasWithDivsForExport(cloneRoot) {
     const stamp = document.getElementById("versionStamp");
     if (stamp) clone.appendChild(stamp.cloneNode(true));
 
-   replaceTextareasWithDivsForExport(clone);
-return clone;
+    // Replace textareas and text inputs with plain divs so iOS Safari
+    // renders their values correctly in the html2canvas snapshot.
+    replaceTextareasWithDivsForExport(clone);
+    replaceInputsWithDivsForExport(clone);
+
+    return clone;
   }
 
  async function generatePdf() {
@@ -2864,7 +2916,11 @@ await ensurePdfLibsLoaded();
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
-    await new Promise(r => setTimeout(r, 180));
+    // Wait for all signature canvases to finish drawing, then add a layout
+    // settle delay. iOS Safari needs both — the promise ensures canvas pixels
+    // are ready, the timeout lets the layout stabilise before capture.
+    if (clone.__signaturesReady) await clone.__signaturesReady;
+    await new Promise(r => setTimeout(r, 300));
 
     const clonePage1 = clone.querySelector('#page1');
     const clonePage2 = clone.querySelector('#page2');
@@ -3261,44 +3317,40 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
       if (!e.target.closest('#clientWrap')) closeDropdown();
     });
 
-    // ---- Jayman button: open submission URL immediately (iPad-safe), then save PDF ----
+    // ---- Jayman button: save PDF then open submission URL ----
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
 
     if (jaymanBtn) {
       jaymanBtn.addEventListener('click', async function() {
         var buttonRow = document.getElementById('buttonRow');
-
-        // Open the Jayman tab SYNCHRONOUSLY here, inside the tap gesture.
-        // Safari/iOS blocks window.open() called from setTimeout or after an await —
-        // it must happen in the same call stack as the user interaction.
-        var jaymanTab = window.open(JAYMAN_URL, '_blank');
-
         try {
           if (buttonRow) buttonRow.style.display = 'none';
-
-          // Generate and download the PDF
-          var pdf      = await generatePdf();
-          var blob     = pdf.output('blob');
+          var pdf  = await generatePdf();
+          var blob = pdf.output('blob');
           var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
+          var file = new File([blob], fileName, { type: 'application/pdf' });
 
-          var dlUrl = URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = dlUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(dlUrl); }, 2000);
-
-          // If the tab was blocked (some browsers still block it), fall back to
-          // navigating the current page after the download has had time to start
-          if (!jaymanTab || jaymanTab.closed) {
-            setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 1500);
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Hazard Assessment – Jayman',
+              text: 'Save this PDF, then complete the Jayman submission form.'
+            });
+          } else {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url; a.download = fileName;
+            document.body.appendChild(a); a.click(); a.remove();
+            URL.revokeObjectURL(url);
           }
 
+          setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 700);
+
         } catch(err) {
-          console.error('Jayman PDF failed:', err);
-          alert('Could not generate PDF. Please try again.');
+          if (err.name !== 'AbortError') {
+            console.error('Jayman share failed:', err);
+            alert('Could not generate PDF. Please try again.');
+          }
         } finally {
           if (buttonRow) buttonRow.style.display = 'flex';
         }
