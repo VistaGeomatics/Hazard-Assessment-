@@ -927,7 +927,7 @@
             <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
-            <button type="button" class="btn-jayman" id="jaymanShareBtn" style="display:none;">Save PDF &amp; Open Jayman &#x2197;</button>
+            <button type="button" class="btn-jayman" id="jaymanShareBtn" style="display:none;">Share with Jayman &#x2197;</button>
           </div>
         </div>
       </div>
@@ -3261,21 +3261,26 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
       if (!e.target.closest('#clientWrap')) closeDropdown();
     });
 
-    // ---- Jayman button: download PDF then open submission URL in new tab ----
+    // ---- Jayman button: open submission URL immediately (iPad-safe), then save PDF ----
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
 
     if (jaymanBtn) {
       jaymanBtn.addEventListener('click', async function() {
         var buttonRow = document.getElementById('buttonRow');
+
+        // Open the Jayman tab SYNCHRONOUSLY here, inside the tap gesture.
+        // Safari/iOS blocks window.open() called from setTimeout or after an await —
+        // it must happen in the same call stack as the user interaction.
+        var jaymanTab = window.open(JAYMAN_URL, '_blank');
+
         try {
           if (buttonRow) buttonRow.style.display = 'none';
 
-          // Generate PDF
+          // Generate and download the PDF
           var pdf      = await generatePdf();
           var blob     = pdf.output('blob');
           var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
 
-          // Step 1: Always save the PDF to the device so the user can upload it to Jayman
           var dlUrl = URL.createObjectURL(blob);
           var a = document.createElement('a');
           a.href = dlUrl;
@@ -3283,15 +3288,16 @@ await addDivPaged(clonePage2, false);  // start a new page for page 2 (and conti
           document.body.appendChild(a);
           a.click();
           a.remove();
-          // Revoke after a short delay to ensure download starts
           setTimeout(function(){ URL.revokeObjectURL(dlUrl); }, 2000);
 
-          // Step 2: Open the Jayman submission form in a new tab
-          // Small delay so the download dialog isn't competing with the new tab
-          setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 500);
+          // If the tab was blocked (some browsers still block it), fall back to
+          // navigating the current page after the download has had time to start
+          if (!jaymanTab || jaymanTab.closed) {
+            setTimeout(function(){ window.open(JAYMAN_URL, '_blank'); }, 1500);
+          }
 
         } catch(err) {
-          console.error('Jayman share failed:', err);
+          console.error('Jayman PDF failed:', err);
           alert('Could not generate PDF. Please try again.');
         } finally {
           if (buttonRow) buttonRow.style.display = 'flex';
