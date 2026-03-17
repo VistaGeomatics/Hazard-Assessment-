@@ -942,7 +942,7 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v4.2</div>
+<div class="version-stamp" id="versionStamp">v4.3</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -3003,6 +3003,37 @@ await ensurePdfLibsLoaded();
     return pdf;
   }
 
+  // Detect iOS/iPadOS — used to route PDF save correctly on all buttons.
+  // navigator.share exists on PC Chrome too but behaves differently; we
+  // specifically want the share sheet only on iOS/iPadOS.
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  // Helper: save a PDF blob. On iOS opens the share sheet (location picker).
+  // On PC triggers a direct download.
+  async function savePdfBlob(blob, fileName) {
+    if (isIOS) {
+      var file = new File([blob], fileName, { type: 'application/pdf' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Worksite Hazard Assessment',
+          text: 'VistaGeomatics – Worksite Hazard Assessment'
+        });
+        return;
+      }
+    }
+    // PC or iOS share not available: direct download
+    var dlUrl = URL.createObjectURL(blob);
+    var a     = document.createElement('a');
+    a.href    = dlUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 2000);
+  }
+
   if (downloadBtn) {
     downloadBtn.addEventListener('click', async () => {
       try {
@@ -3010,29 +3041,7 @@ await ensurePdfLibsLoaded();
         const pdf      = await generatePdf();
         const blob     = pdf.output('blob');
         const fileName = getFinalFileName();
-        const file     = new File([blob], fileName, { type: 'application/pdf' });
-
-        // On iOS/iPadOS use the native share sheet — this lets the user choose
-        // where to save (Files, cloud drive, AirDrop, etc.) and also correctly
-        // renders all form fields. Direct <a download> on iOS saves silently to
-        // Downloads with no location choice and can strip JS-set field values.
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Worksite Hazard Assessment',
-            text: 'VistaGeomatics – Worksite Hazard Assessment'
-          });
-        } else {
-          // PC / non-iOS: direct download as before
-          const dlUrl = URL.createObjectURL(blob);
-          const a     = document.createElement('a');
-          a.href      = dlUrl;
-          a.download  = fileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(() => URL.revokeObjectURL(dlUrl), 2000);
-        }
+        await savePdfBlob(blob, fileName);
       } catch (e) {
         if (e.name !== 'AbortError') {
           console.error('Download failed:', e);
@@ -3048,29 +3057,12 @@ await ensurePdfLibsLoaded();
     shareBtn.addEventListener('click', async () => {
       try {
         if (buttonRow) buttonRow.style.display = 'none';
-        const pdf = await generatePdf();
-        const blob = pdf.output('blob');
+        const pdf      = await generatePdf();
+        const blob     = pdf.output('blob');
         const fileName = getFinalFileName();
-        const file = new File([blob], fileName, { type: 'application/pdf' });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Worksite Hazard Assessment',
-            text: 'VistaGeomatics – Worksite Hazard Assessment PDF'
-          });
-        } else {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        }
+        await savePdfBlob(blob, fileName);
       } catch (e) {
-        console.error('Share failed:', e);
+        if (e.name !== 'AbortError') console.error('Share failed:', e);
       } finally {
         if (buttonRow) buttonRow.style.display = 'flex';
       }
@@ -3356,45 +3348,24 @@ await ensurePdfLibsLoaded();
     });
 
     // ---- Jayman button: open submission URL + save PDF ----
-    // iOS Safari blocks window.open() after any await, so the tab must be
-    // opened synchronously in the same call stack as the tap — before generatePdf().
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
 
     if (jaymanBtn) {
       jaymanBtn.addEventListener('click', async function() {
         var buttonRow = document.getElementById('buttonRow');
 
-        // ── Step 1: open the Jayman tab immediately, inside the tap gesture ──
-        // Must happen before any await or iOS/Safari will block it as a popup.
+        // Open the Jayman tab synchronously — must happen before any await
+        // so iOS Safari doesn't block it as a popup.
         window.open(JAYMAN_URL, '_blank');
 
-        // ── Step 2: generate and save the PDF ──
         try {
           if (buttonRow) buttonRow.style.display = 'none';
 
           var pdf      = await generatePdf();
           var blob     = pdf.output('blob');
           var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
-          var file     = new File([blob], fileName, { type: 'application/pdf' });
 
-          // On iOS use the share sheet so the user can choose where to save
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              files: [file],
-              title: 'Hazard Assessment – Jayman',
-              text: 'Save this PDF then upload it on the Jayman submission form.'
-            });
-          } else {
-            // PC: direct download
-            var dlUrl = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href     = dlUrl;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 2000);
-          }
+          await savePdfBlob(blob, fileName);
 
         } catch(err) {
           if (err.name !== 'AbortError') {
