@@ -929,6 +929,10 @@
             <input type="text" id="crew_contact" name="crew_contact">
           </div>
 
+          <div id="jaymanBanner" style="display:none; margin-top:8px; padding:10px 14px; background:linear-gradient(120deg,#e8952a,#c97a18); border-radius:12px; color:#fff; font-size:0.82rem; font-weight:600; text-align:center; cursor:pointer; box-shadow:0 4px 12px rgba(200,120,20,0.35);">
+            PDF saved ✓ &nbsp;— &nbsp;Tap here to open the Jayman submission form &#x2197;
+          </div>
+
           <div class="btn-row" id="buttonRow">
             <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
             <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
@@ -3003,27 +3007,23 @@ await ensurePdfLibsLoaded();
     return pdf;
   }
 
-  // Detect iOS/iPadOS — used to route PDF save correctly on all buttons.
-  // navigator.share exists on PC Chrome too but behaves differently; we
-  // specifically want the share sheet only on iOS/iPadOS.
+  // ── iOS/iPadOS detection ──────────────────────────────────────
+  // navigator.share exists on PC Chrome too but behaves differently there.
+  // We only want the share sheet on actual iOS/iPadOS devices.
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-  // Helper: save a PDF blob. On iOS opens the share sheet (location picker).
-  // On PC triggers a direct download.
+  // Save a PDF blob.
+  // iOS  → native share sheet so the user can pick the save destination.
+  // PC   → direct <a download> (no share sheet, no prompt).
   async function savePdfBlob(blob, fileName) {
     if (isIOS) {
       var file = new File([blob], fileName, { type: 'application/pdf' });
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'Worksite Hazard Assessment',
-          text: 'VistaGeomatics – Worksite Hazard Assessment'
-        });
+        await navigator.share({ files: [file], title: fileName });
         return;
       }
     }
-    // PC or iOS share not available: direct download
     var dlUrl = URL.createObjectURL(blob);
     var a     = document.createElement('a');
     a.href    = dlUrl;
@@ -3038,10 +3038,9 @@ await ensurePdfLibsLoaded();
     downloadBtn.addEventListener('click', async () => {
       try {
         if (buttonRow) buttonRow.style.display = 'none';
-        const pdf      = await generatePdf();
-        const blob     = pdf.output('blob');
-        const fileName = getFinalFileName();
-        await savePdfBlob(blob, fileName);
+        const pdf  = await generatePdf();
+        const blob = pdf.output('blob');
+        await savePdfBlob(blob, getFinalFileName());
       } catch (e) {
         if (e.name !== 'AbortError') {
           console.error('Download failed:', e);
@@ -3057,10 +3056,9 @@ await ensurePdfLibsLoaded();
     shareBtn.addEventListener('click', async () => {
       try {
         if (buttonRow) buttonRow.style.display = 'none';
-        const pdf      = await generatePdf();
-        const blob     = pdf.output('blob');
-        const fileName = getFinalFileName();
-        await savePdfBlob(blob, fileName);
+        const pdf  = await generatePdf();
+        const blob = pdf.output('blob');
+        await savePdfBlob(blob, getFinalFileName());
       } catch (e) {
         if (e.name !== 'AbortError') console.error('Share failed:', e);
       } finally {
@@ -3347,33 +3345,62 @@ await ensurePdfLibsLoaded();
       if (!e.target.closest('#clientWrap')) closeDropdown();
     });
 
-    // ---- Jayman button: open submission URL + save PDF ----
+    // ---- Jayman button ----
     var JAYMAN_URL = 'https://www.cognitoforms.com/JaymanBUILT1/signinandhazardassessmentsubmission';
+    var jaymanBanner = document.getElementById('jaymanBanner');
+
+    // Wire up the banner so tapping it opens the Jayman URL (iOS only)
+    if (jaymanBanner) {
+      jaymanBanner.addEventListener('click', function() {
+        jaymanBanner.style.display = 'none';
+        window.open(JAYMAN_URL, '_blank');
+      });
+    }
 
     if (jaymanBtn) {
       jaymanBtn.addEventListener('click', async function() {
         var buttonRow = document.getElementById('buttonRow');
 
-        // Open the Jayman tab synchronously — must happen before any await
-        // so iOS Safari doesn't block it as a popup.
-        window.open(JAYMAN_URL, '_blank');
-
-        try {
-          if (buttonRow) buttonRow.style.display = 'none';
-
-          var pdf      = await generatePdf();
-          var blob     = pdf.output('blob');
-          var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
-
-          await savePdfBlob(blob, fileName);
-
-        } catch(err) {
-          if (err.name !== 'AbortError') {
-            console.error('Jayman PDF failed:', err);
-            alert('Could not generate PDF. Please try again.');
+        if (!isIOS) {
+          // ── PC: open Jayman tab immediately (synchronous, no gesture issue),
+          //        then generate and download the PDF directly.
+          window.open(JAYMAN_URL, '_blank');
+          try {
+            if (buttonRow) buttonRow.style.display = 'none';
+            var pdf  = await generatePdf();
+            var blob = pdf.output('blob');
+            var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
+            await savePdfBlob(blob, fileName);
+          } catch(err) {
+            if (err.name !== 'AbortError') {
+              console.error('Jayman PDF failed:', err);
+              alert('Could not generate PDF. Please try again.');
+            }
+          } finally {
+            if (buttonRow) buttonRow.style.display = 'flex';
           }
-        } finally {
-          if (buttonRow) buttonRow.style.display = 'flex';
+
+        } else {
+          // ── iOS: window.open after an await is blocked by Safari.
+          //         Instead: save the PDF via share sheet first (uses the gesture),
+          //         then show a tappable banner that opens the Jayman URL on the
+          //         user's next tap — no popup blocking because it's a fresh gesture.
+          try {
+            if (buttonRow) buttonRow.style.display = 'none';
+            var pdf  = await generatePdf();
+            var blob = pdf.output('blob');
+            var fileName = (typeof getFinalFileName === 'function') ? getFinalFileName() : 'HazardAssessment.pdf';
+            await savePdfBlob(blob, fileName);
+            // Show the banner inviting the user to open the Jayman form
+            if (jaymanBanner) jaymanBanner.style.display = 'block';
+          } catch(err) {
+            if (err.name !== 'AbortError') {
+              console.error('Jayman PDF failed:', err);
+              alert('Could not generate PDF. Please try again.');
+            }
+          } finally {
+            if (buttonRow) buttonRow.style.display = 'flex';
+          }
         }
       });
     }
