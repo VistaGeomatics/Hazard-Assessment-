@@ -358,6 +358,251 @@
       color: #fff !important;
       box-shadow: 0 8px 20px rgba(200,120,20,0.35);
     }
+
+    /* Jayman screenshot button */
+    .btn-jayman-screenshot {
+      background: linear-gradient(120deg, #c97a18, #8b5010);
+      color: #fff !important;
+      box-shadow: 0 8px 20px rgba(140,80,16,0.35);
+    }
+
+    /* ── Brookfield ─────────────────────────────────────────── */
+    .btn-brookfield {
+      background: linear-gradient(120deg, #2e7d32, #1b5e20);
+      color: #fff !important;
+      box-shadow: 0 8px 20px rgba(27,94,32,0.35);
+    }
+
+    /* Brookfield modal overlay */
+    #bfModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(11,48,69,0.55);
+      backdrop-filter: blur(3px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    #bfModal.open { display: flex; }
+
+    .bf-modal-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(5,41,66,0.28);
+      padding: 24px 22px 20px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      animation: bfSlideIn 0.22s ease;
+    }
+    @keyframes bfSlideIn {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .bf-modal-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .bf-modal-logo-badge {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.1rem; font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      flex-shrink: 0;
+    }
+    .bf-modal-logo-text {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1b5e20;
+      line-height: 1.2;
+    }
+    .bf-modal-logo-sub { font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.04em; }
+
+    .bf-modal-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--vista-blue-dark);
+      margin-bottom: 6px;
+    }
+    .bf-modal-sub { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; }
+
+    .bf-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .bf-choice-btn {
+      border: 2px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 14px 10px;
+      background: #f9fbff;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: center;
+      transition: all 0.15s;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .bf-choice-btn .bf-icon { font-size: 1.4rem; }
+    .bf-choice-btn:hover, .bf-choice-btn.selected {
+      border-color: #2e7d32;
+      background: #f0f7f0;
+      color: #1b5e20;
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.14);
+    }
+    .bf-choice-btn.danger:hover, .bf-choice-btn.danger.selected {
+      border-color: var(--vista-blue);
+      background: #f0f5fb;
+      color: var(--vista-blue-dark);
+      box-shadow: 0 0 0 3px rgba(22,95,125,0.14);
+    }
+
+    .bf-area-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .bf-area-btn {
+      border: 2px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #f9fbff;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: left;
+      transition: all 0.15s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .bf-area-btn .bf-area-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .bf-area-btn .bf-area-email { font-size: 0.68rem; font-weight: 400; color: var(--text-muted); display: block; margin-top: 2px; }
+    .bf-area-btn:hover, .bf-area-btn.selected {
+      border-color: #2e7d32;
+      background: #f0f7f0;
+      color: #1b5e20;
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+    }
+
+    .bf-photo-zone {
+      border: 2px dashed var(--border-soft);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+      background: #f9fbff;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .bf-photo-zone:hover { border-color: #2e7d32; background: #f0f7f0; }
+    .bf-photo-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .bf-photo-icon { font-size: 2rem; margin-bottom: 6px; }
+    .bf-photo-label { font-size: 0.82rem; font-weight: 600; color: var(--text-main); }
+    .bf-photo-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; }
+
+    .bf-photo-thumb-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center;
+    }
+    .bf-thumb-wrap {
+      position: relative; display: inline-block;
+    }
+    .bf-thumb-wrap img {
+      width: 90px; height: 70px; object-fit: cover;
+      border-radius: 8px; border: 2px solid #2e7d32;
+      display: block;
+    }
+    .bf-thumb-ts {
+      font-size: 0.55rem; color: #fff;
+      background: rgba(0,0,0,0.55);
+      padding: 1px 4px; border-radius: 0 0 6px 6px;
+      text-align: center;
+    }
+    .bf-thumb-remove {
+      position: absolute; top: -6px; right: -6px;
+      width: 18px; height: 18px;
+      background: #b91c1c; color: #fff;
+      border-radius: 50%; border: none;
+      font-size: 0.65rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; line-height: 1;
+    }
+
+    .bf-step-indicator {
+      display: flex; gap: 6px; margin-bottom: 14px; align-items: center;
+    }
+    .bf-step {
+      flex: 1; height: 4px; border-radius: 99px;
+      background: var(--border-soft); transition: background 0.3s;
+    }
+    .bf-step.done { background: #2e7d32; }
+    .bf-step.active { background: #66bb6a; }
+
+    .bf-modal-actions {
+      display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;
+    }
+
+    .bf-status-bar {
+      display: none;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: linear-gradient(120deg, #f0f7f0, #e8f5e9);
+      border: 1px solid #a5d6a7;
+      font-size: 0.76rem;
+      color: #1b5e20;
+      font-weight: 600;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .bf-status-bar.visible { display: flex; }
+    .bf-status-bar .bf-status-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .bf-status-details { font-size: 0.7rem; font-weight: 400; color: #2e7d32; margin-top: 2px; }
+
+    /* Brookfield fence card (shown inline below signatures) */
+    #bfFenceCard {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #a5d6a7;
+      background: linear-gradient(135deg, #f0f7f0, #e8f5e9);
+    }
+    #bfFenceCard.visible { display: block; }
+    .bf-card-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.78rem; font-weight: 700;
+      color: #1b5e20; text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+    }
+    .bf-card-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; margin-top: 6px; }
+    .bf-card-photo-zone {
+      border: 2px dashed #a5d6a7; border-radius: 10px;
+      padding: 10px 14px; background: #fff;
+      cursor: pointer; transition: all 0.14s;
+      font-size: 0.76rem; font-weight: 600; color: #2e7d32;
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap; position: relative;
+    }
+    .bf-card-photo-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+    .bf-card-photo-zone:hover { border-color: #2e7d32; background: #f0f7f0; }
+    .bf-post-thumbs { display: flex; gap: 6px; flex-wrap: wrap; }
   </style>
 </head>
 
@@ -864,8 +1109,10 @@
           <div class="row">
             <div>
               <label for="nearest_hospital">Nearest first aid facility or hospital</label>
-              <input type="text" id="nearest_hospital" name="nearest_hospital" list="facilityList" placeholder="Start typing facility name or abbreviation">
-              <datalist id="facilityList"></datalist>
+              <div class="client-wrap" id="hospitalWrap">
+                <input type="text" id="nearest_hospital" name="nearest_hospital" autocomplete="off" placeholder="Start typing name or abbreviation (e.g. FMC, CUCC)">
+                <div class="client-dropdown" id="hospitalDropdown"></div>
+              </div>
             </div>
             <div>
               <label for="hospital_phone">Phone #</label>
@@ -933,12 +1180,45 @@
             PDF saved ✓ &nbsp;— &nbsp;Tap here to open the Jayman submission form &#x2197;
           </div>
 
+          <!-- Brookfield fence status bar -->
+          <div class="bf-status-bar" id="bfStatusBar">
+            <div>
+              <div id="bfStatusText">Brookfield fence protocol active</div>
+              <div class="bf-status-details" id="bfStatusDetails"></div>
+            </div>
+          </div>
+
+          <!-- Brookfield inline fence card (post-job photo + submit) -->
+          <div id="bfFenceCard">
+            <div class="bf-card-title">Brookfield Fence Photo Submission</div>
+            <div style="font-size:0.74rem; color:#2e7d32; margin-bottom:8px;" id="bfCardAreaLabel"></div>
+            <div class="bf-card-row">
+              <div>
+                <div style="font-size:0.72rem; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PRE-JOB PHOTOS</div>
+                <div class="bf-post-thumbs" id="bfPreThumbsCard"></div>
+              </div>
+              <div>
+                <div style="font-size:0.72rem; font-weight:600; color:var(--text-muted); margin-bottom:4px;">POST-JOB PHOTOS</div>
+                <div class="bf-card-photo-zone" id="bfPostZoneCard">
+                  <input type="file" id="bfPostFileCard" accept="image/*" capture="environment" multiple>
+                  Add Post-Job Photo(s)
+                </div>
+                <div class="bf-post-thumbs" id="bfPostThumbsCard" style="margin-top:6px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brookfield post-share instruction banner -->
+          <div id="bfInstructionBanner" style="display:none; margin-top:8px; padding:10px 14px; background:linear-gradient(120deg,#e8f5e9,#f1f8e9); border:1.5px solid #a5d6a7; border-radius:12px; font-size:0.78rem; color:#1b5e20; line-height:1.6;"></div>
+
           <div class="btn-row" id="buttonRow">
             <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
             <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
             <button type="button" class="btn-primary" id="downloadBtn">Download PDF</button>
             <button type="button" class="btn-secondary" id="shareBtn">Share PDF</button>
             <button type="button" class="btn-jayman" id="jaymanShareBtn" style="display:none;">Save &amp; Submit to Jayman &#x2197;</button>
+            <button type="button" class="btn-jayman-screenshot" id="jaymanScreenshotBtn" style="display:none;">&#x1F4F7; Save as JPG (Jayman)</button>
+            <button type="button" class="btn-brookfield" id="brookfieldSubmitBtn" style="display:none;">Save &amp; Email Fence Photos</button>
           </div>
         </div>
       </div>
@@ -946,7 +1226,92 @@
   </form>
 </div>
 
-<div class="version-stamp" id="versionStamp">v4.3</div>
+<!-- ══════════════════════════════════════════════════════
+     BROOKFIELD FENCE PHOTO MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="bfModal" role="dialog" aria-modal="true" aria-label="Brookfield Fence Photo Wizard">
+  <div class="bf-modal-box" id="bfModalBox">
+
+    <!-- Logo bar -->
+    <div class="bf-modal-logo">
+      <div class="bf-modal-logo-badge">BR</div>
+      <div>
+        <div class="bf-modal-logo-text">Brookfield Residential</div>
+        <div class="bf-modal-logo-sub">Fence Condition Protocol</div>
+      </div>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="bf-step-indicator">
+      <div class="bf-step active" id="bfStep1bar"></div>
+      <div class="bf-step" id="bfStep2bar"></div>
+      <div class="bf-step" id="bfStep3bar"></div>
+    </div>
+
+    <!-- ── STEP 1: Are there construction fences? ── -->
+    <div id="bfStep1">
+      <div class="bf-modal-title">Construction Fences on Site?</div>
+      <div class="bf-modal-sub">Brookfield requires a fence condition report when temporary construction fencing is present.</div>
+      <div class="bf-choice-grid">
+        <button type="button" class="bf-choice-btn" id="bfFenceYes">
+          Yes — fences present
+        </button>
+        <button type="button" class="bf-choice-btn danger" id="bfFenceNo">
+          No fences on site
+        </button>
+      </div>
+      <div class="bf-modal-actions">
+        <button type="button" class="btn-secondary" id="bfSkip" style="font-size:0.74rem;">Skip / Close</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Select area ── -->
+    <div id="bfStep2" style="display:none;">
+      <div class="bf-modal-title">Select Your Work Area</div>
+      <div class="bf-modal-sub">Photos will be emailed to the correct Brookfield site supervisor.</div>
+      <div class="bf-area-list">
+        <button type="button" class="bf-area-btn" data-area="Livingston / Chinook" data-email="lvcgconstruction@brookfieldrp.onmicrosoft.com">
+          Livingston &amp; Chinook
+        </button>
+        <button type="button" class="bf-area-btn" data-area="Rockland / Starling" data-email="rpconstruction@brookfieldrp.onmicrosoft.com">
+          Rockland &amp; Starling
+        </button>
+        <button type="button" class="bf-area-btn" data-area="Seton / Seton Ridge" data-email="se@brookfieldrp.onmicrosoft.com">
+          Seton &amp; Seton Ridge
+        </button>
+        <button type="button" class="bf-area-btn" data-area="Creekstone / Silver Spruce" data-email="crcssconstruction@brookfieldrp.onmicrosoft.com">
+          Creekstone &amp; Silver Spruce
+        </button>
+      </div>
+      <div class="bf-modal-actions">
+        <button type="button" class="btn-secondary" id="bfBackTo1" style="font-size:0.74rem;">← Back</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Pre-job photo capture ── -->
+    <div id="bfStep3" style="display:none;">
+      <div class="bf-modal-title">Take Pre-Job Fence Photo(s)</div>
+      <div class="bf-modal-sub" id="bfStep3Sub">Photograph the fence condition <strong>before</strong> starting work. Photos are automatically time-stamped.</div>
+
+      <div class="bf-photo-zone" id="bfPrePhotoZone">
+        <input type="file" id="bfPreFile" accept="image/*" capture="environment" multiple>
+        <div class="bf-photo-icon">&#x1F4F7;</div>
+        <div class="bf-photo-label">Tap to open camera</div>
+        <div class="bf-photo-sub">Take one or more photos of all fence panels</div>
+      </div>
+
+      <div class="bf-photo-thumb-row" id="bfPreThumbs"></div>
+
+      <div class="bf-modal-actions">
+        <button type="button" class="btn-secondary" id="bfBackTo2" style="font-size:0.74rem;">← Back</button>
+        <button type="button" class="btn-primary" id="bfPreDone" disabled style="font-size:0.78rem;">Done — Start Work ✓</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="version-stamp" id="versionStamp">v5.2</div>
 
 <!-- OFFLINE NOTE:
      Put these files beside this HTML for offline use:
@@ -1327,7 +1692,7 @@
   ];
 
   const facilityInput = document.getElementById("nearest_hospital");
-  const facilityList  = document.getElementById("facilityList");
+  const hospitalDropdown = document.getElementById("hospitalDropdown");
   const phoneInput    = document.getElementById("hospital_phone");
   const erTextarea    = document.getElementById("emergency_procedures");
 
@@ -1335,49 +1700,29 @@
     return (s || "").toString().trim().toLowerCase().replace(/\s+/g, " ");
   }
 
-  function fillFacilityDatalist() {
-    if (!facilityList) return;
-    facilityList.innerHTML = "";
-    MEDICAL_FACILITIES.forEach(f => {
-      const optName = document.createElement("option");
-      optName.value = f.name;
-      optName.label = `${f.abbr} – ${f.type}`;
-      facilityList.appendChild(optName);
-
-      const optAbbr = document.createElement("option");
-      optAbbr.value = f.abbr;
-      optAbbr.label = f.name;
-      facilityList.appendChild(optAbbr);
-    });
-  }
-  fillFacilityDatalist();
-
   function findFacility(query) {
     const q = normalizeFacilityKey(query);
     if (!q) return null;
-
     let f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.abbr) === q);
     if (f) return f;
-
     f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.name) === q);
     if (f) return f;
-
-    if (q.length >= 3) {
+    if (q.length >= 2) {
       f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.name).startsWith(q));
       if (f) return f;
+      f = MEDICAL_FACILITIES.find(x => normalizeFacilityKey(x.abbr).startsWith(q));
+      if (f) return f;
     }
-
     return null;
   }
 
   function setEmergencyAutofill(facility) {
     if (!facility) return;
-    const current = normalizeFacilityKey(facilityInput.value);
-    if (current === normalizeFacilityKey(facility.abbr)) facilityInput.value = facility.name;
-
-    phoneInput.value = "911";
-    erTextarea.value =
-      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${facility.name}, ${facility.address} for medical attention. Report the incident to your supervisor as soon as it’s safe and complete an incident report.`;
+    facilityInput.value = facility.name;
+    if (phoneInput) phoneInput.value = "911";
+    if (erTextarea) erTextarea.value =
+      `Ensure your safety and move to a secure area. Call 911 for emergencies and, if needed, go to ${facility.name}, ${facility.address} for medical attention. Report the incident to your supervisor as soon as it's safe and complete an incident report.`;
+    if (window.__vistaAutosaveSave) window.__vistaAutosaveSave();
   }
 
   function clearEmergencyAutofill() {
@@ -1385,19 +1730,83 @@
     if (erTextarea) erTextarea.value = "";
   }
 
-  if (facilityInput) {
-    const handler = () => {
-      const val = (facilityInput.value || "").trim();
-      if (!val) { clearEmergencyAutofill(); return; }
-      const match = findFacility(val);
-      if (match) setEmergencyAutofill(match);
-    };
+  if (facilityInput && hospitalDropdown) {
+    var hospMatches = [];
+    var hospActiveIdx = -1;
 
-    facilityInput.addEventListener("input", handler);
-    facilityInput.addEventListener("change", handler);
-    facilityInput.addEventListener("blur", handler);
+    function escHospHtml(s) { return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
-    facilityInput.addEventListener("input", () => {
+    function highlightHosp(text, q) {
+      if (!q) return escHospHtml(text);
+      var re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+      return escHospHtml(text).replace(re, "<mark>$1</mark>");
+    }
+
+    function openHospDropdown() {
+      var q = facilityInput.value.trim().toLowerCase();
+      if (!q) { closeHospDropdown(); return; }
+      hospMatches = MEDICAL_FACILITIES.filter(function(f) {
+        return f.name.toLowerCase().includes(q) || f.abbr.toLowerCase().includes(q) || f.type.toLowerCase().includes(q);
+      }).slice(0, 8);
+      if (!hospMatches.length) { closeHospDropdown(); return; }
+      hospActiveIdx = -1;
+      hospitalDropdown.innerHTML = hospMatches.map(function(f, i) {
+        return "<div class=\"client-option\" data-idx=\"" + i + "\">" +
+          "<span style=\"font-weight:700;\">" + highlightHosp(f.abbr, facilityInput.value.trim()) + "</span>" +
+          " &mdash; " + highlightHosp(f.name, facilityInput.value.trim()) +
+          "<span style=\"font-size:0.7rem;color:var(--text-muted);display:block;margin-top:1px;\">" +
+          escHospHtml(f.type) + " &bull; " + escHospHtml(f.address) + "</span></div>";
+      }).join("");
+      hospitalDropdown.classList.add("open");
+    }
+
+    function closeHospDropdown() {
+      hospitalDropdown.classList.remove("open");
+      hospitalDropdown.innerHTML = "";
+      hospActiveIdx = -1;
+      hospMatches = [];
+    }
+
+    function selectHospital(facility) {
+      setEmergencyAutofill(facility);
+      closeHospDropdown();
+    }
+
+    facilityInput.addEventListener("input", openHospDropdown);
+    facilityInput.addEventListener("focus", openHospDropdown);
+
+    facilityInput.addEventListener("keydown", function(e) {
+      if (!hospitalDropdown.classList.contains("open")) return;
+      var opts = hospitalDropdown.querySelectorAll(".client-option");
+      if (e.key === "ArrowDown") { e.preventDefault(); hospActiveIdx = Math.min(hospActiveIdx + 1, opts.length - 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); hospActiveIdx = Math.max(hospActiveIdx - 1, -1); }
+      else if (e.key === "Enter" && hospActiveIdx >= 0) { e.preventDefault(); selectHospital(hospMatches[hospActiveIdx]); return; }
+      else if (e.key === "Escape") { closeHospDropdown(); return; }
+      opts.forEach(function(o, i) { o.classList.toggle("active", i === hospActiveIdx); });
+    });
+
+    hospitalDropdown.addEventListener("mousedown", function(e) {
+      var opt = e.target.closest(".client-option");
+      if (!opt) return;
+      e.preventDefault();
+      selectHospital(hospMatches[parseInt(opt.dataset.idx, 10)]);
+    });
+
+    document.addEventListener("click", function(e) {
+      if (!e.target.closest("#hospitalWrap")) closeHospDropdown();
+    });
+
+    facilityInput.addEventListener("blur", function() {
+      setTimeout(function() {
+        var val = facilityInput.value.trim();
+        if (!val) { clearEmergencyAutofill(); return; }
+        var match = findFacility(val);
+        if (match) setEmergencyAutofill(match);
+        closeHospDropdown();
+      }, 200);
+    });
+
+    facilityInput.addEventListener("input", function() {
       if (!facilityInput.value.trim()) clearEmergencyAutofill();
     });
   }
@@ -2876,8 +3285,6 @@ function replaceInputsWithDivsForExport(cloneRoot, originalForm) {
     const clonedButtonRow = clone.querySelector('#buttonRow');
     if (clonedButtonRow) clonedButtonRow.style.display = 'none';
 
-    const dl = clone.querySelector("#facilityList");
-    if (dl) dl.remove();
 
     const stamp = document.getElementById("versionStamp");
     if (stamp) clone.appendChild(stamp.cloneNode(true));
@@ -2888,124 +3295,619 @@ return clone;
   }
 
  async function generatePdf() {
-await ensurePdfLibsLoaded();
+    await ensurePdfLibsLoaded();
+    const jsPDFCtor = window.jspdf?.jsPDF || window.jsPDF;
+    if (typeof jsPDFCtor !== "function") {
+      alert("PDF library not loaded. Check your connection and try again.");
+      throw new Error("jsPDF not loaded");
+    }
 
-  // jsPDF can be exposed as window.jspdf.jsPDF (UMD) OR window.jsPDF (some builds)
-  const jsPDFCtor = window.jspdf?.jsPDF || window.jsPDF;
-  const h2c = window.html2canvas;
+    // ── Collect form data ────────────────────────────────────────────────────
+    const v  = name => (document.querySelector(`[name="${name}"]`)?.value || "").trim();
+    const id = i    => (document.getElementById(i)?.value || "").trim();
+    const cb = name => !!(document.querySelector(`input[name="${name}"]`)?.checked);
 
-  const hasJsPDF = (typeof jsPDFCtor === "function");
-  const hasH2C = (typeof h2c === "function");
+    const d = {
+      developed_by: id("developed_by"), location: id("location"),
+      date: id("date"), start_time: id("start_time"), completion_time: id("completion_time"),
+      job_number: id("job_number"), description: id("description"), client_name: id("client_name"),
+      tailgate_minutes: id("tailgate_minutes"),
+      sidewalk_yes: cb("sidewalk_yes"), sidewalk_no: cb("sidewalk_no"),
+      fences_yes: cb("fences_yes"),     fences_no:  cb("fences_no"),
+      sidewalk_comments: id("sidewalk_comments"),
+      pic_site: cb("pic_site"), pic_sidewalk: cb("pic_sidewalk"),
+      pic_fences: cb("pic_fences"), pic_hazards: cb("pic_hazards"),
+      pic_other: cb("pic_other"), pic_other_desc: v("pic_other_desc"),
+      working_alone_yes: cb("working_alone_yes"), working_alone_no: cb("working_alone_no"),
+      check_in_interval: id("check_in_interval"), communication_method: id("communication_method"),
+      working_supervisor_name: id("working_supervisor_name"),
+      check_in_time: id("check_in_time"), check_out_time: id("check_out_time"),
+      veh_tires: cb("veh_tires"), veh_oil: cb("veh_oil"), veh_fuel: cb("veh_fuel"),
+      veh_washer: cb("veh_washer"), veh_lights: cb("veh_lights"), veh_tiedowns: cb("veh_tiedowns"),
+      veh_other: v("veh_other"),
+      atv_tires: cb("atv_tires"), atv_oil_fuel: cb("atv_oil_fuel"),
+      atv_lights: cb("atv_lights"), atv_brakes: cb("atv_brakes"),
+      gen_oil: cb("gen_oil"), gen_fuel: cb("gen_fuel"), gen_cord: cb("gen_cord"),
+      saw_oil: cb("saw_oil"), saw_fuel: cb("saw_fuel"), saw_chain: cb("saw_chain"),
+      saw_guard: cb("saw_guard"), saw_other: v("saw_other"),
+      trl_tires: cb("trl_tires"), trl_lights: cb("trl_lights"),
+      trl_chains: cb("trl_chains"), trl_deck: cb("trl_deck"), trl_plate: cb("trl_plate"),
+      nearest_hospital: id("nearest_hospital"), hospital_phone: id("hospital_phone"),
+      emergency_procedures: id("emergency_procedures"),
+      first_aid_available: cb("first_aid_available"), fire_ext_available: cb("fire_ext_available"),
+      effective_comm: cb("effective_comm"),
+      pc_name: v("pc_name"), pc_date: v("pc_date"),
+      sa_name: v("sa_name"), sa_date: v("sa_date"),
+      client_name_sig: id("client_name"), client_date: v("client_date"),
+      crew_contact: id("crew_contact"),
+    };
 
-  if (!hasJsPDF || !hasH2C) {
-    const missing = [
-      !hasJsPDF ? "jsPDF (jspdf.umd.min.js)" : null,
-      !hasH2C ? "html2canvas (html2canvas.min.js)" : null
-    ].filter(Boolean).join(" and ");
+    // PPE
+    const PPE_MAP = {
+      ppe_hardhat:"Hard Hat", ppe_hiviz:"Hi-Vis Vest", ppe_safety_boots:"Safety Boots",
+      ppe_gloves:"Gloves", ppe_eye:"Eye Protection", ppe_hearing:"Hearing Protection",
+      ppe_sunscreen:"Sunscreen", ppe_reflective:"Reflective Vest", ppe_face_shield:"Face Shield",
+      ppe_respirator:"Respirator", ppe_fall_arr:"Fall Arrest", ppe_sat_phone:"Sat Phone",
+      ppe_bear_spray:"Bear Spray", ppe_first_aid:"First Aid Kit",
+    };
+    const ppeChecked = Object.keys(PPE_MAP).filter(n => cb(n)).map(n => PPE_MAP[n]);
+    const ppeOtherEl = document.querySelector('input[name="ppe_other_desc"]');
+    if (cb("ppe_other") && ppeOtherEl?.value?.trim()) ppeChecked.push(ppeOtherEl.value.trim());
 
-    alert(
-      `Missing PDF libraries: ${missing}.\n\n` +
-      `Open your browser DevTools → Console/Network to see if the .js files are 404/not loading.\n` +
-      `Also confirm filenames are EXACT (GitHub Pages is case-sensitive).`
-    );
-
-    console.error("Library check failed:", {
-      "window.jspdf": window.jspdf,
-      "window.jspdf?.jsPDF": window.jspdf?.jsPDF,
-      "window.jsPDF": window.jsPDF,
-      "window.html2canvas": window.html2canvas
+    // Common hazards
+    const commonRows = [];
+    document.querySelectorAll('#commonHazardsTable tbody tr').forEach(tr => {
+      const applies = tr.querySelector('td:first-child input[type="checkbox"]');
+      if (!applies?.checked) return;
+      const cells = tr.querySelectorAll('td');
+      commonRows.push({
+        hazard:  (cells[1]?.textContent || "").trim(),
+        control: (cells[2]?.textContent || "").trim(),
+      });
     });
 
-    throw new Error("Missing libraries: " + missing);
-  }
-
-  const pdf = new jsPDFCtor("p", "mm", "letter");
-
-    const clone = createFilteredFormClone();
-
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'fixed';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.top = '0';
-    tempContainer.style.width = '1050px';
-    tempContainer.style.background = '#ffffff';
-    tempContainer.appendChild(clone);
-    document.body.appendChild(tempContainer);
-
-    // Await signature canvas draws, then allow layout to settle.
-    // Both steps are needed on iOS Safari before html2canvas captures.
-    if (clone.__signaturesReady) await clone.__signaturesReady;
-    await new Promise(r => setTimeout(r, 300));
-
-    const clonePage1  = clone.querySelector('#page1');
-    const clonePage2  = clone.querySelector('#page2');
-    const clonePage2b = clone.querySelector('#page2b');
-
-    // Renders a DOM element to a canvas at 2× resolution
-    async function captureDiv(div) {
-      return h2c(div, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        windowWidth: 1050
-      });
+    // Job hazards
+    const jobHazards = [];
+    const maxRow = getMaxJobHazardRow();
+    for (let i = 1; i <= maxRow; i++) {
+      const task = v(`task_${i}`), hazard = v(`hazard_${i}`);
+      const f = v(`f_${i}`), s = v(`s_${i}`), p = v(`p_${i}`), r = v(`r_${i}`);
+      const control = (document.querySelector(`textarea[name="control_${i}"]`)?.value || "").trim();
+      if (task || hazard || control) jobHazards.push({ task, hazard, f, s, p, r, control });
     }
 
-    // Place a single canvas image onto the current PDF page, scaled to fit usable width.
-    // Returns the mm height consumed so the caller can position the next image below it.
-    function placeCanvas(canvas, yMm, usableW, usableH) {
-      const scaleByWidth = usableW / canvas.width;
-      const renderedH    = canvas.height * scaleByWidth;
-      const fitScale     = renderedH > usableH ? (usableH / renderedH) : 1;
-      const finalW       = usableW  * fitScale;
-      const finalH       = renderedH * fitScale;
-      const xOffset      = margin + (usableW - finalW) / 2;
-      const imgData      = canvas.toDataURL("image/jpeg", 0.92);
-      pdf.addImage(imgData, "JPEG", xOffset, yMm, finalW, finalH);
-      return finalH;
+    // Signatures — pixel-sample blank detection
+    function getSig(canvasId) {
+      try {
+        const c = document.getElementById(canvasId);
+        if (!c) return null;
+        const px = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+        for (let i = 3; i < px.length; i += 16) { if (px[i] > 10) return c.toDataURL('image/png'); }
+        return null;
+      } catch(_) { return null; }
+    }
+    const sigPC = getSig('pcSignature'), sigSA = getSig('saSignature'), sigCL = getSig('clientSignature');
+
+    // ── PDF canvas ───────────────────────────────────────────────────────────
+    const pdf = new jsPDFCtor("p", "mm", "letter");
+    const PW = 215.9, PH = 279.4;
+    const L = 10, R = 10, T = 10;       // margins
+    const CW = PW - L - R;
+    let y = T;
+
+    // Palette
+    const P = {
+      navy:   [11, 48, 69],   blue:   [22, 95, 125],  blueL:  [42, 127, 163],
+      bgSec:  [228, 238, 248], bgRow:  [245, 249, 255], white:  [255, 255, 255],
+      border: [200, 218, 236], text:   [20, 28, 40],   muted:  [100, 112, 124],
+      green:  [21, 128, 61],  amber:  [161, 72, 9],   red:    [180, 28, 28],
+      severe: [120, 20, 20],
+    };
+
+    // ── Core helpers ─────────────────────────────────────────────────────────
+    const F = (style, sz, col) => {
+      pdf.setFont("helvetica", style);
+      pdf.setFontSize(sz);
+      pdf.setTextColor(...(col || P.text));
+    };
+    const fill  = c => pdf.setFillColor(...c);
+    const draw  = c => pdf.setDrawColor(...c);
+    const lw    = w => pdf.setLineWidth(w);
+    const rect  = (x,yy,w,h,s) => pdf.rect(x, yy, w, h, s||"F");
+    const hline = (yy, x1, x2, col, w) => {
+      draw(col||P.border); lw(w||0.2);
+      pdf.line(x1||L, yy, x2||(L+CW), yy);
+    };
+    const wrap  = (txt, maxW, sz) => {
+      pdf.setFontSize(sz||7.5);
+      return pdf.splitTextToSize(txt||"", maxW);
+    };
+    const np = needed => {
+      if (y + needed > PH - 12) { pdf.addPage(); y = T; return true; }
+      return false;
+    };
+
+    // Format helpers
+    const fmtDate = s => {
+      if (!s) return "—";
+      const dd = new Date(s + "T00:00:00");
+      return isNaN(dd) ? s : dd.toLocaleDateString("en-CA", {year:"numeric",month:"short",day:"numeric"});
+    };
+    const fmtTime = s => {
+      if (!s) return "—";
+      const [h,m] = s.split(":");
+      if (!h) return s;
+      const hr = parseInt(h,10);
+      return `${(hr%12)||12}:${m} ${hr>=12?"PM":"AM"}`;
+    };
+    const rCol = r => {
+      const n = parseInt(r,10);
+      if (isNaN(n)||!r) return P.muted;
+      if (n<=25) return P.green; if (n<=50) return [52,140,80];
+      if (n<=75) return P.amber; if (n<=100) return P.red;
+      return P.severe;
+    };
+
+    // ── Graphic checkbox ─────────────────────────────────────────────────────
+    // cx, cy = top-left corner; sz = side length
+    function cbox(checked, cx, cy, sz) {
+      sz = sz || 3.2;
+      draw(checked ? P.green : P.border); lw(checked ? 0.5 : 0.3);
+      fill(checked ? [236, 253, 245] : P.white);
+      rect(cx, cy, sz, sz, "FD");
+      if (checked) {
+        draw(P.green); lw(0.8);
+        // tick: short left leg + long right leg
+        pdf.line(cx + sz*0.12, cy + sz*0.52, cx + sz*0.38, cy + sz*0.80);
+        pdf.line(cx + sz*0.38, cy + sz*0.80, cx + sz*0.88, cy + sz*0.15);
+      }
     }
 
-    const pageWidth  = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 8;
-    const usableW = pageWidth  - margin * 2;
-    const usableH = pageHeight - margin * 2;
+    // ── Section header bar ───────────────────────────────────────────────────
+    function secHead(title, sub) {
+      np(22);
+      // left accent strip
+      fill(P.blue); lw(0);
+      rect(L, y, 2.5, 6.5, "F");
+      // header bg
+      fill(P.bgSec); draw(P.border); lw(0.2);
+      rect(L + 2.5, y, CW - 2.5, 6.5, "FD");
+      F("bold", 8.5, P.navy);
+      pdf.text(title.toUpperCase(), L + 7, y + 4.6);
+      if (sub) { F("normal", 6.5, P.muted); pdf.text(sub, L + CW - 1, y + 4.6, {align:"right"}); }
+      y += 9;   // header height (6.5) + 2.5 gap before first content line
+    }
 
-    // ── PDF PAGE 1: capture #page1, scale to fit ──
-    const canvas1 = await captureDiv(clonePage1);
-    placeCanvas(canvas1, margin, usableW, usableH);
+    // ── label + value pair ───────────────────────────────────────────────────
+    function lv(lbl, val, x, yy, maxW) {
+      F("bold", 6, P.muted);  pdf.text(lbl.toUpperCase(), x, yy);
+      F("normal", 8, P.text); pdf.text(val||"—", x, yy + 4);
+    }
 
-    // ── PDF PAGE 2: capture #page2 (hazard tables) and #page2b (legend/emergency/sigs)
-    // Both are scaled proportionally so they share the one page without overflow.
-    pdf.addPage();
+    // ── PAGE 1 HEADER ────────────────────────────────────────────────────────
+    // Full-width navy bar
+    fill(P.navy); lw(0); rect(0, 0, PW, 20, "F");
+    // Right accent
+    fill(P.blueL); rect(PW-55, 0, 55, 20, "F");
+    // Logo — downsample and composite onto navy background to preserve transparency
+    try {
+      const li = document.querySelector('.header-logo');
+      if (li && li.complete && li.naturalWidth > 0) {
+        const MAX_PX = 120;
+        const scale  = Math.min(1, MAX_PX / li.naturalHeight);
+        const lc     = document.createElement('canvas');
+        lc.width  = Math.round(li.naturalWidth  * scale);
+        lc.height = Math.round(li.naturalHeight * scale);
+        const ctx = lc.getContext('2d');
+        // Fill with the header accent colour so transparent areas blend in
+        ctx.fillStyle = '#2a7fa3';
+        ctx.fillRect(0, 0, lc.width, lc.height);
+        ctx.drawImage(li, 0, 0, lc.width, lc.height);
+        const lH = 15, lW = (lc.width / lc.height) * lH;
+        // PNG preserves the blended result without artefacts
+        pdf.addImage(lc.toDataURL('image/png'), 'PNG', PW - lW - 3, 2.5, lW, lH);
+      }
+    } catch(_) {}
+    // Company name + subtitle
+    F("bold", 14, P.white); pdf.text("VISTAGEOMATICS", L+1, 9);
+    F("normal", 7, [170, 205, 225]); pdf.text("WORKSITE HAZARD ASSESSMENT & TAILGATE REPORT", L+1, 14.5);
+    // Title bar under header
+    fill([243, 247, 252]); draw(P.border); lw(0.25);
+    rect(0, 20, PW, 9, "FD");
+    F("bold", 11, P.navy); pdf.text("WORKSITE HAZARD ASSESSMENT", PW/2, 26.2, {align:"center"});
+    // Underline accent
+    fill(P.blue); lw(0); rect(PW/2-28, 28.5, 56, 0.7, "F");
+    y = 33;
 
-    const canvas2  = await captureDiv(clonePage2);
-    const canvas2b = clonePage2b ? await captureDiv(clonePage2b) : null;
+    // ── GENERAL INFORMATION ──────────────────────────────────────────────────
+    secHead("General Information");
 
-    if (!canvas2b) {
-      // Only one section — fit it to the full page
-      placeCanvas(canvas2, margin, usableW, usableH);
+    // Helper: truncate a value to fit inside maxW at given font size
+    function fitVal(val, maxW, sz) {
+      if (!val) return "—";
+      pdf.setFontSize(sz || 8);
+      if (pdf.getTextWidth(val) <= maxW) return val;
+      // trim until it fits with ellipsis
+      let s = val;
+      while (s.length > 1 && pdf.getTextWidth(s + "…") > maxW) s = s.slice(0, -1);
+      return s + "…";
+    }
+
+    // Row 1: 4 equal columns — leave 3mm padding each side
+    const c4 = CW / 4;
+    const cPad = 3; // inner left padding per cell
+    const cMax = c4 - cPad - 1; // max text width per cell
+
+    // Label row
+    F("bold", 6, P.muted);
+    pdf.text("DEVELOPED BY",  L + cPad,          y);
+    pdf.text("LOCATION",      L + c4 + cPad,     y);
+    pdf.text("JOB NUMBER",    L + c4*2 + cPad,   y);
+    pdf.text("CLIENT",        L + c4*3 + cPad,   y);
+    // Value row
+    F("normal", 8, P.text);
+    pdf.text(fitVal(d.developed_by, cMax, 8), L + cPad,        y + 4);
+    pdf.text(fitVal(d.location,     cMax, 8), L + c4 + cPad,   y + 4);
+    pdf.text(fitVal(d.job_number,   cMax, 8), L + c4*2 + cPad, y + 4);
+    pdf.text(fitVal(d.client_name,  cMax, 8), L + c4*3 + cPad, y + 4);
+    // Vertical dividers
+    draw(P.border); lw(0.15);
+    [1,2,3].forEach(i => pdf.line(L + c4*i, y-2, L + c4*i, y+6));
+    y += 9;
+
+    // Row 2
+    F("bold", 6, P.muted);
+    pdf.text("DATE",         L + cPad,          y);
+    pdf.text("START TIME",   L + c4 + cPad,     y);
+    pdf.text("END TIME",     L + c4*2 + cPad,   y);
+    pdf.text("DESCRIPTION",  L + c4*3 + cPad,   y);
+    F("normal", 8, P.text);
+    pdf.text(fitVal(fmtDate(d.date),           cMax, 8), L + cPad,        y + 4);
+    pdf.text(fitVal(fmtTime(d.start_time),     cMax, 8), L + c4 + cPad,   y + 4);
+    pdf.text(fitVal(fmtTime(d.completion_time),cMax, 8), L + c4*2 + cPad, y + 4);
+    pdf.text(fitVal(d.description,             cMax, 8), L + c4*3 + cPad, y + 4);
+    draw(P.border); lw(0.15);
+    [1,2,3].forEach(i => pdf.line(L + c4*i, y-2, L + c4*i, y+6));
+    y += 9;
+    hline(y); y += 3;
+
+    // ── TAILGATE + SITE CONDITIONS (side by side) ────────────────────────────
+    secHead("Tailgate Meeting Report", "Complete daily prior to starting work");
+
+    // Split into left (tailgate text) and right (site conditions)
+    const tgLW = CW * 0.58, tgRW = CW - tgLW - 3;
+    const tgRX = L + tgLW + 3;
+
+    // Left: tailgate minutes
+    if (d.tailgate_minutes) {
+      const tgLines = wrap(d.tailgate_minutes, tgLW - 4, 7.5);
+      const tgH = Math.max(22, tgLines.length * 4.2 + 4);
+      fill(P.bgRow); draw(P.border); lw(0.2); rect(L, y, tgLW, tgH, "FD");
+      F("normal", 7.5, P.text); pdf.text(tgLines, L+2, y+4);
+      // Right side stacked
+      const pics = [d.pic_site&&"Site", d.pic_sidewalk&&"Sidewalk",
+        d.pic_fences&&"Fences", d.pic_hazards&&"Hazards",
+        (d.pic_other&&d.pic_other_desc)&&d.pic_other_desc].filter(Boolean);
+      fill(P.bgRow); draw(P.border); lw(0.2); rect(tgRX, y, tgRW, tgH, "FD");
+      let ry = y + 4;
+      F("bold", 6, P.muted); pdf.text("SIDEWALK DRIVEN", tgRX+2, ry);
+      F("bold", 8, d.sidewalk_yes ? P.green : P.text);
+      pdf.text(d.sidewalk_yes ? "YES" : d.sidewalk_no ? "NO" : "—", tgRX+2, ry+4);
+      ry += 9;
+      F("bold", 6, P.muted); pdf.text("FENCES INSTALLED", tgRX+2, ry);
+      F("bold", 8, d.fences_yes ? P.green : P.text);
+      pdf.text(d.fences_yes ? "YES" : d.fences_no ? "NO" : "—", tgRX+2, ry+4);
+      ry += 9;
+      F("bold", 6, P.muted); pdf.text("PHOTOS TAKEN", tgRX+2, ry);
+      F("normal", 7, P.text);
+      const picStr = pics.length ? pics.join(", ") : "None";
+      // wrap to fit inside the right panel — use tgRW minus padding
+      const picLines = wrap(picStr, tgRW - 5, 7);
+      pdf.text(picLines, tgRX+2, ry+4);
+      y += tgH + 3;
     } else {
-      // Two sections — allocate vertical space proportionally so they share the page
-      const totalPx   = canvas2.height + canvas2b.height;
-      const scaleW    = usableW / canvas2.width;      // both canvases same width
-      const totalMm   = totalPx * scaleW;
-      // If combined height fits, use natural scale; otherwise shrink to fit
-      const fitScale  = totalMm > usableH ? (usableH / totalMm) : 1;
+      // No tailgate notes — just show site conditions in a single row
+      const pics = [d.pic_site&&"Site", d.pic_sidewalk&&"Sidewalk",
+        d.pic_fences&&"Fences", d.pic_hazards&&"Hazards"].filter(Boolean);
+      const inRow = [
+        ["Sidewalk Driven", d.sidewalk_yes ? "YES" : d.sidewalk_no ? "NO" : "—"],
+        ["Fences Installed", d.fences_yes ? "YES" : d.fences_no ? "NO" : "—"],
+        ["Photos Taken", pics.join(", ")||"None"],
+      ];
+      inRow.forEach(([lbl,val],i) => lv(lbl, val, L+1+i*(CW/3), y, CW/3-2));
+      y += 9;
+    }
+    hline(y); y += 3;
 
-      const h2mm  = canvas2.height  * scaleW * fitScale;
-      const h2bmm = canvas2b.height * scaleW * fitScale;
-      const w2mm  = usableW * fitScale;
-      const xOff  = margin + (usableW - w2mm) / 2;
+    // ── WORKING ALONE + CHECK-IN ─────────────────────────────────────────────
+    secHead("Working Alone & Check-In");
+    const wa = CW/5;
+    lv("Working Alone",   d.working_alone_yes?"Yes":d.working_alone_no?"No":"—", L+1,      y, wa-2);
+    lv("Check-in Every",  d.check_in_interval,                                   L+wa+1,   y, wa-2);
+    lv("Communication",   d.communication_method,                                L+wa*2+1, y, wa-2);
+    lv("Check-in Time",   fmtTime(d.check_in_time),                             L+wa*3+1, y, wa-2);
+    lv("Check-out Time",  fmtTime(d.check_out_time),                            L+wa*4+1, y, wa-2);
+    y += 9;
+    if (d.working_supervisor_name) {
+      lv("Supervisor Name", d.working_supervisor_name, L+1, y, CW/2-2);
+      y += 9;
+    }
+    hline(y); y += 3;
 
-      pdf.addImage(canvas2.toDataURL("image/jpeg", 0.92),  "JPEG", xOff, margin,          w2mm, h2mm);
-      pdf.addImage(canvas2b.toDataURL("image/jpeg", 0.92), "JPEG", xOff, margin + h2mm,   w2mm, h2bmm);
+    // ── EQUIPMENT INSPECTION (compact grid) ─────────────────────────────────
+    secHead("Daily Equipment Inspection");
+    const eqData = [
+      { label:"Vehicle",          items:[["Tires",d.veh_tires],["Oil",d.veh_oil],["Fuel",d.veh_fuel],["Washer Fluid",d.veh_washer],["Lights",d.veh_lights],["Tie-Downs",d.veh_tiedowns]] },
+      { label:"ATV / Snowmobile", items:[["Tires/Track",d.atv_tires],["Oil/Fuel",d.atv_oil_fuel],["Lights",d.atv_lights],["Brakes",d.atv_brakes]] },
+      { label:"Generator",        items:[["Oil",d.gen_oil],["Fuel",d.gen_fuel],["Ext. Cord",d.gen_cord]] },
+      { label:"Chainsaw",         items:[["Oil",d.saw_oil],["Fuel",d.saw_fuel],["Chain",d.saw_chain],["Guard",d.saw_guard]] },
+      { label:"Trailer",          items:[["Tires",d.trl_tires],["Lights",d.trl_lights],["Safety Chains",d.trl_chains],["Deck",d.trl_deck],["Lic. Plate",d.trl_plate]] },
+    ];
+    const eqLblW = 36, eqItemW = (CW - eqLblW) / 6, eqRowH = 7;
+    // Header
+    fill(P.bgSec); draw(P.border); lw(0.2);
+    rect(L, y, eqLblW, 5, "FD"); rect(L+eqLblW, y, CW-eqLblW, 5, "FD");
+    F("bold", 6.5, P.navy);
+    pdf.text("Equipment", L+2, y+3.5);
+    pdf.text("Inspection Items", L+eqLblW+2, y+3.5);
+    y += 5;
+
+    eqData.forEach((row, ri) => {
+      np(eqRowH + 1);
+      const bg = ri%2===0 ? P.white : P.bgRow;
+      fill(bg); draw(P.border); lw(0.2);
+      rect(L, y, eqLblW, eqRowH, "FD");
+      rect(L+eqLblW, y, CW-eqLblW, eqRowH, "FD");
+      F("bold", 7, P.text); pdf.text(row.label, L+2, y+4.5);
+      const perRow = 6;
+      const iw = (CW - eqLblW - 2) / perRow;
+      row.items.forEach(([lbl, chk], idx) => {
+        const ix = L + eqLblW + 2 + idx * iw;
+        const iy = y + 1.5;
+        cbox(!!chk, ix, iy, 3);
+        F("normal", 6.5, P.text);
+        pdf.text(lbl, ix+3.8, iy+2.4);
+      });
+      y += eqRowH;
+    });
+    y += 3; hline(y); y += 3;
+
+    // ── PPE ── always show full list, checked or unchecked ───────────────────
+    np(18);
+    secHead("Personal Protective Equipment");
+    const ALL_PPE = [
+      ["ppe_hardhat","Hard Hat"], ["ppe_hiviz","Hi-Vis Vest"], ["ppe_safety_boots","Safety Boots"],
+      ["ppe_gloves","Gloves"], ["ppe_eye","Eye Protection"], ["ppe_hearing","Hearing Protection"],
+      ["ppe_sunscreen","Sunscreen"], ["ppe_reflective","Reflective Vest"],
+      ["ppe_face_shield","Face Shield"], ["ppe_respirator","Respirator"],
+      ["ppe_fall_arr","Fall Arrest"], ["ppe_sat_phone","Sat Phone"],
+      ["ppe_bear_spray","Bear Spray"], ["ppe_first_aid","First Aid Kit"],
+    ];
+    const ppePerRow = 5, ppeCW = CW / ppePerRow, ppeRowH = 6.5;
+    for (let i = 0; i < ALL_PPE.length; i += ppePerRow) {
+      ALL_PPE.slice(i, i + ppePerRow).forEach(([key, label], j) => {
+        const checked = cb(key);
+        const xi = L + j * ppeCW;
+        cbox(checked, xi + 1, y + 0.8, 3.2);
+        F("normal", 7.5, checked ? P.text : P.muted);
+        pdf.text(label, xi + 5.8, y + 3.4);
+      });
+      y += ppeRowH;
+    }
+    // Custom PPE if filled in
+    const ppeOtherEl2 = document.querySelector('input[name="ppe_other_desc"]');
+    if (cb("ppe_other") && ppeOtherEl2?.value?.trim()) {
+      cbox(true, L + 1, y + 0.8, 3.2);
+      F("normal", 7.5, P.text); pdf.text(ppeOtherEl2.value.trim(), L + 5.8, y + 3.4);
+      y += ppeRowH;
+    }
+    hline(y); y += 3;
+
+    // ── PAGE 2 ───────────────────────────────────────────────────────────────
+    pdf.addPage(); y = T;
+
+    // Thin blue top bar on page 2
+    fill(P.blue); lw(0); rect(0, 0, PW, 1.5, "F");
+    y = 5;
+
+    // ── COMMON SITE HAZARDS ──────────────────────────────────────────────────
+    if (commonRows.length > 0) {
+      secHead("Common Site Hazards");
+      const chW = CW * 0.30, ccW = CW - chW;
+      // Table header
+      fill(P.bgSec); draw(P.border); lw(0.2);
+      rect(L, y, chW, 5.5, "FD"); rect(L+chW, y, ccW, 5.5, "FD");
+      F("bold", 7, P.navy);
+      pdf.text("Hazard", L+chW/2, y+3.8, {align:"center"});
+      pdf.text("Standard Control Measures", L+chW+ccW/2, y+3.8, {align:"center"});
+      y += 5.5;
+      commonRows.forEach((row, ri) => {
+        const hLines = wrap(row.hazard,  chW-4, 7);
+        const cLines = wrap(row.control, ccW-4, 7);
+        const rh = Math.max(6, Math.max(hLines.length, cLines.length)*4+3);
+        np(rh+1);
+        fill(ri%2===0?P.white:P.bgRow); draw(P.border); lw(0.2);
+        rect(L, y, chW, rh, "FD"); rect(L+chW, y, ccW, rh, "FD");
+        F("bold", 7, P.text);   pdf.text(hLines, L+2,     y+4);
+        F("normal", 7, P.text); pdf.text(cLines, L+chW+2, y+4);
+        y += rh;
+      });
+      y += 3; hline(y); y += 3;
     }
 
+    // ── JOB SPECIFIC HAZARDS ─────────────────────────────────────────────────
+    if (jobHazards.length > 0) {
+      np(18);
+      secHead("Job Specific Hazards");
+      const jW = { task:CW*0.16, haz:CW*0.19, f:7, s:7, p:7, r:10 };
+      jW.ctrl = CW - jW.task - jW.haz - jW.f - jW.s - jW.p - jW.r;
+      const jX = {
+        task:L, haz:L+jW.task, f:L+jW.task+jW.haz,
+        s:L+jW.task+jW.haz+jW.f, p:L+jW.task+jW.haz+jW.f+jW.s,
+        r:L+jW.task+jW.haz+jW.f+jW.s+jW.p,
+        ctrl:L+jW.task+jW.haz+jW.f+jW.s+jW.p+jW.r
+      };
+      // Header
+      fill(P.bgSec); draw(P.border); lw(0.2);
+      [["task","Task"],["haz","Hazard"],["f","F"],["s","S"],["p","P"],["r","R"],["ctrl","Control Measures"]]
+        .forEach(([k,lbl]) => {
+          rect(jX[k], y, jW[k], 5.5, "FD");
+          F("bold", 6.5, P.navy);
+          pdf.text(lbl, jX[k]+jW[k]/2, y+3.8, {align:"center"});
+        });
+      y += 5.5;
+      jobHazards.forEach((row, ri) => {
+        const tL = wrap(row.task,    jW.task-2, 7);
+        const hL = wrap(row.hazard,  jW.haz-2,  7);
+        const cL = wrap(row.control, jW.ctrl-2, 7);
+        const rh = Math.max(7, Math.max(tL.length, hL.length, cL.length)*4+3);
+        np(rh+1);
+        const rNum = parseInt(row.r,10);
+        const severe = !isNaN(rNum) && rNum >= 100;
+        fill(severe ? [255,243,243] : (ri%2===0 ? P.white : P.bgRow));
+        draw(P.border); lw(0.2);
+        [["task",jW.task],["haz",jW.haz],["f",jW.f],["s",jW.s],["p",jW.p],["r",jW.r],["ctrl",jW.ctrl]]
+          .forEach(([k,w]) => rect(jX[k], y, w, rh, "FD"));
+        if (severe) { fill(P.severe); lw(0); rect(L, y, 1.5, rh, "F"); }
+        F("normal", 7, P.text);
+        pdf.text(tL, jX.task+2, y+4); pdf.text(hL, jX.haz+2, y+4); pdf.text(cL, jX.ctrl+2, y+4);
+        F("bold", 7.5, P.navy);
+        ["f","s","p"].forEach(k => pdf.text(row[k]||"—", jX[k]+jW[k]/2, y+rh/2+1.5, {align:"center"}));
+        F("bold", 8.5, rCol(row.r));
+        pdf.text(row.r||"—", jX.r+jW.r/2, y+rh/2+1.5, {align:"center"});
+        y += rh;
+      });
+      y += 3; hline(y); y += 3;
+    }
 
-    document.body.removeChild(tempContainer);
+    // ── RISK LEGEND + EMERGENCY (side by side) ───────────────────────────────
+    np(45);
+    const legW = CW * 0.44, erW = CW - legW - 4;
+    const erX  = L + legW + 4;
+
+    // Legend header — blue accent strip + light bg
+    fill(P.blue); lw(0); rect(L, y, 2.5, 5.5, "F");
+    fill(P.bgSec); draw(P.border); lw(0.2); rect(L+2.5, y, legW-2.5, 5.5, "FD");
+    F("bold", 7.5, P.navy); pdf.text("RISK RATING LEGEND  (R = F × S × P)", L+legW/2+1, y+3.8, {align:"center"});
+
+    // Emergency header — navy background, white text so it's readable
+    fill(P.navy); lw(0); rect(erX, y, erW, 5.5, "F");
+    F("bold", 7.5, P.white); pdf.text("EMERGENCY RESPONSE PLAN", erX + erW/2, y+3.8, {align:"center"});
+    y += 5.5;
+
+    const legSY = y;
+    const LEGEND = [
+      { title:"Freq (F)", rows:[["1","Never"],["2","Yearly"],["3","Monthly"],["4","Weekly"],["5","Daily"]] },
+      { title:"Severity (S)", rows:[["1","No injury"],["2","Minor"],["3","Medical aid"],["4","Lost time"],["5","Fatality"]] },
+      { title:"Prob (P)", rows:[["1","Very unlikely"],["2","Unlikely"],["3","Possible"],["4","Likely"],["5","Certain"]] },
+      { title:"Risk (R)", rows:[["1–25","Low"],["26–50","Moderate"],["51–75","Mod. High"],["76–100","High"],["101+","SEVERE"]] },
+    ];
+    const lcw = legW / LEGEND.length;
+    LEGEND.forEach((col, ci) => {
+      const lx = L + ci * lcw;
+      fill(P.bgSec); draw(P.border); lw(0.2); rect(lx, legSY, lcw, 4.5, "FD");
+      F("bold", 6, P.navy); pdf.text(col.title, lx+lcw/2, legSY+3.2, {align:"center"});
+      col.rows.forEach(([num,lbl],ri) => {
+        const ry2 = legSY + 4.5 + ri*4.8;
+        fill(ri%2===0?P.white:P.bgRow); draw(P.border); lw(0.15); rect(lx, ry2, lcw, 4.8, "FD");
+        fill(P.bgSec); rect(lx, ry2, 10, 4.8, "FD");
+        F("bold", 6, P.navy); pdf.text(num, lx+5, ry2+3.3, {align:"center"});
+        let tc = P.text;
+        if (ci===3) {
+          if(lbl==="Low") tc=P.green; else if(lbl==="Moderate") tc=[52,140,80];
+          else if(lbl==="Mod. High") tc=P.amber; else if(lbl==="High") tc=P.red;
+          else if(lbl==="SEVERE") tc=P.severe;
+        }
+        F(ci===3?"bold":"normal", 6, tc); pdf.text(lbl, lx+11.5, ry2+3.3);
+      });
+    });
+    const legEndY = legSY + 4.5 + LEGEND[0].rows.length * 4.8;
+
+    // Emergency content (right side, same y band)
+    let ey = legSY + 2;
+    // Hospital + phone inline — use P.muted for labels so they're visible on white bg
+    F("bold", 6, P.muted); pdf.text("NEAREST HOSPITAL / FIRST AID", erX+1, ey);
+    F("normal", 8, P.text); pdf.text(d.nearest_hospital||"—", erX+1, ey+4);
+    F("bold", 6, P.muted); pdf.text("PHONE", erX+erW*0.62+1, ey);
+    F("normal", 8, P.text); pdf.text(d.hospital_phone||"—", erX+erW*0.62+1, ey+4);
+    ey += 10;
+    if (d.emergency_procedures) {
+      const epL = wrap(d.emergency_procedures, erW-4, 6.5);
+      const epH = epL.length * 3.8 + 3;
+      fill(P.bgRow); draw(P.border); lw(0.15); rect(erX, ey, erW, epH, "FD");
+      F("normal", 6.5, P.text); pdf.text(epL, erX+2, ey+3);
+      ey += epH + 2;
+    }
+    // Emergency checkboxes
+    const erItems = [
+      [d.first_aid_available, "First Aid Kit"],
+      [d.fire_ext_available,  "Fire Extinguisher"],
+      [d.effective_comm,      "Communication Method"],
+    ];
+    erItems.forEach(([chk, lbl], i) => {
+      cbox(!!chk, erX+1, ey+0.5, 3);
+      F("normal", 6.5, P.text); pdf.text(lbl, erX+5.5, ey+3);
+      ey += 5.5;
+    });
+
+    y = Math.max(legEndY, ey) + 4;
+    hline(y); y += 4;
+
+    // ── SIGN-OFF ─────────────────────────────────────────────────────────────
+    np(42);
+    secHead("Acknowledgement & Sign-Off");
+
+    const sbW = CW/3 - 2, sbH = 30;
+    const sigs = [
+      { lbl:"Party Chief",    img:sigPC, name:d.pc_name,         date:fmtDate(d.pc_date) },
+      { lbl:"Rodman / Helper",img:sigSA, name:d.sa_name,         date:fmtDate(d.sa_date) },
+      { lbl:"Client / Safety Rep", img:sigCL, name:d.client_name_sig, date:fmtDate(d.client_date) },
+    ];
+    sigs.forEach((sig, i) => {
+      const sx = L + i*(sbW+3);
+      // Outer box
+      fill(P.white); draw(P.border); lw(0.3); rect(sx, y, sbW, sbH, "FD");
+      // Label strip
+      fill(P.bgSec); lw(0); rect(sx, y, sbW, 5, "F");
+      F("bold", 7, P.navy); pdf.text(sig.lbl, sx+sbW/2, y+3.5, {align:"center"});
+      // Sig area
+      const saY = y+5, saH = 15;
+      fill(P.bgRow); draw(P.border); lw(0.15); rect(sx+1, saY, sbW-2, saH, "FD");
+      if (sig.img) {
+        try { pdf.addImage(sig.img, "PNG", sx+1, saY, sbW-2, saH); } catch(_) {}
+      }
+      // Name / date lines
+      const nY = saY+saH+2;
+      hline(nY+4, sx+1, sx+sbW-1, P.border, 0.2);
+      F("normal", 7, P.text); pdf.text(sig.name||"", sx+2, nY+3.5);
+      F("bold", 5.5, P.muted); pdf.text("NAME", sx+2, nY+6.5);
+      hline(nY+11, sx+1, sx+sbW-1, P.border, 0.2);
+      F("normal", 7, P.text); pdf.text(sig.date||"", sx+2, nY+10);
+      F("bold", 5.5, P.muted); pdf.text("DATE", sx+2, nY+13);
+    });
+    y += sbH + 4;
+
+    if (d.crew_contact) {
+      lv("Crew Contact", d.crew_contact, L+1, y, CW/3);
+      y += 9;
+    }
+
+    // ── FOOTER every page ────────────────────────────────────────────────────
+    const total = pdf.internal.getNumberOfPages();
+    for (let pg = 1; pg <= total; pg++) {
+      pdf.setPage(pg);
+      hline(PH-9, L, L+CW, P.border, 0.25);
+      F("normal", 6, P.muted);
+      pdf.text("VistaGeomatics  |  Worksite Hazard Assessment", L, PH-5.5);
+      const ctr = [d.job_number && "Job: "+d.job_number, fmtDate(d.date)].filter(Boolean).join("  ·  ");
+      pdf.text(ctr, PW/2, PH-5.5, {align:"center"});
+      pdf.text("Page "+pg+" of "+total, PW-R, PH-5.5, {align:"right"});
+    }
+
     return pdf;
   }
+
+
 
   // ── iOS/iPadOS detection ──────────────────────────────────────
   // navigator.share exists on PC Chrome too but behaves differently there.
@@ -3020,7 +3922,8 @@ await ensurePdfLibsLoaded();
     if (isIOS) {
       var file = new File([blob], fileName, { type: 'application/pdf' });
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: fileName });
+        // NOTE: do NOT pass title — iOS creates a ghost .txt file from it
+        await navigator.share({ files: [file] });
         return;
       }
     }
@@ -3247,7 +4150,7 @@ await ensurePdfLibsLoaded();
   // ============================================================
   (function initClientAutocomplete() {
     var CLIENTS = [
-      'Albi Homes', 'Breckenridge', 'Calbridge Homes', 'Crystal Creek Homes',
+      'Albi Homes', 'Breckenridge', 'Brookfield Residential', 'Calbridge Homes', 'Crystal Creek Homes',
       'Fifty6 Homes', 'Genesis', 'Golden Triangle', 'Homes by Us',
       'Janssen Homes', 'Jayman Homes', 'Kingsmith Homes', 'Morrison Homes',
       'NuVista Homes', 'RP Homes', 'Shane Homes', 'Truman', 'West Creek',
@@ -3260,6 +4163,7 @@ await ensurePdfLibsLoaded();
     var dropdown  = document.getElementById('clientDropdown');
     var shareBtn  = document.getElementById('shareBtn');
     var jaymanBtn = document.getElementById('jaymanShareBtn');
+    var jaymanScreenshotBtn = document.getElementById('jaymanScreenshotBtn');
 
     if (!input || !dropdown) return;
 
@@ -3303,12 +4207,15 @@ await ensurePdfLibsLoaded();
       closeDropdown();
       updateJaymanButton(name);
       if (window.__vistaAutosaveSave) window.__vistaAutosaveSave();
+      // Notify Brookfield module immediately on confirmed selection
+      if (typeof window.__onClientSelected === 'function') window.__onClientSelected(name);
     }
 
     function updateJaymanButton(name) {
       var isJayman = (name || '').trim().toLowerCase() === 'jayman homes';
       if (shareBtn)  shareBtn.style.display  = isJayman ? 'none' : '';
       if (jaymanBtn) jaymanBtn.style.display  = isJayman ? ''     : 'none';
+      if (jaymanScreenshotBtn) jaymanScreenshotBtn.style.display = isJayman ? '' : 'none';
     }
 
     input.addEventListener('input',  openDropdown);
@@ -3409,6 +4316,496 @@ await ensurePdfLibsLoaded();
     window.addEventListener('load', function(){
       setTimeout(function(){ updateJaymanButton(input.value); }, 600);
     });
+
+    // ---- Jayman screenshot button ----
+    if (jaymanScreenshotBtn) {
+      jaymanScreenshotBtn.addEventListener('click', async function() {
+        var buttonRow = document.getElementById('buttonRow');
+        var jaymanBanner = document.getElementById('jaymanBanner');
+
+        try {
+          // Hide UI chrome so it's not in the screenshot
+          if (buttonRow) buttonRow.style.display = 'none';
+          var versionStamp = document.getElementById('versionStamp');
+          if (versionStamp) versionStamp.style.display = 'none';
+
+          await ensurePdfLibsLoaded(); // ensures html2canvas is available
+
+          var formEl = document.getElementById('hazardForm');
+          var canvas = await window.html2canvas(formEl, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#eef3f9',
+            logging: false
+          });
+
+          // Build filename
+          var job  = (document.getElementById('job_number')?.value || 'Job').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,40);
+          var dev  = (document.getElementById('developed_by')?.value || '').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
+          var today = (function(){
+            var d=new Date(); var y=d.getFullYear();
+            var m=String(d.getMonth()+1).padStart(2,'0');
+            var dd=String(d.getDate()).padStart(2,'0');
+            return y+'-'+m+'-'+dd;
+          })();
+          var parts = [job, dev, today].filter(Boolean);
+          var fileName = parts.join('_') + '_Jayman.jpg';
+
+          var jpegDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+          // Share sheet on mobile (if available), otherwise direct download
+          if (navigator.share && navigator.canShare) {
+            var blob = await (await fetch(jpegDataUrl)).blob();
+            var file = new File([blob], fileName, { type: 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({ files: [file], title: fileName });
+            } else {
+              // Fallback: download link
+              var a = document.createElement('a');
+              a.href = jpegDataUrl;
+              a.download = fileName;
+              a.click();
+            }
+          } else {
+            var a = document.createElement('a');
+            a.href = jpegDataUrl;
+            a.download = fileName;
+            a.click();
+          }
+
+          // Show Jayman submission banner
+          if (jaymanBanner) {
+            jaymanBanner.style.display = 'block';
+          }
+
+        } catch(err) {
+          if (err.name !== 'AbortError') {
+            console.error('Jayman screenshot failed:', err);
+            alert('Could not capture screenshot. Please try again.');
+          }
+        } finally {
+          if (buttonRow) buttonRow.style.display = 'flex';
+          var versionStamp = document.getElementById('versionStamp');
+          if (versionStamp) versionStamp.style.display = '';
+        }
+      });
+    }
+  })();
+
+  // ============================================================
+  // BROOKFIELD FENCE PHOTO SYSTEM
+  // ============================================================
+  (function initBrookfield() {
+
+    // ── State ──────────────────────────────────────────────────
+    var bf = {
+      active: false,          // fences on site confirmed
+      area: '',               // selected area name
+      email: '',              // destination email
+      prePhotos: [],          // [{dataUrl, timestamp, file}]
+      postPhotos: [],         // [{dataUrl, timestamp, file}]
+    };
+
+    // ── DOM refs ───────────────────────────────────────────────
+    var modal          = document.getElementById('bfModal');
+    var step1          = document.getElementById('bfStep1');
+    var step2          = document.getElementById('bfStep2');
+    var step3          = document.getElementById('bfStep3');
+    var step1bar       = document.getElementById('bfStep1bar');
+    var step2bar       = document.getElementById('bfStep2bar');
+    var step3bar       = document.getElementById('bfStep3bar');
+    var statusBar      = document.getElementById('bfStatusBar');
+    var statusText     = document.getElementById('bfStatusText');
+    var statusDetails  = document.getElementById('bfStatusDetails');
+    var fenceCard      = document.getElementById('bfFenceCard');
+    var cardAreaLabel  = document.getElementById('bfCardAreaLabel');
+    var bfSubmitBtn    = document.getElementById('brookfieldSubmitBtn');
+    var clientInput    = document.getElementById('client_name');
+    var buttonRow      = document.getElementById('buttonRow');
+
+    if (!modal || !clientInput) return;
+
+    // ── Helpers ────────────────────────────────────────────────
+    function fmtTimestamp(d) {
+      var opts = { year:'numeric', month:'short', day:'numeric',
+                   hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: true };
+      return d.toLocaleString('en-CA', opts);
+    }
+
+    function stampImage(srcDataUrl, timestamp, callback) {
+      // Draw image onto canvas and burn the timestamp into the bottom
+      var img = new Image();
+      img.onload = function() {
+        var c = document.createElement('canvas');
+        c.width  = img.naturalWidth;
+        c.height = img.naturalHeight;
+        var ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        var fontSize = Math.max(18, Math.round(c.width * 0.025));
+        ctx.font = 'bold ' + fontSize + 'px Arial, sans-serif';
+        var text = timestamp;
+        var textW = ctx.measureText(text).width;
+        var padX = fontSize * 0.6, padY = fontSize * 0.5;
+        var boxH = fontSize + padY * 2;
+        var boxW = textW + padX * 2;
+        var x = c.width  - boxW - 12;
+        var y = c.height - boxH - 12;
+
+        // Semi-transparent black background
+        ctx.fillStyle = 'rgba(0,0,0,0.62)';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, boxW, boxH, 6)
+                      : ctx.rect(x, y, boxW, boxH);
+        ctx.fill();
+
+        // White text
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(text, x + padX, y + padY + fontSize * 0.82);
+
+        callback(c.toDataURL('image/jpeg', 0.92));
+      };
+      img.src = srcDataUrl;
+    }
+
+    function readFileAsDataUrl(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function(e) { callback(e.target.result); };
+      reader.readAsDataURL(file);
+    }
+
+    function buildThumb(photo, onRemove) {
+      var wrap = document.createElement('div');
+      wrap.className = 'bf-thumb-wrap';
+      var img = document.createElement('img');
+      img.src = photo.stamped || photo.dataUrl;
+      var ts = document.createElement('div');
+      ts.className = 'bf-thumb-ts';
+      ts.textContent = photo.timestamp.split(',')[1]?.trim() || photo.timestamp;
+      var rm = document.createElement('button');
+      rm.className = 'bf-thumb-remove';
+      rm.type = 'button';
+      rm.textContent = '✕';
+      rm.onclick = onRemove;
+      wrap.appendChild(img);
+      wrap.appendChild(ts);
+      wrap.appendChild(rm);
+      return wrap;
+    }
+
+    function renderPreThumbs() {
+      var container = document.getElementById('bfPreThumbs');
+      if (!container) return;
+      container.innerHTML = '';
+      bf.prePhotos.forEach(function(p, i) {
+        container.appendChild(buildThumb(p, function() {
+          bf.prePhotos.splice(i, 1);
+          renderPreThumbs();
+          renderPreThumbsCard();
+          updatePreDoneBtn();
+        }));
+      });
+      renderPreThumbsCard();
+    }
+
+    function renderPreThumbsCard() {
+      var c = document.getElementById('bfPreThumbsCard');
+      if (!c) return;
+      c.innerHTML = '';
+      bf.prePhotos.forEach(function(p) {
+        var img = document.createElement('img');
+        img.src = p.stamped || p.dataUrl;
+        img.style.cssText = 'width:70px;height:55px;object-fit:cover;border-radius:6px;border:1.5px solid #2e7d32;';
+        c.appendChild(img);
+      });
+    }
+
+    function renderPostThumbsCard() {
+      var c = document.getElementById('bfPostThumbsCard');
+      if (!c) return;
+      c.innerHTML = '';
+      bf.postPhotos.forEach(function(p, i) {
+        c.appendChild(buildThumb(p, function() {
+          bf.postPhotos.splice(i, 1);
+          renderPostThumbsCard();
+          updateBfSubmitBtn();
+        }));
+      });
+    }
+
+    function updatePreDoneBtn() {
+      var btn = document.getElementById('bfPreDone');
+      if (btn) btn.disabled = bf.prePhotos.length === 0;
+    }
+
+    function updateBfSubmitBtn() {
+      // Show the green submit button only when Brookfield is active and we have both photo sets
+      if (bfSubmitBtn) {
+        var ready = bf.active && bf.prePhotos.length > 0 && bf.postPhotos.length > 0;
+        bfSubmitBtn.style.display = bf.active ? '' : 'none';
+      }
+    }
+
+    function updateStatusBar() {
+      if (!bf.active) {
+        statusBar.classList.remove('visible');
+        fenceCard.classList.remove('visible');
+        return;
+      }
+      statusBar.classList.add('visible');
+      fenceCard.classList.add('visible');
+      statusText.textContent = 'Brookfield fence protocol active — ' + bf.area;
+      var pre  = bf.prePhotos.length;
+      var post = bf.postPhotos.length;
+      statusDetails.textContent =
+        pre  + ' pre-job photo' + (pre  !== 1 ? 's' : '') + ' captured. ' +
+        post + ' post-job photo' + (post !== 1 ? 's' : '') + ' captured.';
+      if (cardAreaLabel) cardAreaLabel.textContent = bf.area + ' — ' + bf.email;
+    }
+
+    // ── Step transitions ───────────────────────────────────────
+    function showStep(n) {
+      step1.style.display = n === 1 ? '' : 'none';
+      step2.style.display = n === 2 ? '' : 'none';
+      step3.style.display = n === 3 ? '' : 'none';
+      step1bar.className = 'bf-step' + (n > 1 ? ' done' : ' active');
+      step2bar.className = 'bf-step' + (n > 2 ? ' done' : n === 2 ? ' active' : '');
+      step3bar.className = 'bf-step' + (n === 3 ? ' active' : '');
+    }
+
+    function openModal() {
+      showStep(1);
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Step 1 buttons ─────────────────────────────────────────
+    document.getElementById('bfFenceYes').addEventListener('click', function() {
+      showStep(2);
+    });
+
+    document.getElementById('bfFenceNo').addEventListener('click', function() {
+      bf.active = false;
+      updateStatusBar();
+      updateBfSubmitBtn();
+      closeModal();
+    });
+
+    document.getElementById('bfSkip').addEventListener('click', function() {
+      closeModal();
+    });
+
+    // ── Step 2 area buttons ────────────────────────────────────
+    document.querySelectorAll('.bf-area-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.bf-area-btn').forEach(function(b){ b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        bf.area  = btn.dataset.area;
+        bf.email = btn.dataset.email;
+        showStep(3);
+        document.getElementById('bfStep3Sub').innerHTML =
+          'Photograph the fence condition <strong>before</strong> starting work. ' +
+          'Photos will be emailed to <strong>' + bf.area + '</strong>.';
+      });
+    });
+
+    document.getElementById('bfBackTo1').addEventListener('click', function() { showStep(1); });
+    document.getElementById('bfBackTo2').addEventListener('click', function() { showStep(2); });
+
+    // ── Pre-job photo input ────────────────────────────────────
+    document.getElementById('bfPreFile').addEventListener('change', function(e) {
+      var files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      var now = new Date();
+      var ts  = fmtTimestamp(now);
+      var pending = files.length;
+      files.forEach(function(file) {
+        readFileAsDataUrl(file, function(dataUrl) {
+          stampImage(dataUrl, ts, function(stamped) {
+            bf.prePhotos.push({ dataUrl: dataUrl, stamped: stamped, timestamp: ts, file: file });
+            pending--;
+            if (pending === 0) { renderPreThumbs(); updatePreDoneBtn(); }
+          });
+        });
+      });
+      e.target.value = ''; // allow re-selecting same file
+    });
+
+    document.getElementById('bfPreDone').addEventListener('click', function() {
+      bf.active = true;
+      closeModal();
+      updateStatusBar();
+      updateBfSubmitBtn();
+      if (bfSubmitBtn) bfSubmitBtn.style.display = '';
+    });
+
+    // ── Post-job photo input (inline card) ─────────────────────
+    document.getElementById('bfPostFileCard').addEventListener('change', function(e) {
+      var files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      var now = new Date();
+      var ts  = fmtTimestamp(now);
+      var pending = files.length;
+      files.forEach(function(file) {
+        readFileAsDataUrl(file, function(dataUrl) {
+          stampImage(dataUrl, ts, function(stamped) {
+            bf.postPhotos.push({ dataUrl: dataUrl, stamped: stamped, timestamp: ts, file: file });
+            pending--;
+            if (pending === 0) { renderPostThumbsCard(); updateStatusBar(); updateBfSubmitBtn(); }
+          });
+        });
+      });
+      e.target.value = '';
+    });
+
+    // ── Brookfield submit button ───────────────────────────────
+    if (bfSubmitBtn) {
+      bfSubmitBtn.addEventListener('click', async function() {
+
+        if (!bf.active) return;
+
+        if (bf.prePhotos.length === 0) {
+          alert('Please capture at least one pre-job fence photo before submitting.');
+          return;
+        }
+        if (bf.postPhotos.length === 0) {
+          alert('Please capture at least one post-job fence photo before submitting.');
+          return;
+        }
+
+        var locVal = (document.getElementById('location')?.value || '').trim();
+
+        // Current date formatted as Month DD, YYYY
+        var now = new Date();
+        var dateStr = now.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Subject: Vista Geomatics - Location - Date
+        var subjectParts = ['Vista Geomatics'];
+        if (locVal) subjectParts.push(locVal);
+        subjectParts.push(dateStr);
+        var subject = encodeURIComponent(subjectParts.join(' - '));
+
+        var body = encodeURIComponent(
+          'Good day,\r\n\r\n' +
+          'Please see the attached photos as requested, documenting the condition of the construction fencing at ' +
+          (locVal || 'the worksite') + ' on ' + dateStr + '.\r\n\r\n' +
+          'Photos include:\r\n' +
+          '  - ' + bf.prePhotos.length + ' photo' + (bf.prePhotos.length !== 1 ? 's' : '') + ' taken upon arrival prior to commencing work\r\n' +
+          '  - ' + bf.postPhotos.length + ' photo' + (bf.postPhotos.length !== 1 ? 's' : '') + ' taken at the end of the day upon departure\r\n\r\n' +
+          'Please do not hesitate to contact us should you require any additional information.\r\n\r\n' +
+          'Regards,\r\n' +
+          'VistaGeomatics Field Crew'
+        );
+
+        var mailtoUrl = 'mailto:' + bf.email +
+          '?subject=' + subject +
+          '&body=' + body;
+
+        // Save all photos to the device via share sheet (gives the user the
+        // "Save Image" / "Save to Files" prompt on iPad), then open the email.
+        var allPhotos = bf.prePhotos.concat(bf.postPhotos);
+
+        var photoSaved = false;
+
+        if (navigator.share && navigator.canShare) {
+          try {
+            var photoFiles = await Promise.all(allPhotos.map(async function(p, idx) {
+              var res  = await fetch(p.stamped || p.dataUrl);
+              var blob = await res.blob();
+              var label = idx < bf.prePhotos.length ? 'Pre' : 'Post';
+              var n = idx < bf.prePhotos.length ? (idx + 1) : (idx - bf.prePhotos.length + 1);
+              var safeLoc = (locVal || 'BF').replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30);
+              // NOTE: no title property — iOS creates a ghost .txt file from it
+              return new File([blob],
+                'VistaGeomatics_' + safeLoc + '_' + label + n + '.jpg',
+                { type: 'image/jpeg' }
+              );
+            }));
+
+            if (navigator.canShare({ files: photoFiles })) {
+              await navigator.share({ files: photoFiles });
+              photoSaved = true;
+            }
+          } catch(shareErr) {
+            if (shareErr.name !== 'AbortError') console.warn('Photo share failed:', shareErr);
+          }
+        }
+
+        // Fallback for non-iOS: download each image directly
+        if (!photoSaved) {
+          allPhotos.forEach(function(p, idx) {
+            var label = idx < bf.prePhotos.length ? 'Pre' : 'Post';
+            var n = idx < bf.prePhotos.length ? (idx + 1) : (idx - bf.prePhotos.length + 1);
+            var safeLoc = (locVal || 'BF').replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30);
+            var a = document.createElement('a');
+            a.href = p.stamped || p.dataUrl;
+            a.download = 'VistaGeomatics_' + safeLoc + '_' + label + n + '.jpg';
+            a.click();
+          });
+        }
+
+        // Open the pre-filled email — after share sheet is dismissed on iOS,
+        // or after a short delay on the fallback path
+        setTimeout(function() {
+          window.location.href = mailtoUrl;
+        }, photoSaved ? 300 : 600);
+
+      }); // end bfSubmitBtn click
+    }
+
+    // ── Watch client field via direct hook from selectClient ──────────────────
+    function isBrookfield(val) {
+      return (val || '').trim().toLowerCase().indexOf('brookfield') !== -1;
+    }
+
+    var lastWasBrookfield = false;
+
+    function onClientSelected(name) {
+      var now = isBrookfield(name);
+
+      if (now && !lastWasBrookfield) {
+        bf.active = false;
+        bf.area   = '';
+        bf.email  = '';
+        bf.prePhotos  = [];
+        bf.postPhotos = [];
+        renderPreThumbs();
+        renderPostThumbsCard();
+        updateStatusBar();
+        updateBfSubmitBtn();
+        openModal();
+      } else if (!now && lastWasBrookfield) {
+        bf.active = false;
+        updateStatusBar();
+        updateBfSubmitBtn();
+      }
+
+      lastWasBrookfield = now;
+    }
+
+    // Expose hook for the autocomplete selectClient function
+    window.__onClientSelected = onClientSelected;
+
+    // Also handle manual typing + blur (for users who type it out without using dropdown)
+    clientInput.addEventListener('change', function() {
+      onClientSelected(clientInput.value);
+    });
+
+    // Sync on load (in case autosave restored Brookfield)
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var val = clientInput.value;
+        lastWasBrookfield = isBrookfield(val);
+        if (lastWasBrookfield) updateStatusBar();
+        updateBfSubmitBtn();
+      }, 700);
+    });
+
   })();
 </script>
 </body>
