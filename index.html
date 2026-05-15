@@ -603,6 +603,131 @@
     }
     .bf-card-photo-zone:hover { border-color: #2e7d32; background: #f0f7f0; }
     .bf-post-thumbs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ── Homes by Us Sign-In Modal ──────────────────────────── */
+    #hbuModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2100;
+      background: rgba(11,48,69,0.58);
+      backdrop-filter: blur(3px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    #hbuModal.open { display: flex; }
+
+    .hbu-modal-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(5,41,66,0.28);
+      padding: 26px 24px 22px;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+      animation: bfSlideIn 0.22s ease;
+    }
+
+    .hbu-modal-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .hbu-modal-logo-badge {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.9rem; font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+    .hbu-modal-logo-text {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #96281b;
+      line-height: 1.2;
+    }
+    .hbu-modal-logo-sub { font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.04em; }
+
+    .hbu-modal-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--vista-blue-dark);
+      margin-bottom: 8px;
+    }
+    .hbu-modal-body {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .hbu-modal-body strong { color: var(--text-main); }
+
+    .hbu-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .btn-hbu-signin {
+      background: linear-gradient(120deg, #e74c3c, #c0392b);
+      color: #fff !important;
+      box-shadow: 0 8px 20px rgba(192,57,43,0.35);
+    }
+
+    /* ── Homes by Us Sign-In Complete Badge ─────────────────── */
+    #hbuCompleteBadge {
+      display: none;
+      margin: 10px 0 4px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: linear-gradient(120deg, #f0fdf4, #dcfce7);
+      border: 1.5px solid #86efac;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #166534;
+    }
+    #hbuCompleteBadge.visible { display: flex; }
+    .hbu-badge-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(34,197,94,0.4);
+    }
+    .hbu-badge-icon svg { width: 20px; height: 20px; }
+    .hbu-badge-text { line-height: 1.3; }
+    .hbu-badge-sub { font-size: 0.72rem; font-weight: 400; color: #15803d; margin-top: 2px; }
+
+    /* Undo badge for reviewer confirmation */
+    .hbu-badge-undo {
+      margin-left: auto;
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: #15803d;
+      cursor: pointer;
+      text-decoration: underline;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      text-transform: none;
+      letter-spacing: 0;
+      box-shadow: none;
+    }
+    .hbu-badge-undo:hover { color: #166534; transform: none; box-shadow: none; }
   </style>
 </head>
 
@@ -1211,6 +1336,20 @@
           <!-- Brookfield post-share instruction banner -->
           <div id="bfInstructionBanner" style="display:none; margin-top:8px; padding:10px 14px; background:linear-gradient(120deg,#e8f5e9,#f1f8e9); border:1.5px solid #a5d6a7; border-radius:12px; font-size:0.78rem; color:#1b5e20; line-height:1.6;"></div>
 
+          <!-- Homes by Us Sign-In Complete Badge -->
+          <div id="hbuCompleteBadge">
+            <div class="hbu-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="hbu-badge-text">
+              Homes by Us Site Sign-In Complete
+              <div class="hbu-badge-sub" id="hbuBadgeTime"></div>
+            </div>
+            <button type="button" class="hbu-badge-undo" id="hbuUndoBtn">Undo</button>
+          </div>
+
           <div class="btn-row" id="buttonRow">
             <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
             <button type="button" class="btn-secondary" id="nameBtn">Name File</button>
@@ -1224,6 +1363,30 @@
       </div>
     </div>
   </form>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     HOMES BY US SAFETY SIGN-IN MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="hbuModal" role="dialog" aria-modal="true" aria-label="Homes by Us Safety Sign-In">
+  <div class="hbu-modal-box">
+    <div class="hbu-modal-logo">
+      <div class="hbu-modal-logo-badge">HBU</div>
+      <div>
+        <div class="hbu-modal-logo-text">Homes by Us</div>
+        <div class="hbu-modal-logo-sub">Site Safety Requirement</div>
+      </div>
+    </div>
+    <div class="hbu-modal-title">⚠️ Safety Sign-In Required</div>
+    <div class="hbu-modal-body">
+      <strong>Homes by Us</strong> requires all crews to complete a <strong>safety site sign-in</strong> upon arrival at this location.<br><br>
+      Tap <strong>Sign In Now</strong> to open the Homes by Us sign-in portal. The hazard assessment will remain open — return here once complete and confirm your sign-in below.
+    </div>
+    <div class="hbu-modal-actions">
+      <button type="button" class="btn-secondary" id="hbuDismissBtn" style="font-size:0.74rem;">Dismiss</button>
+      <button type="button" class="btn-hbu-signin btn-primary" id="hbuSignInBtn">Sign In Now ↗</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════
@@ -4393,6 +4556,114 @@ return clone;
   })();
 
   // ============================================================
+  // HOMES BY US SIGN-IN SYSTEM
+  // ============================================================
+  (function initHomesbyUs() {
+    var HBU_URL = 'https://www.homesbyus.ca/trade-on-site-sign-in';
+
+    var modal        = document.getElementById('hbuModal');
+    var signInBtn    = document.getElementById('hbuSignInBtn');
+    var dismissBtn   = document.getElementById('hbuDismissBtn');
+    var badge        = document.getElementById('hbuCompleteBadge');
+    var badgeTime    = document.getElementById('hbuBadgeTime');
+    var undoBtn      = document.getElementById('hbuUndoBtn');
+    var clientInput  = document.getElementById('client_name');
+
+    if (!modal || !clientInput) return;
+
+    var hbuSignedIn = false;
+    var lastWasHbu  = false;
+
+    function isHomesbyUs(val) {
+      return (val || '').trim().toLowerCase().indexOf('homes by us') !== -1;
+    }
+
+    function openHbuModal() {
+      modal.classList.add('open');
+    }
+
+    function closeHbuModal() {
+      modal.classList.remove('open');
+    }
+
+    function markSignInComplete() {
+      hbuSignedIn = true;
+      closeHbuModal();
+      if (badge) badge.classList.add('visible');
+      if (badgeTime) {
+        var now = new Date();
+        badgeTime.textContent = 'Signed in at ' + now.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      }
+    }
+
+    function clearSignIn() {
+      hbuSignedIn = false;
+      if (badge) badge.classList.remove('visible');
+      if (badgeTime) badgeTime.textContent = '';
+    }
+
+    function onClientSelected(name) {
+      var nowHbu = isHomesbyUs(name);
+      if (nowHbu && !lastWasHbu) {
+        clearSignIn();
+        openHbuModal();
+      } else if (!nowHbu && lastWasHbu) {
+        clearSignIn();
+        closeHbuModal();
+      }
+      lastWasHbu = nowHbu;
+    }
+
+    // Sign In button — open URL in new tab, keep form open; then user confirms completion
+    var hbuPhase = 'signin'; // 'signin' | 'confirm'
+    if (signInBtn) {
+      signInBtn.addEventListener('click', function() {
+        if (hbuPhase === 'signin') {
+          window.open(HBU_URL, '_blank', 'noopener,noreferrer');
+          hbuPhase = 'confirm';
+          signInBtn.textContent = '✓ Mark Sign-In Complete';
+          signInBtn.style.background = 'linear-gradient(120deg, #16a34a, #15803d)';
+        } else {
+          markSignInComplete();
+          hbuPhase = 'signin';
+          signInBtn.textContent = 'Sign In Now ↗';
+          signInBtn.style.background = '';
+        }
+      });
+    }
+
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', closeHbuModal);
+    }
+
+    if (undoBtn) {
+      undoBtn.addEventListener('click', clearSignIn);
+    }
+
+    // Expose hook for client autocomplete
+    var _prevOnClientSelected = window.__onClientSelected;
+    window.__onClientSelected = function(name) {
+      onClientSelected(name);
+      if (typeof _prevOnClientSelected === 'function') _prevOnClientSelected(name);
+    };
+
+    // Also watch manual typing
+    clientInput.addEventListener('change', function() {
+      onClientSelected(clientInput.value);
+    });
+
+    // Sync on load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var val = clientInput.value;
+        lastWasHbu = isHomesbyUs(val);
+        if (lastWasHbu && !hbuSignedIn) openHbuModal();
+      }, 750);
+    });
+
+  })();
+
+  // ============================================================
   // BROOKFIELD FENCE PHOTO SYSTEM
   // ============================================================
   (function initBrookfield() {
@@ -4789,7 +5060,12 @@ return clone;
     }
 
     // Expose hook for the autocomplete selectClient function
-    window.__onClientSelected = onClientSelected;
+    // Chain with any previously registered hook (e.g. Homes by Us)
+    var _prevHook = window.__onClientSelected;
+    window.__onClientSelected = function(name) {
+      onClientSelected(name);
+      if (typeof _prevHook === 'function') _prevHook(name);
+    };
 
     // Also handle manual typing + blur (for users who type it out without using dropdown)
     clientInput.addEventListener('change', function() {
